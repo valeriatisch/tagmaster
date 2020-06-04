@@ -15,7 +15,7 @@
 
 ## 2. **Development**
 
-**Backend und Database:** Beego, Firebase
+**Backend und Database:** Beego, Firebase, Auth0
 
 **Frontend:** React
 
