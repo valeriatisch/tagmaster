@@ -1,2 +1,5 @@
 lastupdate.tmp
 tagmaster
+
+#dependencies
+static/node_modules
