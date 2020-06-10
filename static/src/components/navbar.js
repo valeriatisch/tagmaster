@@ -10,23 +10,23 @@ class Navbar extends Component {
     render() {
         return (
             <div>
-                <nav className="navbar sticky-top navbar-expand-lg navbar-dark" style={{backgroundColor:"#191919"}}>
+                <nav className="navbar sticky-top navbar-expand-lg navbar-dark" style={{backgroundColor:"#191919",borderBottom:"1px solid #2e2d2d"}}>
                     <a className ="navbar-nav mr-5 h1" style={{marginTop:"-10px",color:"#efeb53"}}>
                         <Link to={"/"} className="nav-link">
                             <img src={logo} height="50px"/>
                         </Link>
                     </a>
-                    <a className ="navbar-nav mr-auto" style={{color:"white"}}>
+                    <a className ="navbar-nav mr-2" style={{color:"white"}}>
                         <Link to={"/"} className="nav-link">
                             Home
                         </Link>
                     </a>
-                    <a className ="navbar-nav mr-auto">
+                    <a className ="navbar-nav mr-2">
                         <Link to={"/contact"} className="nav-link">
                             Contact
                         </Link>
                         </a>
-                    <a className ="navbar-nav mr-5">
+                    <a className ="navbar-nav mr-2">
                         <Link to={"/impressum"} className="nav-link">
                             About
                         </Link>
