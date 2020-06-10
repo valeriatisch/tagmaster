@@ -24,7 +24,7 @@ func main() {
   	db.AutoMigrate(&models.User{})
 
 	r := gin.Default()
-	r.Use(sessions.Sessions("tagmaster", cookie.NewStore([]byte("secret"))))
+	r.Use(sessions.Sessions("session", cookie.NewStore([]byte("secret"))))
 	r.Use(func(ctx *gin.Context) {
 		ctx.Set("db", db)
 	})
@@ -38,6 +38,13 @@ func main() {
 	api.GET("/test", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message": "hello",
+		})
+	})
+
+	api.GET("/whoami", func(c *gin.Context) {
+		user := auth.GetUser(c)
+		c.JSON(http.StatusOK, gin.H{
+			"email": user.Email,
 		})
 	})
 

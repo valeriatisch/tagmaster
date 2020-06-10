@@ -16,7 +16,8 @@ const (
 
 func Middleware(c *gin.Context) {
 	session := sessions.Default(c)
-	user := session.Get(userkey)
+	user    := session.Get(userkey)
+
 	if user == nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 			"error": "Unauthorized",
@@ -24,32 +25,19 @@ func Middleware(c *gin.Context) {
 	}
 }
 
-func hashPassword(password string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 10)
-	return string(bytes), err
-}
-
-func checkPassword(password, hash string) bool {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
-	return err == nil
-}
-
-
 func Register(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
-	session := sessions.Default(c)
-
-	email := c.PostForm("email")
+	db       := c.MustGet("db").(*gorm.DB)
+	session  := sessions.Default(c)
+	email    := c.PostForm("email")
 	password := c.PostForm("password")
+	hash, _  := hashPassword(password)
 
-	hash, _ := hashPassword(password)
-
-	err := db.Create(&models.User{
+	user := models.User{
 		Email: email,
 		Password: hash,
-	}).Error
+	}
 
+	err := db.Create(&user).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to create",
@@ -58,7 +46,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	session.Set(userkey, email)
+	session.Set(userkey, user.ID)
 	if err := session.Save(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to save session",
@@ -69,10 +57,9 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	db := c.MustGet("db").(*gorm.DB)
-
-	session := sessions.Default(c)
-	email := c.PostForm("email")
+	db       := c.MustGet("db").(*gorm.DB)
+	session  := sessions.Default(c)
+	email    := c.PostForm("email")
 	password := c.PostForm("password")
 
 	var user models.User
@@ -91,7 +78,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	session.Set(userkey, email)
+	session.Set(userkey, user.ID)
 	if err := session.Save(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "Failed to save session",
@@ -118,4 +105,34 @@ func Logout(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{"message": "ok"})
+}
+
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 10)
+	return string(bytes), err
+}
+
+func checkPassword(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
+
+func GetUser(c *gin.Context) models.User {
+	db      := c.MustGet("db").(*gorm.DB)
+	session := sessions.Default(c)
+	id, ok  := session.Get(userkey).(uint)
+	if !ok {
+		panic("cannot get userid")
+	}
+
+	var user models.User
+
+	err := db.Where(&models.User{
+		Model: gorm.Model{ID: id},
+	}).First(&user).Error
+	if err != nil {
+		panic(err)
+	}
+
+	return user
 }
