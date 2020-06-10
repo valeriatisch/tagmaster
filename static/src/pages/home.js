@@ -5,8 +5,10 @@ import Body from "../components/homebody";
 class Home extends Component {
   render() {
     return (
-      <div style={{color:"#efeb53",backgroundColor:"#191919",marginTop:"10px"}}>
-        <style>{'body { background-color: #191919; }'}</style>
+      <div>
+        <style>
+          {"body { background-color: #191919; color: #CBCBCB; marginTop:10px} h1{color:#efeb53}"}
+        </style>
         <Header/>
         <Body/>
       </div>
