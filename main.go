@@ -15,17 +15,25 @@ import (
 
 
 func main() {
+	router := MakeEngine()	
+	router.Run()
+}
+
+func MakeEngine() *gin.Engine {
 	db, err := gorm.Open("postgres", "host=localhost port=5432 user=felix dbname=felix sslmode=disable")
 	if err != nil {
 		log.Fatal(err)
 	}
-  	defer db.Close()
+  	//defer db.Close()
 
   	db.AutoMigrate(&models.User{})
 
 	r := gin.Default()
 	r.Use(sessions.Sessions("session", cookie.NewStore([]byte("secret"))))
+
+	provider := auth.AuthProvider{ Database: db }
 	r.Use(func(ctx *gin.Context) {
+		ctx.Set("auth", provider)
 		ctx.Set("db", db)
 	})
 
@@ -49,6 +57,6 @@ func main() {
 		})
 	})
 
-	r.Run()
+	return r
 }
 
