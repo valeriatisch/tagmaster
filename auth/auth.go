@@ -14,6 +14,11 @@ const (
 	userkey = "user"
 )
 
+type Credentials struct {
+	Email    string `json:"email"    binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
 func Middleware(c *gin.Context) {
 	session := sessions.Default(c)
 	user    := session.Get(userkey)
@@ -28,19 +33,26 @@ func Middleware(c *gin.Context) {
 func Register(c *gin.Context) {
 	db       := c.MustGet("db").(*gorm.DB)
 	session  := sessions.Default(c)
-	email    := c.PostForm("email")
-	password := c.PostForm("password")
-	hash, _  := hashPassword(password)
+
+	var cred Credentials
+	if err := c.ShouldBindJSON(&cred); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Missing credentials",
+		})
+		return
+	}
+
+	hash, _  := hashPassword(cred.Password)
 
 	user := models.User{
-		Email: email,
+		Email: cred.Email,
 		Password: hash,
 	}
 
 	err := db.Create(&user).Error
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to create",
+			"error": "Failed to create user",
 		})
 		log.Println(err)
 		return
@@ -59,11 +71,17 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	db       := c.MustGet("db").(*gorm.DB)
 	session  := sessions.Default(c)
-	email    := c.PostForm("email")
-	password := c.PostForm("password")
+
+	var cred Credentials
+	if err := c.ShouldBindJSON(&cred); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Missing credentials",
+		})
+		return
+	}
 
 	var user models.User
-	err := db.Where(&models.User{Email: email}).First(&user).Error
+	err := db.Where(&models.User{Email: cred.Email}).First(&user).Error
 	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"error": "User not found",
@@ -71,9 +89,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	if !checkPassword(password, user.Password) {
+	if !checkPassword(cred.Password, user.Password) {
 		c.JSON(http.StatusUnauthorized, gin.H{
-			"error": "Incorrect Credentials",
+			"error": "Incorrect credentials",
 		})
 		return
 	}
@@ -93,7 +111,7 @@ func Logout(c *gin.Context) {
 	user := session.Get(userkey)
 	if user == nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid session",
+			"error": "No valid session",
 		})
 		return
 	}
@@ -126,10 +144,10 @@ func GetUser(c *gin.Context) models.User {
 	}
 
 	var user models.User
-
 	err := db.Where(&models.User{
 		Model: gorm.Model{ID: id},
 	}).First(&user).Error
+	
 	if err != nil {
 		panic(err)
 	}
