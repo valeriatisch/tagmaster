@@ -28,97 +28,81 @@ func Middleware(c *gin.Context) {
 	uid    := session.Get(userkey)
 
 	if uid == nil {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
-			"error": "Unauthorized",
-		})
+		c.AbortWithStatus(http.StatusUnauthorized)
 	}
 }
 
 func Register(c *gin.Context) {
-
 	a       := c.MustGet(authkey).(Authenticator)
 	session := sessions.Default(c)
 
 	var cred Credentials
 
 	if err := c.ShouldBindJSON(&cred); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Missing credentials",
-		})
+		c.Status(http.StatusBadRequest)
 		return
 	}
 
 	uid, err := a.Register(cred)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to create user",
-		})
+		c.Status(http.StatusBadRequest)
 		return
 	}
 
 	session.Set(userkey, uid)
 
 	if err := session.Save(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to save session",
-		})
+		c.Status(http.StatusInternalServerError)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "ok"})
+	c.Status(http.StatusOK)
 }
 
 func Login(c *gin.Context) {
-
 	a       := c.MustGet(authkey).(Authenticator)
 	session := sessions.Default(c)
 
 	var cred Credentials
 	
 	if err := c.ShouldBindJSON(&cred); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Missing credentials",
-		})
+		c.Status(http.StatusBadRequest)
 		return
 	}
 
 	uid, ok := a.Authenticate(cred)
 	if !ok {
-		c.JSON(http.StatusUnauthorized, gin.H{
-			"error": "Wrong Credentials",
-		})
+		c.Status(http.StatusUnauthorized)
 		return
 	}
 
 	session.Set(userkey, uid)
 
 	if err := session.Save(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to save session",
-		})
+		c.Status(http.StatusInternalServerError)
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "ok"})
+	c.Status(http.StatusOK)
 }
 
 func Logout(c *gin.Context) {
 	session := sessions.Default(c)
-	user := session.Get(userkey)
+	user    := session.Get(userkey)
+
 	if user == nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "No valid session",
-		})
+		c.Status(http.StatusBadRequest)
 		return
 	}
+
 	session.Delete(userkey)
+
 	if err := session.Save(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Failed to save session",
-		})
+		c.Status(http.StatusInternalServerError)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "ok"})
+
+	c.Status(http.StatusOK)
 }
 
 
@@ -126,6 +110,7 @@ func Logout(c *gin.Context) {
 func GetUser(c *gin.Context) models.User {
 	a       := c.MustGet(authkey).(Authenticator)
 	session := sessions.Default(c)
+	
 	uid, ok := session.Get(userkey).(uint)
 	if !ok {
 		panic("cannot get userid")

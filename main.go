@@ -32,9 +32,9 @@ func MakeEngine() *gin.Engine {
 	r.Use(sessions.Sessions("session", cookie.NewStore([]byte("secret"))))
 
 	provider := auth.AuthProvider{ Database: db }
-	r.Use(func(ctx *gin.Context) {
-		ctx.Set("auth", provider)
-		ctx.Set("db", db)
+	r.Use(func(c *gin.Context) {
+		c.Set("auth", provider)
+		//c.Set("db", db)
 	})
 
 	user := r.Group("/auth")
