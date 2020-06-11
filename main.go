@@ -29,9 +29,10 @@ func main() {
 		ctx.Set("db", db)
 	})
 
-	r.POST("/register", auth.Register)
-	r.POST("/login", auth.Login)
-	r.GET("/logout", auth.Logout)
+	user := r.Group("/auth")
+	user.GET( "/logout",   auth.Logout)
+	user.POST("/register", auth.Register)
+	user.POST("/login",    auth.Login)
 	
 	api := r.Group("/api")
 	api.Use(auth.Middleware)
