@@ -1,9 +1,9 @@
 package auth
 
 import (
-	"github.com/valeriatisch/tagmaster/models"
-	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
+	"github.com/valeriatisch/tagmaster/models"
 	"net/http"
 )
 
@@ -19,13 +19,13 @@ type Credentials struct {
 
 type Authenticator interface {
 	Authenticate(c Credentials) (uint, bool)
-	Get(uid uint)               (models.User, error)
-	Register(c Credentials)     (uint, error)	
+	Get(uid uint) (models.User, error)
+	Register(c Credentials) (uint, error)
 }
 
 func Middleware(c *gin.Context) {
 	session := sessions.Default(c)
-	uid    := session.Get(userkey)
+	uid := session.Get(userkey)
 
 	if uid == nil {
 		c.AbortWithStatus(http.StatusUnauthorized)
@@ -33,7 +33,7 @@ func Middleware(c *gin.Context) {
 }
 
 func Register(c *gin.Context) {
-	a       := c.MustGet(authkey).(Authenticator)
+	a := c.MustGet(authkey).(Authenticator)
 	session := sessions.Default(c)
 
 	var cred Credentials
@@ -60,11 +60,11 @@ func Register(c *gin.Context) {
 }
 
 func Login(c *gin.Context) {
-	a       := c.MustGet(authkey).(Authenticator)
+	a := c.MustGet(authkey).(Authenticator)
 	session := sessions.Default(c)
 
 	var cred Credentials
-	
+
 	if err := c.ShouldBindJSON(&cred); err != nil {
 		c.Status(http.StatusBadRequest)
 		return
@@ -88,7 +88,7 @@ func Login(c *gin.Context) {
 
 func Logout(c *gin.Context) {
 	session := sessions.Default(c)
-	user    := session.Get(userkey)
+	user := session.Get(userkey)
 
 	if user == nil {
 		c.Status(http.StatusBadRequest)
@@ -105,12 +105,10 @@ func Logout(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-
-
 func GetUser(c *gin.Context) models.User {
-	a       := c.MustGet(authkey).(Authenticator)
+	a := c.MustGet(authkey).(Authenticator)
 	session := sessions.Default(c)
-	
+
 	uid, ok := session.Get(userkey).(uint)
 	if !ok {
 		panic("cannot get userid")
