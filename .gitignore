@@ -3,3 +3,5 @@ tagmaster
 
 #dependencies
 static/node_modules
+static/build
+.DS_Store
