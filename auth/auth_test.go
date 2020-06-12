@@ -1,23 +1,23 @@
 package auth
 
 import (
-	"github.com/valeriatisch/tagmaster/models"
-	"github.com/gin-gonic/gin"
+	"bytes"
+	"errors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
-	"testing"
-	"net/http/httptest"
-	"net/http"
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"bytes"
+	"github.com/valeriatisch/tagmaster/models"
 	"log"
-	"errors"
+	"net/http"
+	"net/http/httptest"
+	"testing"
 )
 
 // Stub authentication provider
 type AuthStub struct {
 	nextId uint
-	users map[string]models.User
+	users  map[string]models.User
 }
 
 func (a AuthStub) Authenticate(c Credentials) (uint, bool) {
@@ -34,12 +34,12 @@ func (a AuthStub) Get(uid uint) (models.User, error) {
 	return models.User{}, nil
 }
 
-func (a AuthStub) Register(c Credentials) (uint, error)  {
-	user := models.User {
-		Email: c.Email,
+func (a AuthStub) Register(c Credentials) (uint, error) {
+	user := models.User{
+		Email:    c.Email,
 		Password: c.Password,
 	}
-	
+
 	if a.users[c.Email].Email != "" {
 		return 0, errors.New("")
 	}
@@ -77,23 +77,23 @@ func get(r http.Handler, path string) *httptest.ResponseRecorder {
 func StubEngine() *gin.Engine {
 	router := gin.Default()
 	router.Use(sessions.Sessions(
-		"session", 
+		"session",
 		cookie.NewStore([]byte("secret")),
 	))
 
 	// Use stub authentication provider without database
 	stub := AuthStub{
 		nextId: 5,
-		users: make(map[string]models.User),
+		users:  make(map[string]models.User),
 	}
 
 	router.Use(func(c *gin.Context) {
 		c.Set("auth", stub)
 	})
 
-	router.GET( "/logout",   Logout)
+	router.GET("/logout", Logout)
 	router.POST("/register", Register)
-	router.POST("/login",    Login)
+	router.POST("/login", Login)
 
 	protected := router.Group("protected")
 	protected.Use(Middleware)
@@ -120,17 +120,17 @@ func TestRegister(t *testing.T) {
 
 	// Create new user
 	json = `{"email":"test","password":"pass"}`
-	w    = post(router, "/register", json)
+	w = post(router, "/register", json)
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	// Create duplicate
 	json = `{"email":"test","password":"pass"}`
-	w    = post(router, "/register", json)
+	w = post(router, "/register", json)
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 
 	// Incomplete payload
 	json = `{"email":"test"}`
-	w    = post(router, "/register", json)
+	w = post(router, "/register", json)
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 }
 
@@ -142,18 +142,18 @@ func TestLogin(t *testing.T) {
 
 	// Create new user
 	json = `{"email":"test","password":"pass"}`
-	w    = post(router, "/register", json)
+	w = post(router, "/register", json)
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	// Login wrong password
 	json = `{"email":"test","password":"wrong"}`
-	w    = post(router, "/login", json)
+	w = post(router, "/login", json)
 	assert.Equal(t, http.StatusUnauthorized, w.Code)
 
 	// Login correct password
 	json = `{"email":"test","password":"pass"}`
-	w    = post(router, "/login", json)
-	assert.Equal(t, http.StatusOK, w.Code)	
+	w = post(router, "/login", json)
+	assert.Equal(t, http.StatusOK, w.Code)
 }
 
 func TestAuthorized(t *testing.T) {
@@ -164,12 +164,12 @@ func TestAuthorized(t *testing.T) {
 
 	// Create new user
 	json = `{"email":"test","password":"pass"}`
-	w    = post(router, "/register", json)
+	w = post(router, "/register", json)
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	// Login
 	json = `{"email":"test","password":"pass"}`
-	w    = post(router, "/login", json)
+	w = post(router, "/login", json)
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	// Get protected with cookie from login
@@ -187,31 +187,31 @@ func TestLogout(t *testing.T) {
 	var w *httptest.ResponseRecorder
 
 	// Logout without valid session
-	w    = get(router, "/logout")
+	w = get(router, "/logout")
 	assert.Equal(t, http.StatusBadRequest, w.Code)
 
 	// Create new user
 	json = `{"email":"test","password":"pass"}`
-	w    = post(router, "/register", json)
+	w = post(router, "/register", json)
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	// Login
 	json = `{"email":"test","password":"pass"}`
-	w    = post(router, "/login", json)
+	w = post(router, "/login", json)
 	assert.Equal(t, http.StatusOK, w.Code)
 
-	cookie := w.HeaderMap["Set-Cookie"]
+	cookiee := w.HeaderMap["Set-Cookie"]
 
 	// Get protected with cookie from login
 	req, _ := http.NewRequest("GET", "/protected/test", nil)
-	req.Header = http.Header{"Cookie": cookie}
+	req.Header = http.Header{"Cookie": cookiee}
 	w = httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
 
 	// Logout with valid session
 	req, _ = http.NewRequest("GET", "/logout", nil)
-	req.Header = http.Header{"Cookie": cookie}
+	req.Header = http.Header{"Cookie": cookiee}
 	w = httptest.NewRecorder()
 	router.ServeHTTP(w, req)
 	assert.Equal(t, http.StatusOK, w.Code)
