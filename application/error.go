@@ -39,6 +39,11 @@ var (
 		http.StatusBadRequest, 
 		"Failed to create user",
 	)
+
+	errorNotFound = newError(
+		http.StatusNotFound, 
+		"Not found",
+	)
 )
 
 // Abort request with json payload {"error":"description"}

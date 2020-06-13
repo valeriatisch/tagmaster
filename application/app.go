@@ -20,9 +20,9 @@ func (app *App) Run() {
 
 	// Authorization route handlers
 	auth := router.Group("/auth")
-	auth.POST("/login", app.Login)
-	auth.POST("/register", app.Register)
-	auth.GET("/logout", app.Logout)
+	auth.POST("/login", app.login)
+	auth.POST("/register", app.register)
+	auth.GET("/logout", app.logout)
 
 	// API route handlers
 	api := router.Group("/api")
@@ -31,6 +31,9 @@ func (app *App) Run() {
 			"message": "hi",
 		})
 	})
+	
+	router.Static("/static", "./static/build")
+	router.NoRoute(app.index)
 
 	router.Run()
 }

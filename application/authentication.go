@@ -19,7 +19,7 @@ type Credentials struct {
 	Password string `json:"password" binding:"required"`
 }
 
-func (app *App) Register(c *gin.Context) {
+func (app *App) register(c *gin.Context) {
 	var credentials Credentials
 
 	session := sessions.Default(c)
@@ -54,7 +54,7 @@ func (app *App) Register(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (app *App) Login(c *gin.Context) {
+func (app *App) login(c *gin.Context) {
 	var (
 		credentials Credentials
 		user models.User
@@ -97,7 +97,7 @@ func (app *App) Login(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (app *App) Logout(c *gin.Context) {
+func (app *App) logout(c *gin.Context) {
 	session := sessions.Default(c)
 	uid := session.Get(userkey)
 
