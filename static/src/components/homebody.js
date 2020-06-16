@@ -5,7 +5,6 @@ class Body extends Component{
     render(){
         return(
             <div class="container text-center" style={{marginTop:"30px"}}>
-                <style>{'.button1{ margin-top:10px; width:150px; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .button1:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }'}</style>
                 <div class="row">
                     <div class="col-sm">
                         <h1>Uploading</h1>
@@ -19,10 +18,6 @@ class Body extends Component{
                     <div class="col-sm">
                         <h1>Get started</h1>
                         The best thing about it? It's completely free. So why don't you try it out right now?
-                        <br/>
-                        <Link to="/login">
-                            <button type="button" class="btn btn-lg button1" role="button" aria-pressed="true">Log in</button>
-                        </Link>
                     </div>
                 </div>
             </div>
