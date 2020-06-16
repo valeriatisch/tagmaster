@@ -2,7 +2,7 @@ package application
 
 import (
 	"github.com/gin-gonic/gin"
-	"path"
+	"strings"
 	"fmt"
 )
 
@@ -10,8 +10,7 @@ func (app *App) index(c *gin.Context) {
 	p := c.Request.URL.Path
 	fmt.Println(p)
 
-	ok, _ := path.Match("/api/*", p)
-	if ok {
+	if strings.HasPrefix(p, "/api/") {
 		abortRequest(c, errorNotFound)
 		return
 	}

@@ -1,0 +1,6 @@
+@media all and (min-width: 480px) {
+  .Logout div {
+    text-align: center;
+    margin: 0 auto;
+  }
+}
