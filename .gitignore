@@ -9,3 +9,6 @@ static/build
 
 #macOS
 .DS_Store
+
+#local bucket
+tmp
