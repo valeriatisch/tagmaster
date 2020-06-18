@@ -10,8 +10,8 @@ type Database struct {
 	*gorm.DB
 }
 
-func NewDatabase() *Database {
-	db, err := gorm.Open("postgres", "host=localhost port=5432 user=felix dbname=felix sslmode=disable")
+func NewDatabase(uri string) *Database {
+	db, err := gorm.Open("postgres", uri)
 	if err != nil {
 		log.Fatal(err)
 	}

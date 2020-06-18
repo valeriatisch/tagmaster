@@ -7,33 +7,40 @@ import (
 )
 
 type App struct {
-	Database *models.Database
+	database *models.Database
+	config config
 }
 
 func NewApp() *App {
-	return &App{Database: models.NewDatabase()}
+	conf := loadConfig()
+	db := models.NewDatabase(conf.databaseURI)
+
+	return &App{
+		database: db,
+		config: conf,
+	}
 }
 
 func (app *App) Run() {
 	router := gin.Default()
-	router.Use(middleware.Session())
 
-	// Authorization route handlers
-	auth := router.Group("/auth")
-	auth.POST("/login", app.login)
-	auth.POST("/register", app.register)
-	auth.GET("/logout", app.logout)
+	router.Use(middleware.Session(app.config.sessionSecret))
 
-	// API route handlers
-	api := router.Group("/api")
-	api.GET("/hello", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "hi",
-		})
-	})
+	api := router.Group("/api")	
+	api.POST(	"/login",	app.login)
+	api.POST(	"/register",	app.register)
+	api.GET(	"/logout",	app.logout)
+	api.GET(	"/hello",	app.hello)
 	
-	router.Static("/static", "./static/build")
-	router.NoRoute(app.index)
+	router.NoRoute(func(c *gin.Context) {
+		abortRequest(c, errorNotFound)
+	})
 
 	router.Run()
+}
+
+func (app *App) hello(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"message": "hi",
+	})
 }

@@ -6,12 +6,9 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 )
 
-const (
-	sessionCookie = "session"
-	sessionSecret = "notsecret"
-)
+const cookieName = "session"
 
-func Session() gin.HandlerFunc {
-	store := cookie.NewStore([]byte(sessionSecret))
-	return sessions.Sessions(sessionCookie, store)
+func Session(secret string) gin.HandlerFunc {
+	store := cookie.NewStore([]byte(secret))
+	return sessions.Sessions(cookieName, store)
 }

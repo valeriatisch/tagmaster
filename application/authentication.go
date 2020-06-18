@@ -6,6 +6,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
+	"log"
 )
 
 const (
@@ -23,7 +24,7 @@ func (app *App) register(c *gin.Context) {
 	var credentials Credentials
 
 	session := sessions.Default(c)
-	db := app.Database
+	db := app.database
 
 	if err := c.ShouldBindJSON(&credentials); err != nil {
 		abortRequest(c, errorMissingCredentials)
@@ -32,6 +33,8 @@ func (app *App) register(c *gin.Context) {
 
 	email := credentials.Email
 	password := credentials.Password
+
+	log.Printf("Register email=%s, password=%s\n", email, password)
 
 	//TODO: validate email + password
 
@@ -61,7 +64,7 @@ func (app *App) login(c *gin.Context) {
 	)
 
 	session := sessions.Default(c)
-	db := app.Database
+	db := app.database
 
 	if err := c.ShouldBindJSON(&credentials); err != nil {
 		abortRequest(c, errorMissingCredentials)
