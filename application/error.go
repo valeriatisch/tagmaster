@@ -44,6 +44,21 @@ var (
 		http.StatusNotFound, 
 		"Not found",
 	)
+
+	errorUnauthorized = newError(
+		http.StatusUnauthorized, 
+		"Unauthorized",
+	)
+
+	errorBadRequest = newError(
+		http.StatusBadRequest, 
+		"Bad request",
+	)
+
+	errorInternal = newError(
+		http.StatusInternalServerError, 
+		"Internal server error",
+	)
 )
 
 // Abort request with json payload {"error":"description"}

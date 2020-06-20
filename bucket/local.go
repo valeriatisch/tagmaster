@@ -3,28 +3,34 @@ package bucket
 import (
 	"os"
 	"io"
+	"log"
 )
 
 type LocalBucket struct {
-	dir string
+	directory string
 }
 
-func NewLocalBucket() LocalBucket {
+func NewLocalBucket(directory string) LocalBucket {
+	err := os.MkdirAll(directory, os.ModePerm)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	return LocalBucket {
-		dir: "tmp/",
+		directory: directory,
 	}
 }
 
-func (l LocalBucket) ReadFile(name string) (io.Reader, error) {
-	return os.Open(l.dir + name)
+func (bkt LocalBucket) ReadFile(name string) (io.Reader, error) {
+	return os.Open(bkt.directory + name)
 }
 
-func (l LocalBucket) RemoveFile(name string) error {
-	return os.Remove(name)
+func (bkt LocalBucket) RemoveFile(name string) error {
+	return os.Remove(bkt.directory + name)
 }
 
-func (l LocalBucket) WriteFile(name string, r io.Reader) error {
-	f, err := os.Create(l.dir + name)
+func (bkt LocalBucket) WriteFile(name string, r io.Reader) error {
+	f, err := os.Create(bkt.directory + name)
 	if err != nil {
 		return err
 	}

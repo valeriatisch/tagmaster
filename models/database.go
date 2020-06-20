@@ -17,6 +17,8 @@ func NewDatabase(uri string) *Database {
 	}
 
 	db.AutoMigrate(&User{})
+	db.AutoMigrate(&Project{})
+	db.AutoMigrate(&Image{})
 
 	return &Database{db}
 }

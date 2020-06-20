@@ -5,6 +5,7 @@ import (
 	"context"
 	"time"
 	"log"
+	"errors"
 	"cloud.google.com/go/storage"
 )
 
@@ -12,7 +13,7 @@ type CloudBucket struct {
 	handle *storage.BucketHandle
 }
 
-func NewCloudBucket() CloudBucket {
+func NewCloudBucket(name string) CloudBucket {
 	ctx := context.Background()
 
 	client, err := storage.NewClient(ctx)
@@ -20,7 +21,7 @@ func NewCloudBucket() CloudBucket {
 		log.Fatal(err)
 	}
 
-	bkt := client.Bucket("sksy-tagmaster.appspot.com")
+	bkt := client.Bucket(name)
 
 	return CloudBucket {
 		handle: bkt,
@@ -28,7 +29,7 @@ func NewCloudBucket() CloudBucket {
 }
 
 func (b CloudBucket) RemoveFile(name string) error {
-	return nil
+	return errors.New("RemoveFile not implemented")
 }
 
 func (b CloudBucket) WriteFile(name string, r io.Reader) error {

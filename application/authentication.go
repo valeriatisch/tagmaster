@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"log"
+	"errors"
 )
 
 const (
@@ -118,3 +119,30 @@ func (app *App) logout(c *gin.Context) {
 
 	c.Status(http.StatusOK)
 }
+
+func (app *App) getUser(c *gin.Context) (*models.User, error) {
+	var user models.User
+
+	session := sessions.Default(c)
+	db := app.database
+
+	val := session.Get(userkey)
+	if val == nil {
+		return nil, errors.New("No valid session")
+	}
+
+	uid, ok := val.(uint)
+	if !ok {
+		return nil, errors.New("User id is not uint")
+	}
+
+	err := db.Take(&user, uid).Error
+
+	return &user, err
+}
+
+
+
+
+
+

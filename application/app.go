@@ -20,9 +20,9 @@ func NewApp() *App {
 	var bkt bucket.Bucket
 
 	if conf.isProduction {
-		bkt = bucket.NewCloudBucket()
+		bkt = bucket.NewCloudBucket("sksy-tagmaster.appspot.com")
 	} else {
-		bkt = bucket.NewLocalBucket()
+		bkt = bucket.NewLocalBucket("./images/")
 	}
 
 	return &App{
@@ -38,12 +38,18 @@ func (app *App) Run() {
 	router.Use(middleware.Session(app.config.sessionSecret))
 
 	api := router.Group("/api")	
-	api.POST(	"/login",	app.login)
-	api.POST(	"/register",	app.register)
-	api.GET(	"/logout",	app.logout)
-	api.GET(	"/hello",	app.hello)
-	api.POST(	"/upload/:name",	app.upload)
-	api.GET(	"/serve/:name",	app.serve)
+	api.POST(  "/login",               app.login)
+	api.POST(  "/register",            app.register)
+	api.GET(   "/logout",              app.logout)
+	api.GET(   "/hello",               app.hello)
+
+	api.POST(  "/projects",            app.projectCreate)
+	api.GET(   "/projects/:id",        app.projectRead)
+	api.DELETE("/projects/:id",        app.projectDelete)
+	api.POST(  "/projects/:id/images", app.imageCreate)
+	api.GET(   "/projects/:id/images", app.imageList)
+	api.GET(   "/images/:id",          app.imageRead)
+
 	
 	router.NoRoute(func(c *gin.Context) {
 		abortRequest(c, errorNotFound)
@@ -55,5 +61,11 @@ func (app *App) Run() {
 func (app *App) hello(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "hi",
+	})
+}
+
+func responseOK(c *gin.Context) {
+	c.JSON(200, gin.H{
+		"message": "ok",
 	})
 }
