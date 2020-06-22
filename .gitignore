@@ -1,7 +1,14 @@
-lastupdate.tmp
+#bin
 tagmaster
 
 #dependencies
 static/node_modules
+
+#build
 static/build
+
+#macOS
 .DS_Store
+
+#local bucket
+tmp

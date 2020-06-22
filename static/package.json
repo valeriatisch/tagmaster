@@ -2,6 +2,7 @@
   "name": "static",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/static",
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.8.1",
     "@testing-library/jest-dom": "^4.2.4",

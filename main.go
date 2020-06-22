@@ -1,10 +1,10 @@
 package main
 
 import (
-	//"github.com/gin-gonic/gin"
-	"fmt"
+	"github.com/valeriatisch/tagmaster/application"
 )
 
 func main() {
-	fmt.Println("Server is running on https://localhost/8080")
-	}
+	app := application.NewApp()
+	app.Run()
+}

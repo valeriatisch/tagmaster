@@ -1,10 +1,15 @@
-module github.com/auth0-blog/go-vr-auth
+module github.com/valeriatisch/tagmaster
 
-go 1.14
+go 1.12
 
 require (
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	cloud.google.com/go v0.58.0
+	cloud.google.com/go/storage v1.8.0
+	github.com/gin-contrib/sessions v0.0.3
 	github.com/gin-gonic/gin v1.6.3
-	github.com/rs/cors v1.7.0
-	gopkg.in/gin-gonic/gin.v1 v1.3.0 // indirect
+	github.com/google/uuid v1.1.1
+	github.com/jinzhu/gorm v1.9.12
+	github.com/lib/pq v1.1.1
+	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
+	google.golang.org/genproto v0.0.0-20200617032506-f1bdc9086088
 )
