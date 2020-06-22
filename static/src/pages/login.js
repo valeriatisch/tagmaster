@@ -16,8 +16,13 @@ export default function Login() {
 
   return (
     <div className="Login">
+      <style>
+        {
+          ".submit-button{ color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .login-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }"
+        }
+      </style>
       <form onSubmit={handleSubmit}>
-        <h3>Sign In</h3>
+        <h4>Sign In</h4>
 
         <FormGroup controlId="email" bsSize="large">
           Email
@@ -26,6 +31,9 @@ export default function Login() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter Email"
+            border-color="#efeb53"
+            required
           />
         </FormGroup>
         <FormGroup controlId="password" bsSize="large">
@@ -34,6 +42,8 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             type="password"
+            placeholder="Enter Password"
+            required
           />
         </FormGroup>
         <div className="form-group">
@@ -48,7 +58,13 @@ export default function Login() {
             </label>
           </div>
         </div>
-        <Button block bsSize="large" disabled={!validateForm()} type="submit">
+        <Button
+          class="btn btn-lg submit-button"
+          block
+          bsSize="large"
+          disabled={!validateForm()}
+          type="submit"
+        >
           Login
         </Button>
         <p className="forgot-password text-right">
