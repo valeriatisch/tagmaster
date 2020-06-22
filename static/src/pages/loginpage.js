@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import Formlogin from "../components/formlogin";
-import Loginheader from "../components/loginheader";
+import Formaccount from "../components/formaccount";
+import Accountheader from "../components/accountheader";
 
 
 class Login extends Component {
