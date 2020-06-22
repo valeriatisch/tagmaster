@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 
 
-class accountheader extends Component {
+class Accountheader extends Component {
     render(){
         return (
         <div>
