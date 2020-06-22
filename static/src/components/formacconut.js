@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-class Formlogin extends Component{
+class Formaccount extends Component{
     
     constructor(props) {
         super(props);
