@@ -4,7 +4,7 @@ import Formaccount from "../components/formaccount";
 import Accountheader from "../components/accountheader";
 
 
-class Login extends Component {
+class Register extends Component {
   render() {
     return (
       <div>
@@ -15,4 +15,4 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default Register;
