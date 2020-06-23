@@ -11,7 +11,7 @@ import (
 )
 
 type ImageJSON struct {
-	ID uint `json:"id" binding:"required"`
+	Id uint `json:"id" binding:"required"`
 	Name string `json:"filename" binding:"required"`
 	Done bool `json:"done" binding:"required"`
 }
@@ -54,7 +54,7 @@ func (app *App) imageCreate(c *gin.Context) {
 	uuid := uuid.New().String()
 	name := h.Filename
 
-	err = app.bucket.WriteFile(name, f)
+	err = app.bucket.WriteFile(uuid, f)
 	if err != nil {
 		abortRequest(c, errorInternal)
 		return
@@ -162,20 +162,21 @@ func (app *App) imageList(c *gin.Context) {
 	}
 
 	var images []models.Image
-	json := make([]ImageJSON, len(images))
 
-	err = app.database.Model(&p).Related(&images, "Images").Error
+	err = app.database.Model(&p).Related(&images).Error
 	if err != nil {
 		abortRequest(c, errorInternal)
 		return
 	}
 
-	for _, img := range images {
-		json = append(json, ImageJSON{
-			ID: img.Id(),
+	json := make([]ImageJSON, len(images))
+
+	for i, img := range images {
+		json[i] = ImageJSON{
+			Id: img.Id(),
 			Name: img.Name,
 			Done: img.Done,
-		})
+		}
 	}
 
 	c.JSON(http.StatusOK, json)

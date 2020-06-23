@@ -20,5 +20,8 @@ func NewDatabase(uri string) *Database {
 	db.AutoMigrate(&Project{})
 	db.AutoMigrate(&Image{})
 
+	// db.Model(&Project{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
+	// db.Model(&Image{}).AddForeignKey("project_id", "projects(id)", "CASCADE", "CASCADE")
+
 	return &Database{db}
 }
