@@ -54,6 +54,22 @@ func (app *App) register(c *gin.Context) {
 	responseOK(c)
 }
 
+func (app *App) userDelete(c *gin.Context) {
+	user, err := app.getUser(c)
+	if err != nil {
+		abortRequest(c, errorUnauthorized)
+		return
+	}
+
+	err = app.database.Delete(user).Error
+	if err != nil {
+		abortRequest(c, errorInternal)
+		return
+	}
+
+	sessions.Default(c).Delete(userkey)
+}
+
 func (app *App) login(c *gin.Context) {
 	var (
 		credentials Credentials

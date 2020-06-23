@@ -57,7 +57,7 @@ func (b CloudBucket) ReadFile(name string) (io.Reader, error) {
 	ctx := context.Background()
 	bkt := b.handle
 
-	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
+	ctx, cancel := context.WithTimeout(ctx, time.Second*30)
 	defer cancel()
 
 	return bkt.Object(name).NewReader(ctx)

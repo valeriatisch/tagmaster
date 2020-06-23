@@ -16,10 +16,12 @@ func (user *User) Id() uint {
 }
 
 func (user *User) BeforeDelete(tx *gorm.DB) error {
-	// Cascading delete of associated images.
-	// We use this instead of a foreign key constraint,
-	// because this only soft-deletes things
-	return tx.Where(&Project{
-		UserID: user.Id(),
-	}).Delete(Project{}).Error
+	var projects []Project
+	tx.Model(user).Related(&projects)
+
+	for _, p := range projects {
+		tx.Delete(&p)
+	}
+
+	return nil
 }
