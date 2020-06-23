@@ -57,10 +57,3 @@ textarea.description{
     background-color: #414141;
     border: 1px solid #efeb53;
 }
-
-.box__dragndrop,
-.box__uploading,
-.box__success,
-.box__error {
-  display: none;
-}

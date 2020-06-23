@@ -84,7 +84,7 @@ class Navbar extends Component {
 					<Route path="/impressum" component={Impressum} />
 					<Route path="/contact" component={Contact} />
 					<Route path="/logout" component={Logout} />
-                    <Route path="/newProject" component={newProject} />
+                    <Route path="/user/newProject" component={newProject} />
                 </Switch>
             </div>
         );
