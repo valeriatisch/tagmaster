@@ -5,6 +5,7 @@ import Impressum from "../pages/impressum";
 import Contact from "../pages/contact";
 import Logout from "../pages/logout";
 import Login from "../pages/login";
+import newProject from "../pages/newProject";
 import logo from '../ressources/navbar-logo.png';
 
 
@@ -83,6 +84,7 @@ class Navbar extends Component {
 					<Route path="/impressum" component={Impressum} />
 					<Route path="/contact" component={Contact} />
 					<Route path="/logout" component={Logout} />
+                    <Route path="/newProject" component={newProject} />
                 </Switch>
             </div>
         );
