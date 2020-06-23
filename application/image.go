@@ -11,9 +11,9 @@ import (
 )
 
 type ImageJSON struct {
-	Id uint `json:"id" binding:"required"`
-	Name string `json:"filename" binding:"required"`
-	Done bool `json:"done" binding:"required"`
+	Id uint `json:"id"`
+	Name string `json:"filename"`
+	Done bool `json:"done"`
 }
 
 func (app *App) imageCreate(c *gin.Context) {
@@ -181,16 +181,3 @@ func (app *App) imageList(c *gin.Context) {
 
 	c.JSON(http.StatusOK, json)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
