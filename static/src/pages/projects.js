@@ -24,7 +24,7 @@ class Projekts extends Component{
                  numberoftags="31" numberofpictures="45" img1={picture3} img2={picture4} 
                  description="Label up to 31 different races of dogs."/>
                 <Projectpreview title="Dolphins" creator="max" tag1="dolphin" tag2="" tag3="" id="3"
-                 numberoftags="0" numberofpictures="282" img1={picture5} img2={picture6} 
+                 numberoftags="1" numberofpictures="282" img1={picture5} img2={picture6} 
                  description=""/>
                 <Projectpreview title="Wild animals" creator="kurt" tag1="elephant" tag2="snake" tag3="lion" id="4"
                  numberoftags="24" numberofpictures="53" img1={picture7} img2={picture8} 
