@@ -44,11 +44,6 @@ class Navbar extends Component {
             ".login-button{ color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .login-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }"
           }
         </style>
-        <style>
-          {
-            ".logout-button{ color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .logout-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }"
-          }
-        </style>
         <nav
           className="navbar sticky-top navbar-expand-lg"
           style={{
@@ -86,14 +81,7 @@ class Navbar extends Component {
               {this.state.loggedIn == true ? (
                 <Link to={"/logout"} className="nav-link">
                   {" "}
-                  <button
-                    type="button"
-                    class="btn btn-lg logout-button"
-                    role="button"
-                    aria-pressed="true"
-                  >
-                    Log out
-                  </button>
+                  Logout{" "}
                 </Link>
               ) : (
                 <Link to={"/login"} className="nav-link">
