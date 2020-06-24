@@ -1,19 +1,19 @@
 package application
 
 import (
-	"log"
-	"io"
-	"strconv"
-	"net/http"
-	"github.com/valeriatisch/tagmaster/models"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/valeriatisch/tagmaster/models"
+	"io"
+	"log"
+	"net/http"
+	"strconv"
 )
 
 type ImageJSON struct {
-	ID uint `json:"id" binding:"required"`
+	ID   uint   `json:"id" binding:"required"`
 	Name string `json:"filename" binding:"required"`
-	Done bool `json:"done" binding:"required"`
+	Done bool   `json:"done" binding:"required"`
 }
 
 func (app *App) imageCreate(c *gin.Context) {
@@ -51,7 +51,7 @@ func (app *App) imageCreate(c *gin.Context) {
 	}
 
 	// Store file in bucket
-	uuid := uuid.New().String()
+	u := uuid.New().String()
 	name := h.Filename
 
 	err = app.bucket.WriteFile(name, f)
@@ -61,10 +61,10 @@ func (app *App) imageCreate(c *gin.Context) {
 	}
 
 	// Insert in database
-	img := models.Image {
-		UUID: uuid,
-		Name: name,
-		Done: false,
+	img := models.Image{
+		UUID:      u,
+		Name:      name,
+		Done:      false,
 		ProjectID: p.Id(),
 	}
 
@@ -74,7 +74,7 @@ func (app *App) imageCreate(c *gin.Context) {
 		return
 	}
 
-	// Cleanup if error	
+	// Cleanup if error
 	err = app.bucket.RemoveFile(name)
 	if err != nil {
 		// Inconsistent state
@@ -119,7 +119,6 @@ func (app *App) imageRead(c *gin.Context) {
 		abortRequest(c, errorUnauthorized)
 		return
 	}
-	
 
 	r, err := app.bucket.ReadFile(img.Name)
 	if err != nil {
@@ -128,7 +127,7 @@ func (app *App) imageRead(c *gin.Context) {
 
 	w := c.Writer
 	w.Header().Set("Content-Type", "image/jpeg")
-	io.Copy(w, r)
+	_, _ = io.Copy(w, r)
 
 	c.Status(http.StatusOK)
 }
@@ -172,7 +171,7 @@ func (app *App) imageList(c *gin.Context) {
 
 	for _, img := range images {
 		json = append(json, ImageJSON{
-			ID: img.Id(),
+			ID:   img.Id(),
 			Name: img.Name,
 			Done: img.Done,
 		})
@@ -180,16 +179,3 @@ func (app *App) imageList(c *gin.Context) {
 
 	c.JSON(http.StatusOK, json)
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

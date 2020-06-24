@@ -1,20 +1,21 @@
 package application
 
 import (
-	"github.com/valeriatisch/tagmaster/models"
 	"github.com/gin-gonic/gin"
-	"github.com/valeriatisch/tagmaster/middleware"
 	"github.com/valeriatisch/tagmaster/bucket"
-
+	"github.com/valeriatisch/tagmaster/middleware"
+	"github.com/valeriatisch/tagmaster/models"
+	"os"
 )
 
 type App struct {
 	database *models.Database
-	config config
-	bucket bucket.Bucket
+	config   config
+	bucket   bucket.Bucket
 }
 
 func NewApp() *App {
+	_ = os.Setenv("DATABASE_URI", "host=localhost user=valeria dbname=userdb password=password")
 	conf := loadConfig()
 	db := models.NewDatabase(conf.databaseURI)
 	var bkt bucket.Bucket
@@ -27,8 +28,8 @@ func NewApp() *App {
 
 	return &App{
 		database: db,
-		config: conf,
-		bucket: bkt,
+		config:   conf,
+		bucket:   bkt,
 	}
 }
 
@@ -37,25 +38,25 @@ func (app *App) Run() {
 
 	router.Use(middleware.Session(app.config.sessionSecret))
 
-	api := router.Group("/api")	
-	api.POST(  "/login",               app.login)
-	api.POST(  "/register",            app.register)
-	api.GET(   "/logout",              app.logout)
-	api.GET(   "/hello",               app.hello)
+	api := router.Group("/api")
+	api.POST("/login", app.login)
+	api.POST("/register", app.register)
+	api.GET("/logout", app.logout)
+	api.GET("/hello", app.hello)
+	api.POST("/forgotpassword", app.sendPassword)
 
-	api.POST(  "/projects",            app.projectCreate)
-	api.GET(   "/projects/:id",        app.projectRead)
-	api.DELETE("/projects/:id",        app.projectDelete)
-	api.POST(  "/projects/:id/images", app.imageCreate)
-	api.GET(   "/projects/:id/images", app.imageList)
-	api.GET(   "/images/:id",          app.imageRead)
+	api.POST("/projects", app.projectCreate)
+	api.GET("/projects/:id", app.projectRead)
+	api.DELETE("/projects/:id", app.projectDelete)
+	api.POST("/projects/:id/images", app.imageCreate)
+	api.GET("/projects/:id/images", app.imageList)
+	api.GET("/images/:id", app.imageRead)
 
-	
 	router.NoRoute(func(c *gin.Context) {
 		abortRequest(c, errorNotFound)
 	})
 
-	router.Run()
+	_ = router.Run()
 }
 
 func (app *App) hello(c *gin.Context) {
