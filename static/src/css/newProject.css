@@ -1,0 +1,55 @@
+html { 
+    background-color: #191919;
+    color:white;
+} 
+
+h1{
+    color:#efeb53
+} 
+
+div.main{
+    background-color: #191919;
+    margin:10px
+} 
+div.input-group{
+    margin-bottom:10px
+}
+textarea.description{
+    min-height: 76px;
+    resize:vertical;
+}
+.createP input{
+    background-color: #646464;
+    border: 1px solid #efeb53;
+    color: white;
+}
+.createP textarea{
+    background-color: #646464;
+    border: 1px solid #efeb53;
+    color: white;
+}
+.createP input:focus{
+    background-color: #646464;
+    border: 1px solid #efeb53;
+    color: white;
+}
+.createP textarea:focus{
+    background-color: #646464;
+    border: 1px solid #efeb53;
+    color: white;
+}
+.createP span{
+    background-color: #282828;
+    color: #efeb53;
+    border: 1px solid #efeb53;
+}
+.createP button{
+    color: #efeb53;
+    background-color: #282828;
+    border: 1px solid #efeb53;
+}
+.createP button:hover{
+    color: #ece990;
+    background-color: #414141;
+    border: 1px solid #efeb53;
+}
