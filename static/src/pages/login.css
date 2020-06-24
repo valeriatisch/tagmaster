@@ -2,17 +2,18 @@
   body {
     font-family: Arial, Helvetica, sans-serif;
   }
-  form {
-    border: 3px solid #f1f1f1;
-  }
 
   .Login {
     padding: 20px 0;
   }
 
+  .Login input {
+    margin-right: 10%;
+    text-align: center;
+  }
   .Login form {
     width: 100%;
-    padding: 12px 20px;
+    padding: 20px 80px;
     border: 1px solid #ccc;
     color: #333331;
     box-sizing: border-box;
@@ -20,12 +21,13 @@
     margin-top: 10%;
     max-width: 320px;
   }
+
   .Login h3 {
     text-align: center;
   }
-  .submit-button {
+  .Login button {
     color: #efeb53;
-    background-color: #282828;
+    background-color: #272724f3;
     border: 1px solid #efeb53;
     padding: 14px 20px;
     margin: 8px 0;
