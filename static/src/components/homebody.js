@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from 'react-router-dom';
+import Register from "../pages/accountpage";
 
 class Body extends Component{
     render(){
@@ -20,8 +21,8 @@ class Body extends Component{
                         <h1>Get started</h1>
                         The best thing about it? It's completely free. So why don't you try it out right now?
                         <br/>
-                        <Link to="/login">
-                            <button type="button" class="btn btn-lg button1" role="button" aria-pressed="true">Log in</button>
+                        <Link to="/accountpage">
+                            <button type="button" class="btn btn-lg button1" role="button" aria-pressed="true">Register</button>
                         </Link>
                     </div>
                 </div>
