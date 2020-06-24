@@ -5,7 +5,7 @@ class Formaccount extends Component{
     constructor(props) {
         super(props);
         this.state = {
-          nameOfGuests: null,
+          username: null,
           password: null,
           email: null
         };
@@ -28,15 +28,18 @@ class Formaccount extends Component{
     
       render() {
         return (
-        
+            <div class="container " style={{marginTop:"10px",border: "1px solid", padding:"30px", borderRadius:"30px" }}>
+            <style>{'.button1{ margin-top:20px; width:150px; height: 30px;  color:#f5f8fa; background-color:#4fbae6; border: 1px solid #4fbae6; border-radius: 30px; } .button1:hover { background-color:#5b9be5; color:#f5f8fa; border: 1px solid } .input1{width:250px; height:20px;border-radius: 15px; border: 1px solid; border-color:#000000; padding:7px} .input1:focus{outline:none}'
+            }</style>
+           <h1 style={{fontSize:"22px", marginTop:"5px", padding:"40px"}}>Create an Account</h1>
           <form onSubmit={this.mySubmitHandler}>
             <label>
               Name
               <br />
-              <input
-                name="nameOfGuests"
+              <input class="input1"
+                name="username"
                 type="text"
-                value={this.state.nameOfGuests}
+                value={this.state.username}
                 onChange={this.handleInputChange} />
             </label>
             <br/>
@@ -44,7 +47,7 @@ class Formaccount extends Component{
             <label>
               Password
               <br/>
-              <input
+              <input class="input1"
                 name="password"
                 type="text"
                 value={this.state.password}
@@ -55,7 +58,7 @@ class Formaccount extends Component{
             <label>
               Email
             <br/>
-              <input
+              <input class="input1"
                 name="email"
                 type="text"
                 value={this.state.email}
@@ -63,7 +66,7 @@ class Formaccount extends Component{
             </label>
             <br/>
             <br/>
-            <button>Submit</button>
+            <button>type="submit" class="btn btn-lg button1" role="button" aria-pressed="true">Register</button>
           </form>
           );
       }
