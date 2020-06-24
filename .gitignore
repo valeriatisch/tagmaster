@@ -11,4 +11,4 @@ static/build
 .DS_Store
 
 #local bucket
-tmp
+images/*

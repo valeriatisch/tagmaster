@@ -10,8 +10,8 @@ type appError struct {
 	description string
 }
 
-func (e appError) Error() string {
-	return e.description
+func (err appError) Error() string {
+	return err.description
 }
 
 var (

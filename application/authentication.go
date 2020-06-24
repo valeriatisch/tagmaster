@@ -1,12 +1,10 @@
 package application
 
 import (
-	"net/http"
 	"github.com/valeriatisch/tagmaster/models"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
-	"log"
 	"errors"
 )
 
@@ -35,8 +33,6 @@ func (app *App) register(c *gin.Context) {
 	email := credentials.Email
 	password := credentials.Password
 
-	log.Printf("Register email=%s, password=%s\n", email, password)
-
 	//TODO: validate email + password
 
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), difficulty)
@@ -55,7 +51,23 @@ func (app *App) register(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK)
+	responseOK(c)
+}
+
+func (app *App) userDelete(c *gin.Context) {
+	user, err := app.getUser(c)
+	if err != nil {
+		abortRequest(c, errorUnauthorized)
+		return
+	}
+
+	err = app.database.Delete(user).Error
+	if err != nil {
+		abortRequest(c, errorInternal)
+		return
+	}
+
+	sessions.Default(c).Delete(userkey)
 }
 
 func (app *App) login(c *gin.Context) {
@@ -98,7 +110,7 @@ func (app *App) login(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK)
+	responseOK(c)
 }
 
 func (app *App) logout(c *gin.Context) {
@@ -117,7 +129,7 @@ func (app *App) logout(c *gin.Context) {
 		return
 	}
 
-	c.Status(http.StatusOK)
+	responseOK(c)
 }
 
 func (app *App) getUser(c *gin.Context) (*models.User, error) {
