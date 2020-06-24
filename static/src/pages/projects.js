@@ -28,7 +28,7 @@ class Projekts extends Component{
                  description=""/>
                 <Projectpreview title="Wild animals" creator="kurt" tag1="elephant" tag2="snake" tag3="lion" id="4"
                  numberoftags="24" numberofpictures="53" img1={picture7} img2={picture8} 
-                 description="Browse through the wildlife to label many exotic animals as possible."/>
+                 description="Browse through the wildlife to label many exotic animals."/>
             </div>
         );
     }
