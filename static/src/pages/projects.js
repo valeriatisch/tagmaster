@@ -9,7 +9,7 @@ import picture6 from "../ressources/dolphin2.png"
 import picture7 from "../ressources/giraffe.jpg"
 import picture8 from "../ressources/lion.jpg"
 
-class Projekts extends Component{
+class Projects extends Component{
     render(){
         return(
             <div>
@@ -34,4 +34,4 @@ class Projekts extends Component{
     }
 }
 
-export default Projekts;
+export default Projects;

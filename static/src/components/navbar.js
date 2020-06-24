@@ -7,6 +7,7 @@ import Logout from "../pages/logout";
 import Login from "../pages/login";
 import newProject from "../pages/newProject";
 import logo from '../ressources/navbar-logo.png';
+import Projects from "../pages/projects.js";
 
 
 class Navbar extends Component {
@@ -37,7 +38,7 @@ class Navbar extends Component {
 
     render() {
         return (
-            <div className="container col-auto" style={{padding:"0px"}}>
+            <div className="container col-auto" style={{padding:"0px", backgroundColor:"#191919"}}>
                 <style>{'a { color: #efeb53; fontSize:15px } a:hover{ color:white }'}</style>
                 <style>{'.login-button{ color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .login-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }'}</style>
                 <nav className="navbar sticky-top navbar-expand-lg" style={{backgroundColor:"#191919",borderBottom:"2px solid #2e2d2d"}}>
@@ -50,6 +51,11 @@ class Navbar extends Component {
                         <a className ="mr-3">
                             <Link to={"/"} className="nav-link">
                                 Home
+                            </Link>
+                        </a>
+                        <a className ="mr-3">
+                            <Link to={"/projects"} className="nav-link">
+                                Projects
                             </Link>
                         </a>
                         <a className ="mr-3">
@@ -85,6 +91,7 @@ class Navbar extends Component {
 					<Route path="/contact" component={Contact} />
 					<Route path="/logout" component={Logout} />
                     <Route path="/user/newProject" component={newProject} />
+                    <Route path="/projects" component={Projects} />
                 </Switch>
             </div>
         );

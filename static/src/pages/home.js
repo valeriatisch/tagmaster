@@ -8,7 +8,7 @@ class Home extends Component {
     return (
       <div>
         <style>
-          {"body { background-color: #191919; color: #CBCBCB} h1{color:#efeb53}"}
+          {"body { background-color: #191919; color: #CBCBCB } h1{color:#efeb53}"}
         </style>
         <Header/>
         <Body/>

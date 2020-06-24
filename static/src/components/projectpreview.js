@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Link, Switch, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class Projectpreview extends Component{
     render(){
         return(            
-            <div class="container border" style={{backgroundColor:"#3D3D3D",color:"#CBCBCB", borderRadius:"10px",marginBottom:"5px"}}>
+            <div class="container border" style={{backgroundColor:"#3D3D3D",color:"#efeb53", borderRadius:"10px", marginBottom:"5px"}}>
                 <Link to={`/${this.props.creator}/projects/${this.props.id}`} style={{ textDecoration: 'none'}}>
                     <div class="row">
                         <div class="col-8">

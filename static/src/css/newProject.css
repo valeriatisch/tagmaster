@@ -1,11 +1,6 @@
 html { 
-    background-color: #191919; 
-    color: #CBCBCB
-} 
-
-div { 
-    background-color: #191919; 
-    color: #CBCBCB
+    background-color: #191919;
+    color:white;
 } 
 
 h1{
@@ -13,6 +8,7 @@ h1{
 } 
 
 div.main{
+    background-color: #191919;
     margin:10px
 } 
 div.input-group{

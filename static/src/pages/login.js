@@ -15,7 +15,7 @@ export default function Login() {
   }
 
   return (
-    <div className="Login">
+    <div className="Login" style={{color:"white"}}>
       <form onSubmit={handleSubmit}>
         <h3>Sign In</h3>
 
