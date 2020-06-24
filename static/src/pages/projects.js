@@ -18,7 +18,7 @@ class Projekts extends Component{
                 </style>
                 <h1 class="text-center">All Projects</h1>
                 <Projectpreview title="Road traffic" creator="kevin" tag1="car" tag2="bus" tag3="pedestrian" id="1"
-                 numberoftags="4" numberofpictures="38" img1={picture1} img2={picture2} 
+                 numberoftags="7" numberofpictures="38" img1={picture1} img2={picture2} 
                  description="In this Project you will be labelling everything that can either drive or walk on the road."/>
                 <Projectpreview title="Dog races" creator="bert" tag1="beagle" tag2="kooikerhondje" tag3="poodle" id="2"
                  numberoftags="31" numberofpictures="45" img1={picture3} img2={picture4} 
