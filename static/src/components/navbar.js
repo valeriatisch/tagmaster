@@ -8,6 +8,7 @@ import Login from "../pages/login";
 import newProject from "../pages/newProject";
 import logo from '../ressources/navbar-logo.png';
 import Projects from "../pages/projects.js";
+import Accountpage from "../pages/accountpage";
 
 
 class Navbar extends Component {
@@ -69,7 +70,7 @@ class Navbar extends Component {
                             </Link>
                         </a>
                     </div>
-                    <div className="navbar-nav navbar-right">
+                    <div className="navbar-nav navbar-right" >
                         <a className ="mr-3">
                             {this.state.loggedIn == true ? (
                                 <Link to={"/logout"} className="nav-link">
@@ -92,6 +93,7 @@ class Navbar extends Component {
 					<Route path="/logout" component={Logout} />
                     <Route path="/user/newProject" component={newProject} />
                     <Route path="/projects" component={Projects} />
+                    <Route path="/accountpage" component={Accountpage} />
                 </Switch>
             </div>
         );
