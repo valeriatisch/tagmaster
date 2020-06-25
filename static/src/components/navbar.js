@@ -41,7 +41,7 @@ class Navbar extends Component {
         return (
             <div className="container col-auto" style={{padding:"0px", backgroundColor:"#191919"}}>
                 <style>{'a { color: #efeb53; fontSize:15px } a:hover{ color:white }'}</style>
-                <style>{'.login-button{ color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .login-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }'}</style>
+                <style>{'.login-button{width: 100%; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .login-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }'}</style>
                 <nav className="navbar sticky-top navbar-expand-lg" style={{backgroundColor:"#191919",borderBottom:"2px solid #2e2d2d"}}>
                     <a className ="nav-link mr-3 h1" style={{marginTop:"-20px",marginBottom:"-10px"}}>
                         <Link to={"/"} className="nav-link">
