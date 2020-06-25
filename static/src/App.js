@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Navbar from "./components/navbar";
+import Footer from "./components/footer";
 
 class App extends Component {
   render() {
@@ -9,6 +10,7 @@ class App extends Component {
       <Router>
         <div>
           <Navbar />
+          <Footer/>
         </div>
       </Router>
     );
