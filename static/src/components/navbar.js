@@ -6,6 +6,7 @@ import Contact from "../pages/contact";
 import Logout from "../pages/logout";
 import Login from "../pages/login";
 import logo from "../ressources/navbar-logo.png";
+import Profile from "../pages/profile";
 
 class Navbar extends Component {
   constructor(props) {
@@ -41,12 +42,17 @@ class Navbar extends Component {
         </style>
         <style>
           {
-            ".login-button{ color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .login-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }"
+            ".login-button{font-size:15px; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .login-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }"
           }
         </style>
         <style>
           {
-            ".logout-button{ color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .logout-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }"
+            ".logout-button{ font-size:15px; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .logout-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }"
+          }
+        </style>
+        <style>
+          {
+            ".profile-button{ font-size:15px; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .logout-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }"
           }
         </style>
         <nav
@@ -65,11 +71,19 @@ class Navbar extends Component {
             </Link>
           </a>
           <div className="navbar-nav mr-auto">
-            <a className="mr-3">
-              <Link to={"/"} className="nav-link">
-                Home
-              </Link>
-            </a>
+            {this.state.loggedIn == true ? (
+              <a className="mr-auto">
+                <Link to={"/profile"} className="nav-link">
+                  Profile
+                </Link>
+              </a>
+            ) : (
+              <a className="mr-3">
+                <Link to={"/"} className="nav-link">
+                  Home
+                </Link>
+              </a>
+            )}
             <a className="mr-3">
               <Link to={"/contact"} className="nav-link">
                 Contact
@@ -84,16 +98,18 @@ class Navbar extends Component {
           <div className="navbar-nav navbar-right">
             <a className="mr-3">
               {this.state.loggedIn == true ? (
-                <Link to={"/logout"} className="nav-link">
-                  <button
-                    type="button"
-                    class="btn btn-lg logout-button"
-                    role="button"
-                    aria-pressed="true"
-                  >
-                    Logout{" "}
-                  </button>
-                </Link>
+                <a>
+                  <Link to={"/logout"} className="nav-link">
+                    <button
+                      type="button"
+                      class="btn btn-lg logout-button"
+                      role="button"
+                      aria-pressed="true"
+                    >
+                      Logout{" "}
+                    </button>
+                  </Link>
+                </a>
               ) : (
                 <Link to={"/login"} className="nav-link">
                   <button
@@ -115,6 +131,7 @@ class Navbar extends Component {
           <Route path="/impressum" component={Impressum} />
           <Route path="/contact" component={Contact} />
           <Route path="/logout" component={Logout} />
+          <Route path="/profile" component={Profile} />
         </Switch>
       </div>
     );
