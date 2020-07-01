@@ -5,74 +5,27 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
-	"errors"
 )
 
 const (
 	userkey = "user"
-	difficulty = 10
 )
 
 // These fields must be exported for bindJSON to find them
-type Credentials struct {
+type CredentialsJSON struct {
 	Email    string `json:"email"    binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
-func (app *App) register(c *gin.Context) {
-	var credentials Credentials
-
-	session := sessions.Default(c)
-	db := app.database
-
-	if err := c.ShouldBindJSON(&credentials); err != nil {
-		abortRequest(c, errorMissingCredentials)
-		return
-	}
-
-	email := credentials.Email
-	password := credentials.Password
-
-	//TODO: validate email + password
-
-	bytes, _ := bcrypt.GenerateFromPassword([]byte(password), difficulty)
-	user := models.User{Email: email, Password: string(bytes)}
-
-	if err := db.Create(&user).Error; err != nil {
-		//TODO: Check if duplicate or something else
-		abortRequest(c, errorFailedToCreateUser)
-		return
-	}
-
-	session.Set(userkey, user.Id())
-
-	if err := session.Save(); err != nil {
-		abortRequest(c, err)
-		return
-	}
-
-	responseOK(c)
+type PasswordUpdateJSON struct {
+	Old string `json:"old_password" binding:"required"`
+	New string `json:"new_password" binding:"required,min=8"`
 }
 
-func (app *App) userDelete(c *gin.Context) {
-	user, err := app.getUser(c)
-	if err != nil {
-		abortRequest(c, errorUnauthorized)
-		return
-	}
 
-	err = app.database.Delete(user).Error
-	if err != nil {
-		abortRequest(c, errorInternal)
-		return
-	}
-
-	sessions.Default(c).Delete(userkey)
-}
-
-func (app *App) login(c *gin.Context) {
+func (app *App) authLogin(c *gin.Context) {
 	var (
-		credentials Credentials
+		credentials CredentialsJSON
 		user models.User
 	)
 
@@ -113,7 +66,7 @@ func (app *App) login(c *gin.Context) {
 	responseOK(c)
 }
 
-func (app *App) logout(c *gin.Context) {
+func (app *App) authLogout(c *gin.Context) {
 	session := sessions.Default(c)
 	uid := session.Get(userkey)
 
@@ -132,29 +85,40 @@ func (app *App) logout(c *gin.Context) {
 	responseOK(c)
 }
 
-func (app *App) getUser(c *gin.Context) (*models.User, error) {
-	var user models.User
-
-	session := sessions.Default(c)
-	db := app.database
-
-	val := session.Get(userkey)
-	if val == nil {
-		return nil, errors.New("No valid session")
+func (app *App) authUpdate(c *gin.Context) {
+	user, err := app.getUser(c)
+	if err != nil {
+		abortRequest(c, errorUnauthorized)
+		return
 	}
 
-	uid, ok := val.(uint)
-	if !ok {
-		return nil, errors.New("User id is not uint")
+	var json PasswordUpdateJSON
+	if err := c.ShouldBindJSON(&json); err != nil {
+		abortRequest(c, errorBadRequest)
+		return
 	}
 
-	err := db.Take(&user, uid).Error
+	if !checkPassword(user.Password, json.Old) {
+		abortRequest(c, errorUnauthorized)
+		return
+	}
 
-	return &user, err
+	user.Password = hashPassword(json.New)
+	app.database.Save(user)
+
+	responseOK(c)
 }
 
+func (app *App) authReset(c *gin.Context) {
 
+}
 
+func hashPassword(pw string) string {
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(pw), 10)
+	return string(bytes)
+}
 
-
-
+func checkPassword(hash, pw string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
+	return err == nil
+}

@@ -53,10 +53,17 @@ func (app *App) Run() {
 
 	api := router.Group("/api")
 
+	// Authentication
+	api.POST(  "/auth/login",          app.authLogin)
+	api.POST(  "/auth/logout",         app.authLogout)
+	api.POST(  "/auth/update",         app.authUpdate)
+	api.POST(  "/auth/reset",          app.authReset)
+
 	// User
-	api.POST(  "/login",               app.login)
-	api.POST(  "/register",            app.register)
-	api.GET(   "/logout",              app.logout)
+	api.POST(  "/user",                app.userCreate)
+	api.GET(   "/user",                app.userRead)
+	api.PUT(   "/user",                app.userUpdate)
+	api.DELETE("/user",                app.userDelete)
 
 	// Project
 	api.POST(  "/projects",            app.projectCreate)
