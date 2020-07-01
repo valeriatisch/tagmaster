@@ -2,7 +2,6 @@ package application
 
 import (
 	"errors"
-	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/sendgrid/sendgrid-go"
@@ -172,9 +171,7 @@ func (app *App) sendPassword(c *gin.Context) {
 
 	db.Model(&user).Update("password", string(bytes))
 
-	_ = os.Setenv("SENDGRID_API_KEY", "")
-	//TODO tagmaster E-Mail erstellen
-	from := mail.NewEmail("Tagmaster", "")
+	from := mail.NewEmail("Tagmaster", "not-reply@tagmaster.ml")
 	to := mail.NewEmail("Tagmaster User", email)
 	subject := "Tagmaster password update"
 	plainTextContent := "Your new password is " + password
@@ -185,9 +182,9 @@ func (app *App) sendPassword(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 	} else {
-		fmt.Println(response.StatusCode)
-		fmt.Print(response.Body)
-		fmt.Println(response.Headers)
+		log.Println(response.StatusCode)
+		log.Print(response.Body)
+		log.Println(response.Headers)
 	}
 
 	session.Set(userkey, user.Id())
@@ -209,7 +206,7 @@ func generatePassword() string {
 	all := "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
 		"abcdefghijklmnopqrstuvwxyz" +
 		digits + specials
-	length := 8
+	length := 10
 	buf := make([]byte, length)
 	buf[0] = digits[rand.Intn(len(digits))]
 	buf[1] = specials[rand.Intn(len(specials))]
@@ -219,7 +216,6 @@ func generatePassword() string {
 	rand.Shuffle(len(buf), func(i, j int) {
 		buf[i], buf[j] = buf[j], buf[i]
 	})
-	str := string(buf)
 
-	return str
+	return string(buf)
 }

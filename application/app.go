@@ -5,7 +5,6 @@ import (
 	"github.com/valeriatisch/tagmaster/bucket"
 	"github.com/valeriatisch/tagmaster/middleware"
 	"github.com/valeriatisch/tagmaster/models"
-	"os"
 )
 
 type App struct {
@@ -15,7 +14,6 @@ type App struct {
 }
 
 func NewApp() *App {
-	_ = os.Setenv("DATABASE_URI", "host=localhost user=valeria dbname=userdb password=password")
 	conf := loadConfig()
 	db := models.NewDatabase(conf.databaseURI)
 	var bkt bucket.Bucket
@@ -43,7 +41,7 @@ func (app *App) Run() {
 	api.POST("/register", app.register)
 	api.GET("/logout", app.logout)
 	api.GET("/hello", app.hello)
-	api.POST("/forgotpassword", app.sendPassword)
+	api.POST("/sendPassword", app.sendPassword)
 
 	api.POST("/projects", app.projectCreate)
 	api.GET("/projects/:id", app.projectRead)
