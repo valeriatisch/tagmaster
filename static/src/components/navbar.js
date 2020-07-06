@@ -9,6 +9,7 @@ import newProject from "../pages/newProject";
 import logo from '../ressources/navbar-logo.png';
 import Projects from "../pages/projects.js";
 import Accountpage from "../pages/accountpage";
+import Label from "../pages/label";
 
 
 class Navbar extends Component {
@@ -42,7 +43,7 @@ class Navbar extends Component {
             <div className="container col-auto" style={{padding:"0px", backgroundColor:"#191919"}}>
                 <style>{'a { color: #efeb53; fontSize:15px } a:hover{ color:white }'}</style>
                 <style>{'.login-button{width: 100%; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .login-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }'}</style>
-                <nav className="navbar sticky-top navbar-expand-lg" style={{backgroundColor:"#191919",borderBottom:"2px solid #2e2d2d"}}>
+                <nav className="navbar navbar-expand-md" style={{backgroundColor:"#191919",borderBottom:"2px solid #2e2d2d"}}>
                     <a className ="nav-link mr-3 h1" style={{marginTop:"-20px",marginBottom:"-10px"}}>
                         <Link to={"/"} className="nav-link">
                             <img src={logo} height="45px"/>
@@ -94,6 +95,7 @@ class Navbar extends Component {
                     <Route path="/user/newProject" component={newProject} />
                     <Route path="/projects" component={Projects} />
                     <Route path="/accountpage" component={Accountpage} />
+                    <Route path="/label" component={Label} />
                 </Switch>
             </div>
         );
