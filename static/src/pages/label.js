@@ -10,6 +10,8 @@ class Label extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      ogwidth : 0,
+      ogheight: 0,
       imageLabels: ["cat", "dog", "bird"],
       tags: [],
       show: false,
@@ -24,24 +26,42 @@ class Label extends Component {
   componentDidMount() {
     const canvas = this.refs.canvas;
     const img = this.refs.img;
+    const that = this;
     img.onload = function() {
-      canvas.width = img.width-4;
-      canvas.height = img.height-4;
+      canvas.width = img.width;
+      canvas.height = img.height;
+      that.setState({ogwidth: canvas.width,ogheight: canvas.height});
       const ctx = canvas.getContext("2d");
     }
+
+    var zoom = setInterval(function(){
+      if(canvas.width != img.width){
+        canvas.width = img.width;
+        canvas.height = img.height;
+      }
+    },10);
+  }
+
+  componentDidUpdate(){
+    const canvas = this.refs.canvas;
+    const img = this.refs.img;
+    canvas.width = img.width;
+    canvas.height = img.height;
   }
 
   render() {
     return (
       <Container style={{"margin-top": "40px"}}>
         <Row>
-          <Col>
+          <Col xs={6} md={8}>
             <div style={{"background-color": "red"}}>
-              <Image ref="img" style={{"position": "absolute", "top": "0px", "left": "0px", "width": "100%"}} src="https://source.unsplash.com/random" fluid />
-              <canvas onMouseDown={(e) => this.onMouseDown(e)} onMouseUp={(e) => this.onMouseUp(e)} onMouseMove={(e) => this.onMouseMove(e)} style={{border:"2px solid", "border-color": "yellow","position": "absolute", "top": "0px", "left": "0px"}} ref="canvas" height={425} />
+              <Image ref="img" style={{"position": "absolute", "top": "0px", "left": "0px", "width": "100%"}} src="https://i.pinimg.com/originals/d8/eb/a5/d8eba5be8a52b45b7477b4dca15e6e6a.jpg" fluid rounded/>
+              <canvas onMouseDown={(e) => this.onMouseDown(e)} onMouseUp={(e) => this.onMouseUp(e)} onMouseMove={(e) => this.onMouseMove(e)} 
+                      onTouchStart={(e) => this.onTouchStart(e)} onTouchEnd={(e) => this.onTouchEnd(e)} onTouchMove={(e) => this.onTouchMove(e)}
+                      style={{"position": "absolute", "top": "0px", "left": "0px"}} ref="canvas" height={425} />
             </div>
           </Col>
-          <Col>
+          <Col xs={6} md={4}>
             <Table striped bordered hover variant="dark">
               <thead>
                 <tr>
@@ -117,9 +137,10 @@ class Label extends Component {
     const tag = this.state.tags[i];
     const canvas = this.refs.canvas;
     const ctx = canvas.getContext("2d");
+    const faktor = canvas.height/this.state.ogheight;
     ctx.lineWidth = 2;
     ctx.strokeStyle = "#0000FF";
-    ctx.strokeRect(tag.x1, tag.y1, tag.x2 - tag.x1, tag.y2 - tag.y1);
+    ctx.strokeRect(tag.x1*faktor, tag.y1*faktor, (tag.x2 - tag.x1)*faktor , (tag.y2 - tag.y1)*faktor );
   }
 
   stopHover() {
@@ -129,8 +150,10 @@ class Label extends Component {
   addTag(t) {
     this.handleClose();
     this.clearCanvas();
+    const canvas = this.refs.canvas;
     const {x1, y1, x2, y2} = this.state;
-    const tag = {label: t, x1: x1, y1: y1, x2: x2, y2: y2};
+    const faktor = canvas.height/this.state.ogheight;
+    const tag = {label: t, x1: x1/faktor, y1: y1/faktor, x2: x2/faktor, y2: y2/faktor};
     this.state.tags.push(tag);
   }
 
@@ -149,12 +172,13 @@ class Label extends Component {
   }
 
   onMouseDown(e) {
-    const canvas = this.refs.canvas
-    const ctx = canvas.getContext("2d")
+    const canvas = this.refs.canvas;
+    const ctx = canvas.getContext("2d");
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const {x, y} = this.getPos(e)
+    const {x, y} = this.getPos(e);
+
     this.setState({x1: x});
     this.setState({y1: y});
     this.setState({drawing: true});
@@ -182,17 +206,74 @@ class Label extends Component {
     if (!this.state.drawing) {
       return;
     }
+    const canvas = this.refs.canvas;
+    const ctx = canvas.getContext("2d");
 
-    const {x, y} = this.getPos(e)
-    const canvas = this.refs.canvas
+    const {x, y} = this.getPos(e);
+
     const x1 = this.state.x1;
     const y1 = this.state.y1;
 
-    const ctx = canvas.getContext("2d")
+    
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.lineWidth = 2;
     ctx.strokeStyle = "#FF0000";
     ctx.strokeRect(x1, y1, x - x1, y - y1);
   }
+
+  onTouchStart(e){
+    const canvas = this.refs.canvas;
+    const ctx = canvas.getContext("2d");
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    var touch = e.touches[0];
+    const {x, y} = this.getPos(touch);
+
+    this.setState({x1: x});
+    this.setState({y1: y});
+    this.setState({drawing: true});
+  }
+
+  onTouchMove(e){
+    if (!this.state.drawing) {
+      return;
+    }
+    const canvas = this.refs.canvas;
+    const ctx = canvas.getContext("2d")
+
+    var touch = e.touches[0];
+    const {x, y} = this.getPos(touch);
+    const x1 = this.state.x1;
+    const y1 = this.state.y1;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "#FF0000";
+    ctx.strokeRect(x1, y1, x - x1, y - y1);
+  }
+
+  onTouchEnd(e){
+    var touch = e.changedTouches[0]
+    const {x, y} = this.getPos(touch);
+
+    if (Math.abs(this.state.x1-x) < 5 || Math.abs(this.state.y1-y) < 5){
+      const canvas = this.refs.canvas;
+      const ctx = canvas.getContext("2d");
+
+      this.setState({drawing: false});
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+    }
+    else{
+      this.setState({drawing: false, show: true});
+      
+      this.setState({x2: x});
+      this.setState({y2: y});
+    }
+  }
+
+
+
 }
 export default Label;
