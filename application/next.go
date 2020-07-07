@@ -8,7 +8,10 @@ import (
 )
 
 func (app *App) nextImage(c *gin.Context) {
-	var img models.Image
+	var (
+		img models.Image
+		p models.Project
+	)
 
 	_, err := app.getUser(c)
 	if err != nil {
@@ -19,8 +22,12 @@ func (app *App) nextImage(c *gin.Context) {
 	limit := time.Now().Add(-10 * time.Minute)
 	query := app.database.Where("last_served < ? AND done IS FALSE", limit)
 
-	res := query.First(&img)
-	if res.Error != nil {
+	if query.First(&img).Error != nil {
+		abortRequest(c, errorInternal)
+		return
+	}
+
+	if app.database.Take(&p, img.ProjectID).Error != nil {
 		abortRequest(c, errorInternal)
 		return
 	}
@@ -33,7 +40,7 @@ func (app *App) nextImage(c *gin.Context) {
 
 	json := gin.H{
 		"id": img.Id(),
-		"tags": "one,two,three",
+		"tags": p.Tags,
 	}
 
 	c.JSON(http.StatusOK, json)
