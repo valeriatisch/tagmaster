@@ -70,7 +70,11 @@ func (app *App) imageCreate(c *gin.Context) {
 
 	err = app.database.Create(&img).Error
 	if err == nil {
-		responseOK(c)
+		json := gin.H{
+			"id": img.Id(),
+		}
+
+		c.JSON(http.StatusOK, json)
 		return
 	}
 
