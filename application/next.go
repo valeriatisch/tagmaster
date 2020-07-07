@@ -3,6 +3,7 @@ package application
 import (
 	"github.com/valeriatisch/tagmaster/models"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	"time"
 	"net/http"
 )
@@ -22,8 +23,12 @@ func (app *App) nextImage(c *gin.Context) {
 	limit := time.Now().Add(-10 * time.Minute)
 	query := app.database.Where("last_served < ? AND done IS FALSE", limit)
 
-	if query.First(&img).Error != nil {
-		abortRequest(c, errorInternal)
+	if err := query.First(&img).Error; err != nil {
+		if gorm.IsRecordNotFoundError(err) {
+			abortRequest(c, errorNoImageAvailable)
+		} else {
+			abortRequest(c, errorInternal)
+		}		
 		return
 	}
 

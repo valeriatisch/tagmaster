@@ -72,6 +72,7 @@ func (app *App) imageCreate(c *gin.Context) {
 	if err == nil {
 		json := gin.H{
 			"id": img.Id(),
+			"done": img.Done,
 		}
 
 		c.JSON(http.StatusOK, json)
@@ -89,7 +90,7 @@ func (app *App) imageCreate(c *gin.Context) {
 }
 
 func (app *App) imageRead(c *gin.Context) {
-	user, err := app.getUser(c)
+	_, err := app.getUser(c)
 	if err != nil {
 		abortRequest(c, errorUnauthorized)
 		return
@@ -119,13 +120,39 @@ func (app *App) imageRead(c *gin.Context) {
 		return
 	}
 
-	if p.UserID != user.Id() {
+	json := gin.H{
+		"id": img.Id(),
+		"done": img.Done,
+		"tags": p.Tags,
+	}
+
+	c.JSON(http.StatusOK, json)
+}
+
+func (app *App) imageFile(c *gin.Context) {
+	_, err := app.getUser(c)
+	if err != nil {
 		abortRequest(c, errorUnauthorized)
 		return
 	}
-	
 
-	r, err := app.bucket.ReadFile(img.Name)
+	val := c.Param("id")
+
+	id, err := strconv.Atoi(val)
+	if err != nil {
+		abortRequest(c, errorBadRequest)
+		return
+	}
+
+	var img models.Image
+
+	err = app.database.Take(&img, id).Error
+	if err != nil {
+		abortRequest(c, errorNotFound)
+		return
+	}
+
+	r, err := app.bucket.ReadFile(img.UUID)
 	if err != nil {
 		log.Fatal(err)
 	}
