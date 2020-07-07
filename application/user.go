@@ -7,18 +7,90 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"errors"
 	"net/http"
-	"log"
 )
 
+const userkey = "user"
+
+type CredentialsJSON struct {
+	Email    string `json:"email"    binding:"email"`
+	Password string `json:"password" binding:"min=8,max=20"`
+}
+
 type UserJSON struct {
-	Email    string `json:"email"    binding:"required,email"`
-	First    string `json:"first"    binding:"required,min=2"`
-	Last     string `json:"last"     binding:"required,min=2"`
-	Password string `json:"password" binding:"required,min=8"`
+	Email    string `json:"email"    binding:"email"`
+	First    string `json:"first"    binding:"min=2,max=20"`
+	Last     string `json:"last"     binding:"min=2,max=20"`
+	Password string `json:"password" binding:"min=8,max=20"`
+}
+
+type UpdateUserJSON struct {
+	Email    string `json:"email"    binding:"omitempty,email"`
+	First    string `json:"first"    binding:"omitempty,min=2,max=20"`
+	Last     string `json:"last"     binding:"omitempty,min=2,max=20"`
+	Password string `json:"password" binding:"omitempty,min=8,max=20"`
+}
+
+func (app *App) userLogin(c *gin.Context) {
+	var (
+		credentials CredentialsJSON
+		user models.User
+	)
+
+	session := sessions.Default(c)
+	db := app.database
+
+	if err := c.ShouldBindJSON(&credentials); err != nil {
+		abortRequest(c, errorMissingCredentials)
+		return
+	}
+
+	email := credentials.Email
+	password := credentials.Password
+
+	res := db.Where(&models.User{Email: email}).First(&user)
+	if res.Error != nil {
+		abortRequest(c, errorNotRegistered)
+		return
+	}
+
+	hash := user.Password
+	err  := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+
+	if err != nil {
+		abortRequest(c, errorAuthenticationFailed)
+		return
+	}
+
+	session.Set(userkey, user.Id())
+
+	if err := session.Save(); err != nil {
+		abortRequest(c, err)
+		return
+	}
+
+	responseOK(c)
+}
+
+func (app *App) userLogout(c *gin.Context) {
+	session := sessions.Default(c)
+	uid := session.Get(userkey)
+
+	if uid == nil {
+		abortRequest(c, errorNotLoggedIn)
+		return
+	}
+
+	session.Delete(userkey)
+
+	if err := session.Save(); err != nil {
+		abortRequest(c, err)
+		return
+	}
+
+	responseOK(c)
 }
 
 func (app *App) userCreate(c *gin.Context) {
-	// session := sessions.Default(c)
 	db := app.database
 
 	var json UserJSON
@@ -41,13 +113,6 @@ func (app *App) userCreate(c *gin.Context) {
 		abortRequest(c, errorFailedToCreateUser)
 		return
 	}
-
-	// session.Set(userkey, user.Id())
-
-	// if err := session.Save(); err != nil {
-	// 	abortRequest(c, err)
-	// 	return
-	// }
 
 	responseOK(c)
 }
@@ -76,23 +141,48 @@ func (app *App) userUpdate(c *gin.Context) {
 		return
 	}
 
-	var json UserJSON
+	var json UpdateUserJSON
 	if err := c.ShouldBindJSON(&json); err != nil {
-		abortRequest(c, errorMissingCredentials)
+		abortRequest(c, errorBadRequest)
 		return
 	}
 
-	if !checkPassword(user.Password, json.Password) {
-		abortRequest(c, errorUnauthorized)
-		log.Println(json.Password)
-		return
+	// Make sure email is unique
+	if json.Email != "" {
+		user.Email = json.Email
+		var users []models.User
+		res := app.database.Where(models.User{Email: json.Email}).Find(&users)
+		if res.Error != nil {
+			abortRequest(c, errorInternal)
+			return
+		}
+
+		for _, u := range users {
+			if u.Id() == user.Id() {
+				continue
+			}
+
+			abortRequest(c, errorEmailNotUnique)
+			return
+		}
 	}
 
-	user.Email = json.Email
-	user.First = json.First
-	user.Last  = json.Last
+	if json.First != "" {
+		user.First = json.First
+	}
 
-	app.database.Save(user)
+	if json.Last != "" {
+		user.Last  = json.Last
+	}
+	
+	if json.Password != "" {
+		user.Password = hashPassword(json.Password)
+	}
+
+	if err := app.database.Save(user).Error; err != nil {
+		abortRequest(c, errorInternal)
+		return
+	}
 
 	responseOK(c)	
 }
@@ -113,6 +203,16 @@ func (app *App) userDelete(c *gin.Context) {
 	sessions.Default(c).Delete(userkey)
 
 	responseOK(c)
+}
+
+func hashPassword(pw string) string {
+	bytes, _ := bcrypt.GenerateFromPassword([]byte(pw), 10)
+	return string(bytes)
+}
+
+func checkPassword(hash, pw string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(pw))
+	return err == nil
 }
 
 func (app *App) getUser(c *gin.Context) (*models.User, error) {

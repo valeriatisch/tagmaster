@@ -59,6 +59,11 @@ var (
 		http.StatusInternalServerError, 
 		"Internal server error",
 	)
+
+	errorEmailNotUnique = newError(
+		http.StatusBadRequest, 
+		"Email address already in use",
+	)
 )
 
 // Abort request with json payload {"error":"description"}
