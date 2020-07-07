@@ -9,7 +9,6 @@ import (
 
 func (app *App) nextImage(c *gin.Context) {
 	var img models.Image
-	db := app.database
 
 	_, err := app.getUser(c)
 	if err != nil {
@@ -18,7 +17,7 @@ func (app *App) nextImage(c *gin.Context) {
 	}
 
 	limit := time.Now().Add(-10 * time.Minute)
-	query := db.Where("last_served < ?", limit).Order("last_served asc")
+	query := app.database.Where("last_served < ? AND done IS FALSE", limit)
 
 	res := query.First(&img)
 	if res.Error != nil {
