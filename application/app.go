@@ -75,6 +75,9 @@ func (app *App) Run() {
 	// Label
 	// TODO
 
+	// Next
+	api.GET(   "/next",                app.nextImage)
+
 	router.NoRoute(func(c *gin.Context) {
 		abortRequest(c, errorNotFound)
 	})
