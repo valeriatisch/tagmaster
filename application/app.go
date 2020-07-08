@@ -10,8 +10,8 @@ import (
 
 type App struct {
 	database *models.Database
-	config config
-	bucket bucket.Bucket
+	config   config
+	bucket   bucket.Bucket
 }
 
 func (app *App) deletionCallback(scope *gorm.Scope) {
@@ -36,8 +36,8 @@ func NewApp() *App {
 
 	app := &App{
 		database: db,
-		config: conf,
-		bucket: bkt,
+		config:   conf,
+		bucket:   bkt,
 	}
 
 	db.Callback().Delete().After("gorm:delete").
@@ -57,6 +57,7 @@ func (app *App) Run() {
 	api.POST(  "/register",            app.userCreate)
 	api.POST(  "/login",               app.userLogin)
 	api.GET(   "/logout",              app.userLogout)
+	api.POST(  "/reset",               app.sendPassword)          
 	api.GET(   "/account",             app.userRead)
 	api.PATCH( "/account",             app.userUpdate)
 	api.DELETE("/account",             app.userDelete)
@@ -83,7 +84,7 @@ func (app *App) Run() {
 		abortRequest(c, errorNotFound)
 	})
 
-	router.Run()
+	_ = router.Run()
 }
 
 func responseOK(c *gin.Context) {
