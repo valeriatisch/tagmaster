@@ -11,7 +11,6 @@ import (
 )
 
 type LabelJSON struct {
-	Id uint `json:"id"`
 	Name string `json:"filename"`
 	Topright uint `json:"topright"`
 	Topleft uint `json:"topleft"`
@@ -49,8 +48,8 @@ func (app *App) labelCreate(c *gin.Context) {
 	}
 
 	// Store file in bucket
-	uuid := uuid.New().String()
-	name := h.Filename
+	
+	
 
 	err = app.bucket.WriteFile(uuid, f)
 	if err != nil {
@@ -60,8 +59,6 @@ func (app *App) labelCreate(c *gin.Context) {
 
 	// Insert in database
 	label := models.Label {
-		ID: uuid,
-		Name: name,
 		ImageID: i.Id(),
 	}
 
@@ -71,13 +68,6 @@ func (app *App) labelCreate(c *gin.Context) {
 		return
 	}
 
-	// Cleanup if error	
-	err = app.bucket.RemoveFile(name)
-	if err != nil {
-		// Inconsistent state
-		log.Printf("Failed to delete file %s\n", name)
-	}
-	abortRequest(c, errorInternal)
 	return
 }
 
@@ -156,14 +146,13 @@ func (app *App) labelList(c *gin.Context) {
 	}
 
 	json := LableJSON{
-		Id: label.Id(),
 		Name: label.Name,
 		Topright: label.Topright,
 		Topleft: label.Topleft,
 		Bottomright: label.Bottomright,
 		Bottomleft: label.Bottomleft,
 	}
-	
+
 	c.JSON(http.StatusOK, json)
 }
 

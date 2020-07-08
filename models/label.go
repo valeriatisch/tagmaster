@@ -4,7 +4,6 @@ import (
 
 type Label struct {
 	gorm.Model
-	ID string
 	Name string
 	topright float64
 	topleft float64
