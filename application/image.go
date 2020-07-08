@@ -14,7 +14,6 @@ type ImageJSON struct {
 	Id uint `json:"id"`
 	Name string `json:"filename"`
 	Done bool `json:"done"`
-	label models.Label `json:"label"`
 }
 
 func (app *App) imageCreate(c *gin.Context) {
@@ -185,7 +184,7 @@ func (app *App) imageList(c *gin.Context) {
 	c.JSON(http.StatusOK, json)
 }
 
-func (app *App) saveLabel(c *gin.Context, var image models.Image, topright float64, topleft float64, bottomright float64, bottomleft float64, title string) {
+func (app *App) labelCreate(c *gin.Context, var image models.Image, topright float64, topleft float64, bottomright float64, bottomleft float64, title string) {
 	 
 
 	label := models.Label{
