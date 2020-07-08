@@ -11,7 +11,6 @@ import (
 	"errors"
 	"net/http"
 	"log"
-	"os"
 	"time"
 )
 
@@ -247,7 +246,7 @@ func (app *App) sendPassword(c *gin.Context) {
 	plainTextContent := "Your new password is " + password
 	htmlContent := "<strong>Your new password is " + password + "</strong>"
 	msg := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
-	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
+	client := sendgrid.NewSendClient(app.config.SENDGRID_API_KEY)
 	_, err := client.Send(msg)
 	if err != nil {
 		log.Println(err)
