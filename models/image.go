@@ -6,11 +6,11 @@ import (
 
 type Image struct {
 	gorm.Model
-	UUID string
-	Name string
-	Done bool
+	UUID      string
+	Name      string
+	Done      bool
 	ProjectID uint
-	label Label
+	Labels    []Label
 }
 
 func (img *Image) Id() uint {

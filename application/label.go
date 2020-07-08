@@ -1,22 +1,22 @@
 package application
 
 import (
-	"strconv"
-	"net/http"
-	"github.com/valeriatisch/tagmaster/models"
 	"github.com/gin-gonic/gin"
+	"github.com/valeriatisch/tagmaster/models"
+	"net/http"
+	"strconv"
 )
 
 type LabelJSON struct {
-	Name string `json:"Labelname"`
-	Topright uint `json:"Topright"`
-	Topleft uint `json:"Topleft"`
-	Bottomright uint `json:"Bottomright"`
-	Bottomleft uint `json:"Bottomleft"`
+	Name        string `json:"Labelname"`
+	Topright    uint   `json:"Topright"`
+	Topleft     uint   `json:"Topleft"`
+	Bottomright uint   `json:"Bottomright"`
+	Bottomleft  uint   `json:"Bottomleft"`
 }
 
 func (app *App) labelCreate(c *gin.Context) {
-	_, err := app.getUser(c)
+	user, err := app.getUser(c)
 	if err != nil {
 		abortRequest(c, errorUnauthorized)
 		return
@@ -46,13 +46,13 @@ func (app *App) labelCreate(c *gin.Context) {
 	}
 
 	// Insert in database
-	label := models.Label {
-		ImageID: i.Id(),
-		Name: l.Name,
-		Topleft: l.Topleft,
-		Topright: l.Topright,
+	label := models.Label{
+		ImageID:     i.Id(),
+		Name:        l.Name,
+		Topleft:     l.Topleft,
+		Topright:    l.Topright,
 		Bottomright: l.Bottomright,
-		Bottomleft: l.Bottomleft,
+		Bottomleft:  l.Bottomleft,
 	}
 
 	err = app.database.Create(&label).Error
@@ -65,7 +65,7 @@ func (app *App) labelCreate(c *gin.Context) {
 }
 
 func (app *App) labelRead(c *gin.Context) {
-	_, err := app.getUser(c)
+	user, err := app.getUser(c)
 	if err != nil {
 		abortRequest(c, errorUnauthorized)
 		return
@@ -96,15 +96,58 @@ func (app *App) labelRead(c *gin.Context) {
 	}
 
 	lab := LabelJSON{
-		Name: label.Name,
-		Topright: label.Topright,
-		Topleft: label.Topleft,
-		Bottomleft: label.Bottomleft,
+		Name:        label.Name,
+		Topright:    label.Topright,
+		Topleft:     label.Topleft,
+		Bottomleft:  label.Bottomleft,
 		Bottomright: label.Bottomright,
 	}
-	
+
 	c.JSON(http.StatusOK, lab)
 }
 
+func (app *App) labelList(c *gin.Context) {
+	user, err := app.getUser(c)
+	if err != nil {
+		abortRequest(c, errorUnauthorized)
+		return
+	}
 
+	val := c.Param("id")
 
+	id, err := strconv.Atoi(val)
+	if err != nil {
+		abortRequest(c, errorBadRequest)
+		return
+	}
+
+	var i models.Image
+
+	err = app.database.Take(&i, id).Error
+	if err != nil {
+		abortRequest(c, errorNotFound)
+		return
+	}
+
+	var labels []models.Label
+
+	err = app.database.Model(&i).Related(&labels).Error
+	if err != nil {
+		abortRequest(c, errorInternal)
+		return
+	}
+
+	json := make([]LabelJSON, len(labels))
+
+	for i, lbl := range labels {
+		json[i] = LabelJSON{
+			Name:        lbl.Name,
+			Topright:    lbl.Topright,
+			Topleft:     lbl.Topleft,
+			Bottomleft:  lbl.Bottomleft,
+			Bottomright: lbl.Bottomright,
+		}
+	}
+
+	c.JSON(http.StatusOK, json)
+}
