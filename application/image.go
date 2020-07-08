@@ -14,6 +14,7 @@ type ImageJSON struct {
 	Id uint `json:"id"`
 	Name string `json:"filename"`
 	Done bool `json:"done"`
+	label: models.Label `json:"label"`
 }
 
 func (app *App) imageCreate(c *gin.Context) {
