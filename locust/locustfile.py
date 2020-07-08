@@ -3,7 +3,7 @@ import string
 from locust import HttpUser, task, between
 
 
-def randomString(stringLength=8):
+def randomString(stringLength=20):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for i in range(stringLength))
 
@@ -24,11 +24,13 @@ def random_tags():
 
 
 class TagmasterUser(HttpUser):
-    wait_time = between(2, 5)
-    email = randomEmail()
-    password = randomString()
+    wait_time = between(2, 5)   
+        
 
     def on_start(self):
+        self.email = randomEmail()
+        self.password = randomString()
+
         p1 = {
             "email": self.email,
             "first": randomString(),
@@ -73,6 +75,7 @@ class TagmasterUser(HttpUser):
         self.client.get("/api/projects/" + str(project_id))
         # image list
         self.client.get("/api/projects/" + str(project_id) + "/images")
+
 
     @task(3)
     def project_list(self):
