@@ -36,6 +36,10 @@ type UpdateUserJSON struct {
 	Password string `json:"password" binding:"omitempty,min=8,max=20"`
 }
 
+type EmailJSON struct {
+	Email    string `json:"email"    binding:"email"`
+}
+
 func (app *App) userLogin(c *gin.Context) {
 	var (
 		credentials CredentialsJSON
@@ -213,15 +217,18 @@ func (app *App) userDelete(c *gin.Context) {
 
 func (app *App) sendPassword(c *gin.Context) {
 	var (
-		credentials CredentialsJSON
-		user        models.User
+		json EmailJSON
+		user models.User
 	)
 
 	db := app.database
 
-	_ = c.ShouldBindJSON(&credentials)
+	if err := c.ShouldBindJSON(&json); err != nil {
+		abortRequest(c, errorBadRequest)
+		return
+	}
 
-	email := credentials.Email
+	email := json.Email
 
 	res := db.Where(&models.User{Email: email}).First(&user)
 	if res.Error != nil {
@@ -247,7 +254,6 @@ func (app *App) sendPassword(c *gin.Context) {
 	}
 
 	responseOK(c)
-
 }
 
 func generatePassword() string {
