@@ -11,11 +11,11 @@ import (
 )
 
 type LabelJSON struct {
-	Name string `json:"filename"`
-	Topright uint `json:"topright"`
-	Topleft uint `json:"topleft"`
-	Bottomright uint `json:"bottomright"`
-	Bottomleft uint `json:"bottomleft"`
+	Name string `json:"Labelname"`
+	Topright uint `json:"Topright"`
+	Topleft uint `json:"Topleft"`
+	Bottomright uint `json:"Bottomright"`
+	Bottomleft uint `json:"Bottomleft"`
 }
 
 func (app *App) labelCreate(c *gin.Context) {
@@ -41,25 +41,21 @@ func (app *App) labelCreate(c *gin.Context) {
 		return
 	}
 
-	f, h, err := c.Request.FormFile("file")
+	var l LabelJSON
+	err = c.ShouldBindJSON(&l)
 	if err != nil {
 		abortRequest(c, errorBadRequest)
-		return
-	}
-
-	// Store file in bucket
-	
-	
-
-	err = app.bucket.WriteFile(uuid, f)
-	if err != nil {
-		abortRequest(c, errorInternal)
 		return
 	}
 
 	// Insert in database
 	label := models.Label {
 		ImageID: i.Id(),
+		Name: l.Name,
+		topleft: l.Topleft,
+		topright: l.Topright,
+		bottomright: l.Bottomright,
+		bottomleft: l.Bottomleft,
 	}
 
 	err = app.database.Create(&label).Error
@@ -102,57 +98,16 @@ func (app *App) labelRead(c *gin.Context) {
 		return
 	}
 
-	r, err := app.bucket.ReadFile(label.Name)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	w := c.Writer
-	w.Header().Set("Content-Type", "image/jpeg")
-	io.Copy(w, r)
-
-	c.Status(http.StatusOK)
-}
-
-func (app *App) labelList(c *gin.Context) {
-	user, err := app.getUser(c)
-	if err != nil {
-		abortRequest(c, errorUnauthorized)
-		return
-	}
-
-	val := c.Param("id")
-
-	id, err := strconv.Atoi(val)
-	if err != nil {
-		abortRequest(c, errorBadRequest)
-		return
-	}
-
-	var i models.Image
-
-	err = app.database.Take(&i, id).Error
-	if err != nil {
-		abortRequest(c, errorNotFound)
-		return
-	}
-
-	var label models.Label
-
-	err = app.database.Model(&i).Related(&label).Error
-	if err != nil {
-		abortRequest(c, errorInternal)
-		return
-	}
-
-	json := LableJSON{
+	lab := LabelJSON{
 		Name: label.Name,
-		Topright: label.Topright,
-		Topleft: label.Topleft,
-		Bottomright: label.Bottomright,
-		Bottomleft: label.Bottomleft,
+		Topright: label.topright,
+		Topleft: label.topleft,
+		Bottomleft: label.bottomleft,
+		Bottomright: label.bottomright,
 	}
-
-	c.JSON(http.StatusOK, json)
+	
+	c.JSON(http.StatusOK, lab)
 }
+
+
 
