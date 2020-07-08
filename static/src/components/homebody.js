@@ -5,7 +5,7 @@ import Register from "../pages/accountpage";
 class Body extends Component{
     render(){
         return(
-            <div class="container text-center" style={{marginTop:"30px"}}>
+            <div class="container text-center" style={{marginTop:"30px",marginBottom:"20px"}}>
                 <style>{'.button1{ margin-top:10px; width:150px; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .button1:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }'}</style>
                 <div class="row">
                     <div class="col-sm">
