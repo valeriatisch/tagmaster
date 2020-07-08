@@ -8,7 +8,7 @@ type Label struct {
 	topleft float64
 	bottomright float64
 	bottomleft float64
-	image Image
+	titel uint
 }
 
 func (label *Label) Id() uint {

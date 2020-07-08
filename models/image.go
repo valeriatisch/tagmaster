@@ -10,6 +10,7 @@ type Image struct {
 	Name string
 	Done bool
 	ProjectID uint
+	label Label
 }
 
 func (img *Image) Id() uint {
