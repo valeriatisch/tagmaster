@@ -7,7 +7,9 @@ import (
 type User struct {
 	gorm.Model
 	Email    string `gorm:"type:varchar(100);unique_index"`
-	Password string `gorm:"size:255;not null"`
+	First    string
+	Last     string
+	Password string
 	Projects []Project
 }
 
