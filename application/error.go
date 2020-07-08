@@ -10,8 +10,8 @@ type appError struct {
 	description string
 }
 
-func (e appError) Error() string {
-	return e.description
+func (err appError) Error() string {
+	return err.description
 }
 
 var (
@@ -58,6 +58,16 @@ var (
 	errorInternal = newError(
 		http.StatusInternalServerError, 
 		"Internal server error",
+	)
+
+	errorEmailNotUnique = newError(
+		http.StatusBadRequest, 
+		"Email address already in use",
+	)
+
+	errorNoImageAvailable = newError(
+		http.StatusInternalServerError, 
+		"No image available",
 	)
 )
 

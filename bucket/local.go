@@ -26,6 +26,7 @@ func (bkt LocalBucket) ReadFile(name string) (io.Reader, error) {
 }
 
 func (bkt LocalBucket) RemoveFile(name string) error {
+	log.Printf("Deleting %s\n", name)
 	return os.Remove(bkt.directory + name)
 }
 

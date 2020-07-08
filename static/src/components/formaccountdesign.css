@@ -1,0 +1,27 @@
+
+  label {
+    font-size: 1.2em;
+    margin-bottom: 0.25em;
+    color: rgb(240, 240, 240);
+    font-weight: lighter;
+  }
+  div{
+    color: rgb(240, 240, 240); 
+  }
+  button{
+    background-color: #519e8a;
+    color: #fff;
+    border: 2px solid #fff;
+    width: 50%;
+    margin-top: 1em;
+    padding: 6px 0px;
+    font-size: 1em;
+    font-weight: lighter;
+    letter-spacing: 2px;
+    margin-bottom: 0.25em;
+  }
+  span{
+    color: rgb(247, 10, 10);
+  }
+ 
+  

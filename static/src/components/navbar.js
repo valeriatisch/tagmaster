@@ -5,7 +5,10 @@ import Impressum from "../pages/impressum";
 import Contact from "../pages/contact";
 import Logout from "../pages/logout";
 import Login from "../pages/login";
+import newProject from "../pages/newProject";
 import logo from '../ressources/navbar-logo.png';
+import Projects from "../pages/projects.js";
+import Accountpage from "../pages/accountpage";
 
 
 class Navbar extends Component {
@@ -36,9 +39,9 @@ class Navbar extends Component {
 
     render() {
         return (
-            <div className="container col-auto" style={{padding:"0px"}}>
+            <div className="container col-auto" style={{padding:"0px", backgroundColor:"#191919"}}>
                 <style>{'a { color: #efeb53; fontSize:15px } a:hover{ color:white }'}</style>
-                <style>{'.login-button{ color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .login-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }'}</style>
+                <style>{'.login-button{width: 100%; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .login-button:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }'}</style>
                 <nav className="navbar sticky-top navbar-expand-lg" style={{backgroundColor:"#191919",borderBottom:"2px solid #2e2d2d"}}>
                     <a className ="nav-link mr-3 h1" style={{marginTop:"-20px",marginBottom:"-10px"}}>
                         <Link to={"/"} className="nav-link">
@@ -52,6 +55,11 @@ class Navbar extends Component {
                             </Link>
                         </a>
                         <a className ="mr-3">
+                            <Link to={"/projects"} className="nav-link">
+                                Projects
+                            </Link>
+                        </a>
+                        <a className ="mr-3">
                             <Link to={"/contact"} className="nav-link">
                                 Contact
                             </Link>
@@ -62,7 +70,7 @@ class Navbar extends Component {
                             </Link>
                         </a>
                     </div>
-                    <div className="navbar-nav navbar-right">
+                    <div className="navbar-nav navbar-right" >
                         <a className ="mr-3">
                             {this.state.loggedIn == true ? (
                                 <Link to={"/logout"} className="nav-link">
@@ -83,6 +91,9 @@ class Navbar extends Component {
 					<Route path="/impressum" component={Impressum} />
 					<Route path="/contact" component={Contact} />
 					<Route path="/logout" component={Logout} />
+                    <Route path="/user/newProject" component={newProject} />
+                    <Route path="/projects" component={Projects} />
+                    <Route path="/accountpage" component={Accountpage} />
                 </Switch>
             </div>
         );

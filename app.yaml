@@ -7,13 +7,13 @@ env_variables:
 handlers:
 - url: /api/.*
   script: auto
-  # secure: always
+  secure: always
 
 - url: /static
   static_dir: static/build
-  # secure: always
+  secure: always
 
 - url: /.*
   static_files: static/build/index.html
   upload: static/build/index.html
-  # secure: always
+  secure: always

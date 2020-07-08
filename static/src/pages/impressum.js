@@ -4,7 +4,7 @@ class Impressum extends Component {
     render() {
         return (
             <div>
-                <h2>Impressum</h2>
+                <h2 style={{color:"white"}}>Impressum</h2>
             </div>
         );
     }

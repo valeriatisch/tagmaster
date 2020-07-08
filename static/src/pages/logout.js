@@ -9,7 +9,7 @@ class Logout extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{color:"white"}}>
         You have successfully logged out!
         <p>
           <a

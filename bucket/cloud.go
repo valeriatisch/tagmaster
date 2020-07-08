@@ -5,7 +5,6 @@ import (
 	"context"
 	"time"
 	"log"
-	"errors"
 	"cloud.google.com/go/storage"
 )
 
@@ -28,10 +27,6 @@ func NewCloudBucket(name string) CloudBucket {
 	}
 }
 
-func (b CloudBucket) RemoveFile(name string) error {
-	return errors.New("RemoveFile not implemented")
-}
-
 func (b CloudBucket) WriteFile(name string, r io.Reader) error {
 	ctx := context.Background()
 	bkt := b.handle
@@ -45,24 +40,25 @@ func (b CloudBucket) WriteFile(name string, r io.Reader) error {
 	        return err
 	}
 
-	if err := wc.Close(); err != nil {
-	        return err
-	}
+	return wc.Close()
+}
 
-	return nil
+func (b CloudBucket) RemoveFile(name string) error {
+	ctx := context.Background()
+	bkt := b.handle
+
+	ctx, cancel := context.WithTimeout(ctx, time.Second*30)
+	defer cancel()
+
+	return bkt.Object(name).Delete(ctx)
 }
 
 func (b CloudBucket) ReadFile(name string) (io.Reader, error) {
 	ctx := context.Background()
 	bkt := b.handle
 
-	ctx, cancel := context.WithTimeout(ctx, time.Second*50)
+	ctx, cancel := context.WithTimeout(ctx, time.Second*30)
 	defer cancel()
 
-	rc, err := bkt.Object(name).NewReader(ctx)
-	if err != nil {
-		return nil, err
-	}
-	
-	return rc, nil
+	return bkt.Object(name).NewReader(ctx)
 }

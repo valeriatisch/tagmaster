@@ -12,3 +12,4 @@ type Bucket interface {
 	RemoveFile(name string) error
 	ReadFile(name string) (io.Reader, error)
 }
+
