@@ -71,9 +71,13 @@ func (app *App) Run() {
 	api.POST(  "/projects/:id/images", app.imageCreate)
 	api.GET(   "/projects/:id/images", app.imageList)
 	api.GET(   "/images/:id",          app.imageRead)
+	api.GET(   "/images/:id/file",     app.imageFile)
 
 	// Label
 	// TODO
+
+	// Next
+	api.GET(   "/next",                app.nextImage)
 
 	router.NoRoute(func(c *gin.Context) {
 		abortRequest(c, errorNotFound)
