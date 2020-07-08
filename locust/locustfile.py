@@ -24,7 +24,7 @@ def random_tags():
 
 
 class TagmasterUser(HttpUser):
-    wait_time = between(3, 7)
+    wait_time = between(2, 5)
     email = randomEmail()
     password = randomString()
 
@@ -67,33 +67,20 @@ class TagmasterUser(HttpUser):
             "tags": random_tags()
         }
 
-        self.client.post("/api/projects", json=p3)
-        project_id = 0
+        response = self.client.post("/api/projects", json=p3)
+        response_json = response.json()
+        project_id = response_json['id']
         self.client.get("/api/projects/" + str(project_id))
-
-    @task
-    def post_image(self):
-        project_id = 0
-        p4 = {
-            "done":"false"
-        }
-        with open('pic.jpg', 'rb') as image:
-            self.client.post("/api/projects/" + str(project_id) + "/images", json=p4, files={'photo': image})
+        # image list
+        self.client.get("/api/projects/" + str(project_id) + "/images")
 
     @task(3)
     def project_list(self):
         self.client.get("/api/projects")
 
-    @task
-    def get_image(self):
-        image_id = 0
-        self.client.get("api/images/" + str(image_id))
-
-    @task
-    def image_list(self):
-        project_id = 0
-        self.client.get("api/projects/" + str(project_id) + "/images")
-
     def on_stop(self):
-        # self.client.delete("api/projects/" + str(project_id))
-        self.client.delete("api/account")
+        p4 = {
+            "email": self.email,
+            "password": self.password
+        }
+        self.client.delete("/api/account", json=p4)
