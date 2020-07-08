@@ -1,13 +1,10 @@
 package application
 
 import (
-	"log"
-	"io"
 	"strconv"
 	"net/http"
 	"github.com/valeriatisch/tagmaster/models"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 type LabelJSON struct {
@@ -19,7 +16,7 @@ type LabelJSON struct {
 }
 
 func (app *App) labelCreate(c *gin.Context) {
-	user, err := app.getUser(c)
+	_, err := app.getUser(c)
 	if err != nil {
 		abortRequest(c, errorUnauthorized)
 		return
@@ -52,10 +49,10 @@ func (app *App) labelCreate(c *gin.Context) {
 	label := models.Label {
 		ImageID: i.Id(),
 		Name: l.Name,
-		topleft: l.Topleft,
-		topright: l.Topright,
-		bottomright: l.Bottomright,
-		bottomleft: l.Bottomleft,
+		Topleft: l.Topleft,
+		Topright: l.Topright,
+		Bottomright: l.Bottomright,
+		Bottomleft: l.Bottomleft,
 	}
 
 	err = app.database.Create(&label).Error
@@ -68,7 +65,7 @@ func (app *App) labelCreate(c *gin.Context) {
 }
 
 func (app *App) labelRead(c *gin.Context) {
-	user, err := app.getUser(c)
+	_, err := app.getUser(c)
 	if err != nil {
 		abortRequest(c, errorUnauthorized)
 		return
@@ -100,10 +97,10 @@ func (app *App) labelRead(c *gin.Context) {
 
 	lab := LabelJSON{
 		Name: label.Name,
-		Topright: label.topright,
-		Topleft: label.topleft,
-		Bottomleft: label.bottomleft,
-		Bottomright: label.bottomright,
+		Topright: label.Topright,
+		Topleft: label.Topleft,
+		Bottomleft: label.Bottomleft,
+		Bottomright: label.Bottomright,
 	}
 	
 	c.JSON(http.StatusOK, lab)
