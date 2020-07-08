@@ -59,6 +59,16 @@ var (
 		http.StatusInternalServerError, 
 		"Internal server error",
 	)
+
+	errorEmailNotUnique = newError(
+		http.StatusBadRequest, 
+		"Email address already in use",
+	)
+
+	errorNoImageAvailable = newError(
+		http.StatusInternalServerError, 
+		"No image available",
+	)
 )
 
 // Abort request with json payload {"error":"description"}

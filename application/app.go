@@ -54,9 +54,12 @@ func (app *App) Run() {
 	api := router.Group("/api")
 
 	// User
-	api.POST(  "/login",               app.login)
-	api.POST(  "/register",            app.register)
-	api.GET(   "/logout",              app.logout)
+	api.POST(  "/register",            app.userCreate)
+	api.POST(  "/login",               app.userLogin)
+	api.GET(   "/logout",              app.userLogout)
+	api.GET(   "/account",             app.userRead)
+	api.PATCH( "/account",             app.userUpdate)
+	api.DELETE("/account",             app.userDelete)
 
 	// Project
 	api.POST(  "/projects",            app.projectCreate)
@@ -68,9 +71,13 @@ func (app *App) Run() {
 	api.POST(  "/projects/:id/images", app.imageCreate)
 	api.GET(   "/projects/:id/images", app.imageList)
 	api.GET(   "/images/:id",          app.imageRead)
+	api.GET(   "/images/:id/file",     app.imageFile)
 
 	// Label
 	// TODO
+
+	// Next
+	api.GET(   "/next",                app.nextImage)
 
 	router.NoRoute(func(c *gin.Context) {
 		abortRequest(c, errorNotFound)

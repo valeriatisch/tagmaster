@@ -9,6 +9,7 @@ type Project struct {
 	Name string
 	UserID uint
 	Images []Image
+	Tags string
 }
 
 func (project *Project) Id() uint {
