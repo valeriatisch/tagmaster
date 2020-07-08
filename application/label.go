@@ -10,13 +10,16 @@ import (
 	"github.com/google/uuid"
 )
 
-type ImageJSON struct {
+type LabelJSON struct {
 	Id uint `json:"id"`
 	Name string `json:"filename"`
-	Done bool `json:"done"`
+	Topright uint `json:"topright"`
+	Topleft uint `json:"topleft"`
+	Bottomright uint `json:"bottomright"`
+	Bottomleft uint `json:"bottomleft"`
 }
 
-func (app *App) imageCreate(c *gin.Context) {
+func (app *App) labelCreate(c *gin.Context) {
 	user, err := app.getUser(c)
 	if err != nil {
 		abortRequest(c, errorUnauthorized)
@@ -31,16 +34,11 @@ func (app *App) imageCreate(c *gin.Context) {
 		return
 	}
 
-	var p models.Project
+	var i models.Image
 
-	err = app.database.Take(&p, id).Error
+	err = app.database.Take(&i, id).Error
 	if err != nil {
 		abortRequest(c, errorNotFound)
-		return
-	}
-
-	if p.UserID != user.Id() {
-		abortRequest(c, errorUnauthorized)
 		return
 	}
 
@@ -61,14 +59,13 @@ func (app *App) imageCreate(c *gin.Context) {
 	}
 
 	// Insert in database
-	img := models.Image {
-		UUID: uuid,
+	label := models.Label {
+		ID: uuid,
 		Name: name,
-		Done: false,
-		ProjectID: p.Id(),
+		ImageID: i.Id(),
 	}
 
-	err = app.database.Create(&img).Error
+	err = app.database.Create(&label).Error
 	if err == nil {
 		responseOK(c)
 		return
@@ -84,7 +81,7 @@ func (app *App) imageCreate(c *gin.Context) {
 	return
 }
 
-func (app *App) imageRead(c *gin.Context) {
+func (app *App) labelRead(c *gin.Context) {
 	user, err := app.getUser(c)
 	if err != nil {
 		abortRequest(c, errorUnauthorized)
@@ -99,29 +96,23 @@ func (app *App) imageRead(c *gin.Context) {
 		return
 	}
 
-	var img models.Image
+	var label models.Label
 
-	err = app.database.Take(&img, id).Error
+	err = app.database.Take(&label, id).Error
 	if err != nil {
 		abortRequest(c, errorNotFound)
 		return
 	}
 
-	var p models.Project
+	var i models.Image
 
-	err = app.database.Take(&p, img.ProjectID).Error
+	err = app.database.Take(&i, label.ImageID).Error
 	if err != nil {
 		abortRequest(c, errorInternal)
 		return
 	}
 
-	if p.UserID != user.Id() {
-		abortRequest(c, errorUnauthorized)
-		return
-	}
-	
-
-	r, err := app.bucket.ReadFile(img.Name)
+	r, err := app.bucket.ReadFile(label.Name)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -133,7 +124,7 @@ func (app *App) imageRead(c *gin.Context) {
 	c.Status(http.StatusOK)
 }
 
-func (app *App) imageList(c *gin.Context) {
+func (app *App) labelList(c *gin.Context) {
 	user, err := app.getUser(c)
 	if err != nil {
 		abortRequest(c, errorUnauthorized)
@@ -148,38 +139,31 @@ func (app *App) imageList(c *gin.Context) {
 		return
 	}
 
-	var p models.Project
+	var i models.Image
 
-	err = app.database.Take(&p, id).Error
+	err = app.database.Take(&i, id).Error
 	if err != nil {
 		abortRequest(c, errorNotFound)
 		return
 	}
 
-	if p.UserID != user.Id() {
-		abortRequest(c, errorUnauthorized)
-		return
-	}
+	var label models.Label
 
-	var images []models.Image
-
-	err = app.database.Model(&p).Related(&images).Error
+	err = app.database.Model(&i).Related(&label).Error
 	if err != nil {
 		abortRequest(c, errorInternal)
 		return
 	}
 
-	json := make([]ImageJSON, len(images))
-
-	for i, img := range images {
-		json[i] = ImageJSON{
-			Id: img.Id(),
-			Name: img.Name,
-			Done: img.Done,
-		}
+	json := LableJSON{
+		Id: label.Id(),
+		Name: label.Name,
+		Topright: label.Topright,
+		Topleft: label.Topleft,
+		Bottomright: label.Bottomright,
+		Bottomleft: label.Bottomleft,
 	}
-
+	
 	c.JSON(http.StatusOK, json)
 }
-
 
