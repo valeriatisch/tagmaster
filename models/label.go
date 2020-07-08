@@ -12,6 +12,3 @@ type Label struct {
 	ImageID uint
 }
 
-func (label *Label) Id() uint {
-	return label.Model.ID
-}
