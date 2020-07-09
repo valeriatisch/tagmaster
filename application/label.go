@@ -16,11 +16,6 @@ type LabelJSON struct {
 }
 
 func (app *App) labelCreate(c *gin.Context) {
-	user, err := app.getUser(c)
-	if err != nil {
-		abortRequest(c, errorUnauthorized)
-		return
-	}
 
 	val := c.Param("id")
 
@@ -65,11 +60,6 @@ func (app *App) labelCreate(c *gin.Context) {
 }
 
 func (app *App) labelRead(c *gin.Context) {
-	user, err := app.getUser(c)
-	if err != nil {
-		abortRequest(c, errorUnauthorized)
-		return
-	}
 
 	val := c.Param("id")
 
@@ -107,11 +97,6 @@ func (app *App) labelRead(c *gin.Context) {
 }
 
 func (app *App) labelList(c *gin.Context) {
-	user, err := app.getUser(c)
-	if err != nil {
-		abortRequest(c, errorUnauthorized)
-		return
-	}
 
 	val := c.Param("id")
 
@@ -148,6 +133,5 @@ func (app *App) labelList(c *gin.Context) {
 			Bottomright: lbl.Bottomright,
 		}
 	}
-
 	c.JSON(http.StatusOK, json)
 }
