@@ -6,6 +6,7 @@ import (
 	"github.com/valeriatisch/tagmaster/bucket"
 	"github.com/jinzhu/gorm"
 	"github.com/gin-gonic/gin"
+	"log"
 )
 
 type App struct {
@@ -24,6 +25,7 @@ func (app *App) deletionCallback(scope *gorm.Scope) {
 }
 
 func NewApp() *App {
+	log.Println("Creating new instance")
 	conf := loadConfig()
 	db := models.NewDatabase(conf.databaseURI)
 	var bkt bucket.Bucket
@@ -84,6 +86,7 @@ func (app *App) Run() {
 		abortRequest(c, errorNotFound)
 	})
 
+	log.Println("New instance started")
 	_ = router.Run()
 }
 

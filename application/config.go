@@ -46,7 +46,7 @@ func loadDevelopment() config {
 func mustGetEnvironment(name string) string {
 	e := os.Getenv(name)
 	if len(e) == 0 {
-		log.Fatal(name, " not set")
+		log.Fatal("Fatal: ", name, " not set")
 	}
 
 	return e
@@ -67,7 +67,7 @@ func mustGetSecret(name string) string {
 
 	result, err := client.AccessSecretVersion(ctx, req)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Fatal: ", name, " not set")
 	}
 
 	return string(result.Payload.Data)
