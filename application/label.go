@@ -8,7 +8,7 @@ import (
 )
 
 type LabelJSON struct {
-	Name        string `json:"Labelname"`
+	LabelName   string `json:"LabelName"`
 	Topright    uint   `json:"Topright"`
 	Topleft     uint   `json:"Topleft"`
 	Bottomright uint   `json:"Bottomright"`
@@ -46,12 +46,12 @@ func (app *App) labelCreate(c *gin.Context) {
 
 	// Insert in database
 	label := models.Label{
-		ImageID:     i.Id(),
-		Name:        l.Name,
+		LabelName:   l.LabelName,
 		Topleft:     l.Topleft,
 		Topright:    l.Topright,
 		Bottomright: l.Bottomright,
 		Bottomleft:  l.Bottomleft,
+		ImageID:     i.Id(),
 	}
 
 	err = app.database.Create(&label).Error
@@ -95,7 +95,7 @@ func (app *App) labelRead(c *gin.Context) {
 	}
 
 	lab := LabelJSON{
-		Name:        label.Name,
+		LabelName:   label.LabelName,
 		Topright:    label.Topright,
 		Topleft:     label.Topleft,
 		Bottomleft:  label.Bottomleft,
@@ -140,7 +140,7 @@ func (app *App) labelList(c *gin.Context) {
 
 	for i, lbl := range labels {
 		json[i] = LabelJSON{
-			Name:        lbl.Name,
+			LabelName:   lbl.LabelName,
 			Topright:    lbl.Topright,
 			Topleft:     lbl.Topleft,
 			Bottomleft:  lbl.Bottomleft,

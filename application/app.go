@@ -1,26 +1,26 @@
 package application
 
 import (
-	"github.com/valeriatisch/tagmaster/models"
-	"github.com/valeriatisch/tagmaster/middleware"
-	"github.com/valeriatisch/tagmaster/bucket"
-	"github.com/jinzhu/gorm"
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
+	"github.com/valeriatisch/tagmaster/bucket"
+	"github.com/valeriatisch/tagmaster/middleware"
+	"github.com/valeriatisch/tagmaster/models"
 )
 
 type App struct {
 	database *models.Database
-	config config
-	bucket bucket.Bucket
+	config   config
+	bucket   bucket.Bucket
 }
 
 func (app *App) deletionCallback(scope *gorm.Scope) {
 	img, ok := scope.Value.(*models.Image)
 	if !ok {
-		return	
+		return
 	}
 
-	go app.bucket.RemoveFile(img.UUID)	
+	go app.bucket.RemoveFile(img.UUID)
 }
 
 func NewApp() *App {
@@ -36,8 +36,8 @@ func NewApp() *App {
 
 	app := &App{
 		database: db,
-		config: conf,
-		bucket: bkt,
+		config:   conf,
+		bucket:   bkt,
 	}
 
 	db.Callback().Delete().After("gorm:delete").
@@ -54,22 +54,24 @@ func (app *App) Run() {
 	api := router.Group("/api")
 
 	// User
-	api.POST(  "/login",               app.login)
-	api.POST(  "/register",            app.register)
-	api.GET(   "/logout",              app.logout)
+	api.POST("/login", app.login)
+	api.POST("/register", app.register)
+	api.GET("/logout", app.logout)
 
 	// Project
-	api.POST(  "/projects",            app.projectCreate)
-	api.GET(   "/projects",            app.projectList)
-	api.GET(   "/projects/:id",        app.projectRead)
-	api.DELETE("/projects/:id",        app.projectDelete)
+	api.POST("/projects", app.projectCreate)
+	api.GET("/projects", app.projectList)
+	api.GET("/projects/:id", app.projectRead)
+	api.DELETE("/projects/:id", app.projectDelete)
 
 	// Image
-	api.POST(  "/projects/:id/images", app.imageCreate)
-	api.GET(   "/projects/:id/images", app.imageList)
-	api.GET(   "/images/:id",          app.imageRead)
+	api.POST("/projects/:id/images", app.imageCreate)
+	api.GET("/projects/:id/images", app.imageList)
+	api.GET("/images/:id", app.imageRead)
 
 	// Label
+	api.POST("/images/:id/label", app.labelCreate)
+	api.GET("/images/:id/label", app.labelList)
 	// TODO
 
 	router.NoRoute(func(c *gin.Context) {
