@@ -2,17 +2,31 @@ import React, { useState } from "react";
 import { Button, FormGroup, FormControl } from "react-bootstrap";
 import "./login.css";
 
+
+
 export default function Login() {
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   function validateForm() {
     return email.length > 0 && password.length > 0;
   }
+  
 
   function handleSubmit(event) {
+    const obj = {
+      Email: email,
+      Password: password,
+    };
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://localhost:8080/api/login')
+    xhr.send(JSON.stringify(obj))
+   
+  
     event.preventDefault();
   }
+  
 
   return (
     <div className="Login" style={{color:"white"}}>

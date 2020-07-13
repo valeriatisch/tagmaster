@@ -1,0 +1,45 @@
+
+[
+    
+    {
+        
+        "name": "Road traffic",
+        "code": "Af",
+        "creator": "kevin",
+        "tag1": "car",
+        "tag2": "bus",
+        "tag3": "pedestrian",
+        "id": "1",
+        "numberoftags": "7",
+        "numberofpictures": "38",
+        "img1": "picture1",
+        "img2": "picture2"
+    },
+    {
+        "name": "Dog races",
+        "code": "Af",
+        "creator": "bert",
+        "tag1": "beagle",
+        "tag2": "kooikerhondje",
+        "tag3": "poodle",
+        "id": "2",
+        "numberoftags": "31",
+        "numberofpictures": "45",
+        "img1": "picture3",
+        "img2": "picture4"
+    },
+    {
+        "name": "Dolphins",
+        "code": "Af",
+        "creator": "max",
+        "tag1": "dolphin",
+        "tag2": "",
+        "tag3": "",
+        "id": "3",
+        "numberoftags": "1",
+        "numberofpictures": "282",
+        "img1": "picture5",
+        "img2": "picture6"
+    }
+    
+]

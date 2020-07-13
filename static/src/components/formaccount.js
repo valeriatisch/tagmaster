@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Navbar, ThemeProvider } from "react-bootstrap";
 
 
+
 class Formlogin extends Component {
   constructor(props) {
     super(props);
@@ -32,7 +33,7 @@ class Formlogin extends Component {
       alert("email must not be empty");
     }
     else{
-      alert("Successfull!!");
+      alert("successfull");
     }
     
     
