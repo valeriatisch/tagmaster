@@ -2,11 +2,16 @@ package application
 
 import (
 	"github.com/valeriatisch/tagmaster/models"
+	"github.com/sendgrid/sendgrid-go"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
+	"math/rand"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"errors"
 	"net/http"
+	"log"
+	"time"
 )
 
 const userkey = "user"
@@ -28,6 +33,10 @@ type UpdateUserJSON struct {
 	First    string `json:"first"    binding:"omitempty,min=2,max=20"`
 	Last     string `json:"last"     binding:"omitempty,min=2,max=20"`
 	Password string `json:"password" binding:"omitempty,min=8,max=20"`
+}
+
+type EmailJSON struct {
+	Email    string `json:"email"    binding:"email"`
 }
 
 func (app *App) userLogin(c *gin.Context) {
@@ -204,6 +213,69 @@ func (app *App) userDelete(c *gin.Context) {
 
 	responseOK(c)
 }
+
+func (app *App) sendPassword(c *gin.Context) {
+	var (
+		json EmailJSON
+		user models.User
+	)
+
+	db := app.database
+
+	if err := c.ShouldBindJSON(&json); err != nil {
+		abortRequest(c, errorBadRequest)
+		return
+	}
+
+	email := json.Email
+
+	res := db.Where(&models.User{Email: email}).First(&user)
+	if res.Error != nil {
+		abortRequest(c, errorNotRegistered)
+		return
+	}
+
+	password := generatePassword()
+	hash := hashPassword(password)
+
+	db.Model(&user).Update("password", hash)
+
+	from := mail.NewEmail("Tagmaster", "no-reply@tagmaster.ml")
+	to := mail.NewEmail("Tagmaster User", email)
+	subject := "Tagmaster password update"
+	plainTextContent := "Your new password is " + password
+	htmlContent := "<strong>Your new password is " + password + "</strong>"
+	msg := mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	client := sendgrid.NewSendClient(app.config.SENDGRID_API_KEY)
+	_, err := client.Send(msg)
+	if err != nil {
+		log.Println(err)
+	}
+
+	responseOK(c)
+}
+
+func generatePassword() string {
+	rand.Seed(time.Now().UnixNano())
+	digits := "0123456789"
+	specials := "~=+%^*/()[]{}/!@#$?|"
+	all := "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
+		"abcdefghijklmnopqrstuvwxyz" +
+		digits + specials
+	length := 10
+	buf := make([]byte, length)
+	buf[0] = digits[rand.Intn(len(digits))]
+	buf[1] = specials[rand.Intn(len(specials))]
+	for i := 2; i < length; i++ {
+		buf[i] = all[rand.Intn(len(all))]
+	}
+	rand.Shuffle(len(buf), func(i, j int) {
+		buf[i], buf[j] = buf[j], buf[i]
+	})
+
+	return string(buf)
+}
+
 
 func hashPassword(pw string) string {
 	bytes, _ := bcrypt.GenerateFromPassword([]byte(pw), 10)
