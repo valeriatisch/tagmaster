@@ -53,19 +53,20 @@ class LabelImage extends Component {
   render() {
     
     return (
-    <>
+    <div style={{backgroundColor:"#191919"}}>
+      <style>{"body { background-color: #191919}"}</style>
       <BrowserView>
-        <Container style={{"margin-top": "40px"}}>
+        <Container style={{marginTop: "40px"}}>
           <Row>
-            <Col xs={6} md={8}>
+            <Col>
               <div>
-                <Image ref="img" style={{"position": "absolute", "top": "0px", "left": "0px", "width": "100%"}} src={this.props.imgsrc} fluid rounded/>
+                <Image ref="img" style={{"position": "absolute", "top": "0px", "left": "0px", "width": "100%", "marginBottom":"15px"}} src={this.props.imgsrc} fluid rounded/>
                 <canvas onMouseDown={(e) => this.onMouseDown(e)} onMouseUp={(e) => this.onMouseUp(e)} onMouseMove={(e) => this.onMouseMove(e)} 
                         onTouchStart={(e) => this.onTouchStart(e)} onTouchEnd={(e) => this.onTouchEnd(e)} onTouchMove={(e) => this.onTouchMove(e)}
                         style={{"position": "absolute", "top": "0px", "left": "0px"}} ref="canvas" height={425} />
               </div>
             </Col>
-            <Col xs={6} md={4}>
+            <Col>
               <Table striped bordered hover variant="dark">
                 <thead>
                   <tr>
@@ -126,7 +127,7 @@ class LabelImage extends Component {
                 <Image ref="img" style={{"top": "0px", "left": "0px", "width": "100%"}} src={this.props.imgsrc} fluid rounded/>
                 <canvas onMouseDown={(e) => this.onMouseDown(e)} onMouseUp={(e) => this.onMouseUp(e)} onMouseMove={(e) => this.onMouseMove(e)} 
                     onTouchStart={(e) => this.onTouchStart(e)} onTouchEnd={(e) => this.onTouchEnd(e)} onTouchMove={(e) => this.onTouchMove(e)}
-                    style={{"position": "absolute", "top": "0px", "left": "0px", "marginLeft":"15px"}} ref="canvas" height={425}/>
+                    style={{"position": "absolute", "top": "0px", "left": "0px", "marginLeft":"15px", "touch-action":"none"}} ref="canvas" height={425}/>
             </Col>
           </Row>
           <Row>
@@ -184,7 +185,7 @@ class LabelImage extends Component {
           </Modal>
         </Container>
       </MobileView>
-    </>
+    </div>
     );
   }
 
@@ -291,7 +292,6 @@ class LabelImage extends Component {
 
   onTouchStart(e){
     this.clearCanvas();
-    
     var touch = e.touches[0];
     const {x, y} = this.getPos(touch);
 

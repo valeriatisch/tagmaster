@@ -42,7 +42,7 @@ class ownNavbar extends Component {
         return (
             <>
 			<style>
-				{".login-button{margin-right:100%;width:150px;border:1px solid #efeb53;text-align:center;background-color:#282828;color:#efeb53} .login-button:hover{background-color:#3F3F3F;color:#efeb53}"}
+				{".login-button{width:150px;border:1px solid #efeb53;text-align:center;background-color:#282828;color:#efeb53} .login-button:hover{background-color:#3F3F3F;color:#efeb53}"}
 			</style>
             <Navbar expand="md" style={{backgroundColor:"#191919",borderBottom:"1px solid #454545"}}>
                 <Navbar.Brand href="/" style={{marginTop:"-5px"}}><img src={logo} height="50"/></Navbar.Brand>
