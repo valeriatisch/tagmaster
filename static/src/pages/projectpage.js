@@ -1,13 +1,14 @@
 import React, { Component } from "react";
+import { Container, Row, Col} from 'react-bootstrap';
 
-import Upload from "../components/uploadfile.js";
+import Project from "../components/project.js";
 
 class Register extends Component {
     render() {
         return (
-            <div>
-                <Upload/>
-            </div>
+            <>
+                <Project title="hdf" description="hdfhdfhdf" tags={["dog","cat","bird"]}/>
+            </>
         );
      }
 }

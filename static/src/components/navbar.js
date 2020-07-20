@@ -11,7 +11,7 @@ import Projects from "../pages/projects.js";
 import Accountpage from "../pages/accountpage";
 import { Nav,Navbar } from "react-bootstrap";
 import Label from "../pages/label";
-import Project from "../pages/projectpage";
+import ProjectPage from "../pages/projectpage";
 
 class ownNavbar extends Component {
 	constructor(props) {
@@ -80,7 +80,7 @@ class ownNavbar extends Component {
                 <Route path="/projects" component={Projects} />
                 <Route path="/accountpage" component={Accountpage} />
                 <Route path="/label" component={Label} />
-				<Route path="/user/project" component={Project} />
+				<Route path="/user/project" component={ProjectPage} />
             </Switch>
             </>
         );
