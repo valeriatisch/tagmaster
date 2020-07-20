@@ -2,6 +2,7 @@ package models
 
 import (
 	"github.com/jinzhu/gorm"
+	"time"
 )
 
 type Image struct {
@@ -11,6 +12,7 @@ type Image struct {
 	Done      bool
 	ProjectID uint
 	Labels    []Label
+	LastServed time.Time
 }
 
 func (img *Image) Id() uint {

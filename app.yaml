@@ -2,7 +2,7 @@ runtime: go112
 
 env_variables:
   PLATFORM: appengine
-  # GIN_MODE: release
+  GIN_MODE: release
 
 handlers:
 - url: /api/.*

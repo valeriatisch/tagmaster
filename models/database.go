@@ -13,7 +13,7 @@ type Database struct {
 func NewDatabase(uri string) *Database {
 	db, err := gorm.Open("postgres", uri)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Fatal: can't connect to db ", err)
 	}
 
 	db.AutoMigrate(&User{})

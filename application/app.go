@@ -1,11 +1,12 @@
 package application
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
-	"github.com/valeriatisch/tagmaster/bucket"
-	"github.com/valeriatisch/tagmaster/middleware"
 	"github.com/valeriatisch/tagmaster/models"
+	"github.com/valeriatisch/tagmaster/middleware"
+	"github.com/valeriatisch/tagmaster/bucket"
+	"github.com/jinzhu/gorm"
+	"github.com/gin-gonic/gin"
+	"log"
 )
 
 type App struct {
@@ -24,6 +25,7 @@ func (app *App) deletionCallback(scope *gorm.Scope) {
 }
 
 func NewApp() *App {
+	log.Println("Creating new instance")
 	conf := loadConfig()
 	db := models.NewDatabase(conf.databaseURI)
 	var bkt bucket.Bucket
@@ -54,31 +56,40 @@ func (app *App) Run() {
 	api := router.Group("/api")
 
 	// User
-	api.POST("/login", app.login)
-	api.POST("/register", app.register)
-	api.GET("/logout", app.logout)
+	api.POST(  "/register",            app.userCreate)
+	api.POST(  "/login",               app.userLogin)
+	api.GET(   "/logout",              app.userLogout)
+	api.POST(  "/reset",               app.sendPassword)          
+	api.GET(   "/account",             app.userRead)
+	api.PATCH( "/account",             app.userUpdate)
+	api.DELETE("/account",             app.userDelete)
 
 	// Project
-	api.POST("/projects", app.projectCreate)
-	api.GET("/projects", app.projectList)
-	api.GET("/projects/:id", app.projectRead)
-	api.DELETE("/projects/:id", app.projectDelete)
+	api.POST(  "/projects",            app.projectCreate)
+	api.GET(   "/projects",            app.projectList)
+	api.GET(   "/projects/:id",        app.projectRead)
+	api.DELETE("/projects/:id",        app.projectDelete)
 
 	// Image
-	api.POST("/projects/:id/images", app.imageCreate)
-	api.GET("/projects/:id/images", app.imageList)
-	api.GET("/images/:id", app.imageRead)
+	api.POST(  "/projects/:id/images", app.imageCreate)
+	api.GET(   "/projects/:id/images", app.imageList)
+	api.GET(   "/images/:id",          app.imageRead)
+	api.GET(   "/images/:id/file",     app.imageFile)
 
 	// Label
 	api.POST("/images/:id/label", app.labelCreate)
 	api.GET("/images/:id/label", app.labelList)
 	// TODO
 
+	// Next
+	api.GET(   "/next",                app.nextImage)
+
 	router.NoRoute(func(c *gin.Context) {
 		abortRequest(c, errorNotFound)
 	})
 
-	router.Run()
+	log.Println("New instance started")
+	_ = router.Run()
 }
 
 func responseOK(c *gin.Context) {
