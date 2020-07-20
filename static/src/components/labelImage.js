@@ -30,7 +30,7 @@ class LabelImage extends Component {
     img.onload = function() {
       canvas.width = img.width;
       canvas.height = img.height;
-      that.setState({ogwidth: canvas.width,ogheight: canvas.height});
+      that.setState({ogwidth: img.naturalWidth,ogheight: img.naturalHeight});
       const ctx = canvas.getContext("2d");
     }
     
