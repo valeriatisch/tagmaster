@@ -7,10 +7,11 @@ import (
 
 type Image struct {
 	gorm.Model
-	UUID string
-	Name string
-	Done bool
+	UUID      string
+	Name      string
+	Done      bool
 	ProjectID uint
+	Labels    []Label
 	LastServed time.Time
 }
 

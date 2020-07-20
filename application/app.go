@@ -18,10 +18,10 @@ type App struct {
 func (app *App) deletionCallback(scope *gorm.Scope) {
 	img, ok := scope.Value.(*models.Image)
 	if !ok {
-		return	
+		return
 	}
 
-	go app.bucket.RemoveFile(img.UUID)	
+	go app.bucket.RemoveFile(img.UUID)
 }
 
 func NewApp() *App {
@@ -77,6 +77,8 @@ func (app *App) Run() {
 	api.GET(   "/images/:id/file",     app.imageFile)
 
 	// Label
+	api.POST("/images/:id/label", app.labelCreate)
+	api.GET("/images/:id/label", app.labelList)
 	// TODO
 
 	// Next
