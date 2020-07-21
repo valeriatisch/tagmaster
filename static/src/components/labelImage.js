@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Col, Image, ListGroup, Table, Button, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Image, ListGroup, Table, Button, Modal, Badge} from 'react-bootstrap';
 import { Trash, TabletLandscape } from 'react-bootstrap-icons';
 import {BrowserView, MobileView, isBrowser, isMobile, TabletView} from 'react-device-detect';
 
@@ -21,6 +21,18 @@ class LabelImage extends Component {
       x2: 0,
       y2: 0
     };
+  }
+
+  printTags() {
+    let ausgabe = [];
+    let tags = this.props.imageLabels;
+    let colors = ["#0247FE","green","#FE2712","#FB9902","#20B2AA","#FF69B4","darkviolet"];
+    
+    for (let i=0; i < tags.length; i++){
+    let badge = <Badge variant="primary" style={{backgroundColor:colors[i%colors.length],marginRight:"5px"}}>{tags[i]}</Badge>;
+        ausgabe.push(badge);
+    }
+    return ausgabe;
   }
 
   componentDidMount() {
@@ -67,26 +79,35 @@ class LabelImage extends Component {
               </div>
             </Col>
             <Col>
-              <Table striped bordered hover variant="dark">
-                <thead>
-                  <tr>
-                    <th>Tag
-                      <Button onClick={() => window.location.reload(false)} style={{width: "80px", border: "1px solid #efeb53", color: "#efeb53", "background-color": "transparent"}} size="sm" className="float-right">Done</Button>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.tags.map((e, i) => {
-                    return (
-                      <tr onMouseEnter={() => this.startHoverOrTouching(i)} onMouseLeave={() => this.stopHover()} onTouchStart={() => this.startHoverOrTouching(i)}>  
-                        <td>
-                          {e.label}
-                          <Button onClick={() => this.removeTag(i)} variant="outline-danger" size="sm" style={{"width": "50px"}} className="float-right"><Trash /></Button></td>
+              <Row>
+                <Col style={{fontSize:"20px",marginBottom:"10px"}}>
+                  Tags: {this.printTags()}
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Table striped bordered hover variant="dark">
+                    <thead>
+                      <tr>
+                        <th>Tag
+                          <Button onClick={() => window.location.reload(false)} style={{width: "80px", border: "1px solid #efeb53", color: "#efeb53", "background-color": "transparent"}} size="sm" className="float-right">Done</Button>
+                        </th>
                       </tr>
-                    )}
-                  )}
-                </tbody>
-              </Table>
+                    </thead>
+                    <tbody>
+                      {this.state.tags.map((e, i) => {
+                        return (
+                          <tr onMouseEnter={() => this.startHoverOrTouching(i)} onMouseLeave={() => this.stopHover()} onTouchStart={() => this.startHoverOrTouching(i)}>  
+                            <td>
+                              {e.label}
+                              <Button onClick={() => this.removeTag(i)} variant="outline-danger" size="sm" style={{"width": "50px"}} className="float-right"><Trash /></Button></td>
+                          </tr>
+                        )}
+                      )}
+                    </tbody>
+                  </Table>
+                </Col>
+              </Row>
             </Col>
           </Row>
           <style>{".modal-content{border:2px solid yellow} .modal-dialog {position: relative;top: 15%} button1:hover{background-color:#3F3F3F}"}</style>
