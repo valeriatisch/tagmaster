@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/valeriatisch/tagmaster/application"
-	"os"
 )
 
 func main() {
