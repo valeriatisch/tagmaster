@@ -6,10 +6,10 @@ import (
 
 type Label struct {
 	gorm.Model
-	LabelName   string
-	Topright    uint
-	Topleft     uint
-	Bottomright uint
-	Bottomleft  uint
-	ImageID     uint
+	Name string
+	X1 uint
+	Y1 uint
+	X2 uint
+	Y2 uint
+	ImageID uint
 }

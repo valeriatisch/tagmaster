@@ -77,9 +77,8 @@ func (app *App) Run() {
 	api.GET(   "/images/:id/file",     app.imageFile)
 
 	// Label
-	api.POST("/images/:id/label", app.labelCreate)
-	api.GET("/images/:id/label", app.labelList)
-	// TODO
+	api.POST(  "/images/:id/label",    app.labelCreate)
+	api.GET(   "/images/:id/label",    app.labelList)
 
 	// Next
 	api.GET(   "/next",                app.nextImage)
