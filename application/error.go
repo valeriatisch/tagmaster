@@ -69,6 +69,11 @@ var (
 		http.StatusInternalServerError, 
 		"No image available",
 	)
+
+	errorAlreadyLabeled = newError(
+		http.StatusBadRequest, 
+		"Image already labeled",
+	)
 )
 
 // Abort request with json payload {"error":"description"}

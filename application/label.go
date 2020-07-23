@@ -31,10 +31,14 @@ func (app *App) labelCreate(c *gin.Context) {
 	}
 
 	var i models.Image
-
 	err = app.database.Take(&i, id).Error
 	if err != nil {
 		abortRequest(c, errorNotFound)
+		return
+	}
+
+	if i.Done {
+		abortRequest(c, errorAlreadyLabeled)
 		return
 	}
 
@@ -59,8 +63,17 @@ func (app *App) labelCreate(c *gin.Context) {
 		err = app.database.Create(&label).Error
 		if err != nil {
 			log.Println("failed to insert label")
-			// TODO: How should we handle this?
+			// TODO: how should we handle this?
+			// This should probably be done in a transaction
 		}
+	}
+
+	i.Done = true
+	err = app.database.Save(i).Error
+	if err != nil {
+		// TODO: this is not great...
+		abortRequest(c, errorInternal)
+		return
 	}
 
 	responseOK(c)
