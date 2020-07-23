@@ -58,6 +58,109 @@ func (app *App) projectCreate(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
+type ExportJSON struct {
+	Filename string `json:"filename"`
+	Labels []LabelJSON `json:"tags"`
+}
+
+func (app *App) projectExport(c *gin.Context) {
+	user, err := app.getUser(c)
+	if err != nil {
+		abortRequest(c, errorUnauthorized)
+		return
+	}
+
+	val := c.Param("id")
+
+	id, err := strconv.Atoi(val)
+	if err != nil {
+		abortRequest(c, errorBadRequest)
+		return
+	}
+
+	var p models.Project
+
+	err = app.database.Take(&p, id).Error
+	if err != nil {
+		abortRequest(c, errorNotFound)
+		return
+	}
+
+	if p.UserID != user.Id() {
+		abortRequest(c, errorUnauthorized)
+		return
+	}
+
+	done, err := projectIsDone(app.database, p)
+	if err != nil {
+		abortRequest(c, errorInternal)
+		return
+	}
+
+	if !done {
+		// TODO
+		abortRequest(c, errorInternal)
+		return
+	}
+
+	var (
+		export []ExportJSON
+		images []models.Image
+	)
+
+	res := app.database.Model(&p).Related(&images)
+	if res.Error != nil {
+		// TODO
+		abortRequest(c, errorInternal)
+		return
+	}
+
+	for _, img := range images {
+		exp, err := exportImage(app.database, &img)
+		if err != nil {
+			// TODO
+			abortRequest(c, errorInternal)
+			return
+		}
+
+		export = append(export, exp)
+	}
+
+	c.Writer.Header().Add("Content-Disposition", "attachment; filename=export.json")
+	c.Writer.Header().Add("Content-Type", "application/octet-stream")
+	c.JSON(http.StatusOK, export)
+}
+
+func exportImage(db *models.Database, img *models.Image) (ExportJSON, error) {
+	var (
+		labels []models.Label
+		tags []LabelJSON
+		export ExportJSON
+	)
+
+	res := db.Model(&img).Related(&labels)
+	if res.Error != nil {
+		return export, res.Error
+	}
+
+	for _, l := range labels {
+		tags = append(tags, LabelJSON{
+			Name: l.Name,
+			X1: l.X1,
+			Y1: l.Y1,
+			X2: l.X2,
+			Y2: l.Y2,
+		})
+	}
+
+	export = ExportJSON{
+		Filename: img.Name,
+		Labels: tags,
+	}
+
+	return export, nil
+}
+
 func (app *App) projectActivate(c *gin.Context) {
 	user, err := app.getUser(c)
 	if err != nil {

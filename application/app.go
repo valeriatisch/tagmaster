@@ -70,6 +70,7 @@ func (app *App) Run() {
 	api.GET(   "/projects/:id",           app.projectRead)
 	api.DELETE("/projects/:id",           app.projectDelete)
 	api.POST(  "/projects/:id/activate",  app.projectActivate)
+	api.GET(   "/projects/:id/export",    app.projectExport)
 
 	// Image
 	api.POST(  "/projects/:id/images",    app.imageCreate)
