@@ -74,6 +74,16 @@ var (
 		http.StatusBadRequest, 
 		"Image already labeled",
 	)
+
+	errorActivateEmpty = newError(
+		http.StatusBadRequest, 
+		"Project is empty",
+	)
+
+	errorIsActive = newError(
+		http.StatusBadRequest, 
+		"Project is already active",
+	)
 )
 
 // Abort request with json payload {"error":"description"}

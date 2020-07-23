@@ -11,6 +11,8 @@ type ProjectJSON struct {
 	Id uint     `json:"id"`
 	Name string `json:"name" binding:"required"`
 	Tags string `json:"tags" binding:"required"`
+	Active bool `json:"active"`
+	Done bool   `json:"done"`
 	Images []uint `json:"images"`
 }
 
@@ -32,6 +34,8 @@ func (app *App) projectCreate(c *gin.Context) {
 
 	project := models.Project{
 		Name: pj.Name,
+		Active: false,
+		Done: false,
 		UserID: user.Id(),
 		Tags: pj.Tags,
 	}
@@ -46,9 +50,68 @@ func (app *App) projectCreate(c *gin.Context) {
 		Id: project.Id(),
 		Name: project.Name,
 		Tags: project.Tags,
+		Active: false,
+		Done: false,
+		Images: []uint{},
 	}
 
 	c.JSON(http.StatusOK, res)
+}
+
+func (app *App) projectActivate(c *gin.Context) {
+	user, err := app.getUser(c)
+	if err != nil {
+		abortRequest(c, errorUnauthorized)
+		return
+	}
+
+	val := c.Param("id")
+
+	id, err := strconv.Atoi(val)
+	if err != nil {
+		abortRequest(c, errorBadRequest)
+		return
+	}
+
+	var p models.Project
+
+	err = app.database.Take(&p, id).Error
+	if err != nil {
+		abortRequest(c, errorNotFound)
+		return
+	}
+
+	if p.UserID != user.Id() {
+		abortRequest(c, errorUnauthorized)
+		return
+	}
+
+	if p.Active {
+		abortRequest(c, errorIsActive)
+		return
+	}
+
+	imageIds := getImageIds(app.database, p)
+
+	if len(imageIds) == 0 {
+		abortRequest(c, errorActivateEmpty)
+		return
+	}
+
+	p.Active = true
+	err = app.database.Save(p).Error
+	if err != nil {
+		abortRequest(c, errorInternal)
+		return
+	}
+
+	responseOK(c)
+}
+
+func projectIsDone(db *models.Database, p models.Project) (bool, error) {
+	var cnt uint
+	err := db.Model(&models.Image{}).Where("project_id = ? AND done = ?", p.Id(), false).Count(&cnt).Error
+	return cnt == 0, err
 }
 
 func (app *App) projectRead(c *gin.Context) {
@@ -80,12 +143,19 @@ func (app *App) projectRead(c *gin.Context) {
 	}
 
 	imageIds := getImageIds(app.database, p)
+	done, err := projectIsDone(app.database, p)
+	if err != nil {
+		abortRequest(c, errorInternal)
+		return
+	}
 
 	res := ProjectJSON{
 		Id: p.Id(),
 		Name: p.Name,
 		Tags: p.Tags,
 		Images: imageIds,
+		Done: done,
+		Active: p.Active,
 	}
 
 	c.JSON(http.StatusOK, res)
@@ -127,11 +197,18 @@ func (app *App) projectList(c *gin.Context) {
 
 	for i, p := range projects {
 		imageIds := getImageIds(app.database, p)
+		done, err := projectIsDone(app.database, p)
+		if err != nil {
+			abortRequest(c, errorInternal)
+			return
+		}
 		json[i] = ProjectJSON{
 			Id: p.Id(),
 			Name: p.Name,
 			Tags: p.Tags,
 			Images: imageIds,
+			Done: done,
+			Active: p.Active,
 		}
 	}
 
