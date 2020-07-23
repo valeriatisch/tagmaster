@@ -27,7 +27,9 @@ func (app *App) deletionCallback(scope *gorm.Scope) {
 func NewApp() *App {
 	log.Println("Creating new instance")
 	conf := loadConfig()
-	db := models.NewDatabase(conf.databaseURI)
+	 db := models.NewDatabase(conf.databaseURI)
+	log.Println("read URI")
+	//db := models.NewDatabase("postgres://postgres:uwwmt81@locahost:5432/postgres")
 	var bkt bucket.Bucket
 
 	if conf.isProduction {

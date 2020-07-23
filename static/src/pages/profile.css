@@ -1,0 +1,23 @@
+html {
+  background-color: #191919;
+  color: black;
+}
+
+h1 {
+  color: #efeb53;
+}
+
+h2 {
+  color: #efeb53;
+}
+
+.info {
+  background-color: #191919;
+  padding-top: 50px;
+  margin: auto;
+  width: 50%;
+}
+
+.total {
+  background-color: #191919;
+}

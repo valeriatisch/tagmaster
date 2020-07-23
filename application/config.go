@@ -44,7 +44,9 @@ func loadDevelopment() config {
 }
 
 func mustGetEnvironment(name string) string {
-	e := os.Getenv(name)
+	// disabled windows 10
+	//e := os.Getenv(name)
+	e := "postgres://postgres:uwwmt81@localhost:5432/postgres?sslmode=disable";
 	if len(e) == 0 {
 		log.Fatal("Fatal: ", name, " not set")
 	}
