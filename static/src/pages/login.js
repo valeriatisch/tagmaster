@@ -17,7 +17,7 @@ export default function Login() {
 
   return (
     <div className="Login" style={{ color: "white" }}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={this.handleSubmit}>
         <h3>Sign In</h3>
 
         <FormGroup controlId="email" bsSize="large">
