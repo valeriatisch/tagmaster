@@ -5,14 +5,15 @@ import (
 	"github.com/valeriatisch/tagmaster/models"
 	"net/http"
 	"strconv"
+	"log"
 )
 
 type LabelJSON struct {
-	LabelName   string `json:"LabelName"`
-	Topright    uint   `json:"Topright"`
-	Topleft     uint   `json:"Topleft"`
-	Bottomright uint   `json:"Bottomright"`
-	Bottomleft  uint   `json:"Bottomleft"`
+	Name string `json:"name"`
+	X1   uint   `json:"x1"`
+	Y1   uint   `json:"y1"`
+	X2   uint   `json:"x2"`
+	Y2   uint   `json:"y2"`
 }
 
 func (app *App) labelCreate(c *gin.Context) {
@@ -30,37 +31,52 @@ func (app *App) labelCreate(c *gin.Context) {
 	}
 
 	var i models.Image
-
 	err = app.database.Take(&i, id).Error
 	if err != nil {
 		abortRequest(c, errorNotFound)
 		return
 	}
 
-	var l LabelJSON
-	err = c.ShouldBindJSON(&l)
+	if i.Done {
+		abortRequest(c, errorAlreadyLabeled)
+		return
+	}
+
+	var labels []LabelJSON
+	err = c.ShouldBindJSON(&labels)
 	if err != nil {
 		abortRequest(c, errorBadRequest)
 		return
 	}
 
-	// Insert in database
-	label := models.Label{
-		LabelName:   l.LabelName,
-		Topleft:     l.Topleft,
-		Topright:    l.Topright,
-		Bottomright: l.Bottomright,
-		Bottomleft:  l.Bottomleft,
-		ImageID:     i.Id(),
+	for _, l := range labels {
+		// Insert in database
+		label := models.Label{
+			Name: l.Name,
+			X1: l.X1,
+			Y1: l.Y1,
+			X2: l.X2,
+			Y2: l.Y2,
+			ImageID: i.Id(),
+		}
+
+		err = app.database.Create(&label).Error
+		if err != nil {
+			log.Println("failed to insert label")
+			// TODO: how should we handle this?
+			// This should probably be done in a transaction
+		}
 	}
 
-	err = app.database.Create(&label).Error
-	if err == nil {
-		responseOK(c)
+	i.Done = true
+	err = app.database.Save(i).Error
+	if err != nil {
+		// TODO: this is not great...
+		abortRequest(c, errorInternal)
 		return
 	}
 
-	return
+	responseOK(c)
 }
 
 func (app *App) labelRead(c *gin.Context) {
@@ -95,11 +111,11 @@ func (app *App) labelRead(c *gin.Context) {
 	}
 
 	lab := LabelJSON{
-		LabelName:   label.LabelName,
-		Topright:    label.Topright,
-		Topleft:     label.Topleft,
-		Bottomleft:  label.Bottomleft,
-		Bottomright: label.Bottomright,
+		Name: label.Name,
+		X1: label.X1,
+		Y1: label.Y1,
+		X2: label.X2,
+		Y2: label.Y2,
 	}
 
 	c.JSON(http.StatusOK, lab)
@@ -140,11 +156,11 @@ func (app *App) labelList(c *gin.Context) {
 
 	for i, lbl := range labels {
 		json[i] = LabelJSON{
-			LabelName:   lbl.LabelName,
-			Topright:    lbl.Topright,
-			Topleft:     lbl.Topleft,
-			Bottomleft:  lbl.Bottomleft,
-			Bottomright: lbl.Bottomright,
+			Name:   lbl.Name,
+			Y1: lbl.Y1,
+			X1: lbl.X1,
+			Y2: lbl.Y2,
+			X2: lbl.X2,
 		}
 	}
 	c.JSON(http.StatusOK, json)

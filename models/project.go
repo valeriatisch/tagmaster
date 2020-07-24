@@ -7,6 +7,8 @@ import (
 type Project struct {
 	gorm.Model
 	Name string
+	Done bool
+	Active bool
 	UserID uint
 	Images []Image
 	Tags string
