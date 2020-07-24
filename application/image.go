@@ -44,6 +44,11 @@ func (app *App) imageCreate(c *gin.Context) {
 		return
 	}
 
+	if p.Active {
+		abortRequest(c, errorIsActive)
+		return
+	}
+
 	f, h, err := c.Request.FormFile("file")
 	if err != nil {
 		abortRequest(c, errorBadRequest)
@@ -89,6 +94,7 @@ func (app *App) imageCreate(c *gin.Context) {
 	return
 }
 
+// TODO: Do we really need this?
 func (app *App) imageRead(c *gin.Context) {
 	_, err := app.getUser(c)
 	if err != nil {
