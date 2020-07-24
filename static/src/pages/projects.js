@@ -17,18 +17,14 @@ class Projects extends Component{
                     {"body { background-color: #191919; color: #CBCBCB} h1{color:#efeb53}"}
                 </style>
                 <h1 class="text-center">All Projects</h1>
-                <Projectpreview title="Road traffic" creator="kevin" tag1="car" tag2="bus" tag3="pedestrian" id="1"
-                 numberoftags="7" numberofpictures="38" img1={picture1} img2={picture2} 
-                 description="In this Project you will be labelling everything that can either drive or walk on the road."/>
-                <Projectpreview title="Dog races" creator="bert" tag1="beagle" tag2="kooikerhondje" tag3="poodle" id="2"
-                 numberoftags="31" numberofpictures="45" img1={picture3} img2={picture4} 
-                 description="Label up to 31 different races of dogs."/>
-                <Projectpreview title="Dolphins" creator="max" tag1="dolphin" tag2="" tag3="" id="3"
-                 numberoftags="1" numberofpictures="282" img1={picture5} img2={picture6} 
-                 description=""/>
-                <Projectpreview title="Wild animals" creator="kurt" tag1="elephant" tag2="snake" tag3="lion" id="4"
-                 numberoftags="24" numberofpictures="53" img1={picture7} img2={picture8} 
-                 description="Browse through the wildlife to label many exotic animals."/>
+                <Projectpreview title="Road traffic"  tags={["car","bus","pedestrian","","","",""]}
+                 numberofpictures="38" img1={picture1} img2={picture2}/>
+                <Projectpreview title="Dog races" tags={["beagle","kooikerhondje","poodle","","","","","","","",""]}
+                 numberofpictures="45" img1={picture3} img2={picture4}/>
+                <Projectpreview title="Dolphins" tags={["dolphin"]}
+                 numberofpictures="282" img1={picture5} img2={picture6}/>
+                <Projectpreview title="Wild animals" tags={["elephant","snake","lion","dsd","","","","","","","",""]}
+                 numberofpictures="53" img1={picture7} img2={picture8}/>
             </div>
         );
     }
