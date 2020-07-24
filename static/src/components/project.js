@@ -42,11 +42,6 @@ class Register extends Component {
                     </Row>
                     <Row>
                         <Col style={{marginTop:"15px","textAlign":"center"}}>
-                            {this.props.description}
-                        </Col>
-                    </Row>
-                    <Row>
-                        <Col style={{marginTop:"15px","textAlign":"center"}}>
                             <div style={{backgroundColor:"#191919"}}>
                                 <style>{'.button1{width:150px; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .button1:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }'}</style>
                                 <form onSubmit={this.onFormSubmit} style={{margin:"0 auto",width:"300px"}}>

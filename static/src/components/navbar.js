@@ -51,7 +51,7 @@ class ownNavbar extends Component {
 				<Navbar.Collapse id="basic-navbar-nav">
 					<Nav className="mr-auto" style={{}}>
 						<Nav.Link href="/" style={{color:"#efeb53"}}>Home</Nav.Link>
-						<Nav.Link href="/projects" style={{color:"#efeb53"}}>Projects</Nav.Link>
+						<Nav.Link href="/user/projects" style={{color:"#efeb53"}}>Projects</Nav.Link>
 						<Nav.Link href="/contact" style={{color:"#efeb53"}}>Contact</Nav.Link>
 						<Nav.Link href="/impressum" style={{color:"#efeb53"}}>About</Nav.Link>
 					</Nav>
@@ -77,7 +77,7 @@ class ownNavbar extends Component {
                 <Route path="/contact" component={Contact} />
                 <Route path="/logout" component={Logout} />
                 <Route path="/user/newProject" component={newProject} />
-                <Route path="/projects" component={Projects} />
+                <Route exact path="/user/projects" component={Projects} />
                 <Route path="/accountpage" component={Accountpage} />
                 <Route path="/label" component={Label} />
 				<Route path="/user/project" component={ProjectPage} />
