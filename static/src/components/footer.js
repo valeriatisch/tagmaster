@@ -3,16 +3,15 @@ import { Link } from 'react-router-dom';
 import Projects from "../pages/projects";
 import Impressum from "../pages/impressum";
 import Contact from "../pages/contact";
-
+import "../css/footer.css";
 
 const Footer = () => (
-    
-  <div class="container col-auto" style={{position:"absolute",right: "0",bottom: "0",left:"0", paddingTop:"20px", marginTop:"80px",height: "100px",width:"100%",backgroundColor:"#585858",fontSize:"20px",color:"#000000", fontWeight:"bold"}}>
-  
-  <div class="container text-center" >
-  
-   
-    <div class="row">
+<body>
+    <div class="container col-auto"></div>
+    <footer>  
+        <section>
+        <div class="foot-main text-center">
+            <div class="row foot-main-list">
                     <a class="col-sm"> <Link to="/projects">
                             Projects
                         </Link>
@@ -26,9 +25,14 @@ const Footer = () => (
                         </Link>
                     </a>   
                         <br/>
-            </div>
-            
+             </div>
         </div>
-        
-    </div>  
+        </section> 
+        <section>
+            <div class = "foot-copyright text-center">
+            &copy; {new Date().getFullYear()} Copyright Tagmaster
+            </div>
+        </section>
+    </footer>
+</body>
 );
