@@ -1,104 +1,59 @@
-import React, { Component } from "react";
-import "./formaccountdesign.css";
-import { Link } from 'react-router-dom';
-import { Navbar, ThemeProvider } from "react-bootstrap";
-
+import React, { Component } from 'react';
+import './formaccountdesign.css';
+import { auth } from '../firebase/firebase';
 
 class Formlogin extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      password: null,
-      email: null,
-      errorpassword: null,
-      errortruepassword: false
-    };
-
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  mySubmitHandler = (event) => {
-    event.preventDefault();
-    if(this.state.email==null||this.state.email==""){
-      alert("email must not be empty");
-    }
-    else if(this.state.errortruepassword){
-      alert(this.state.errorpassword);
-    }
-    else if(this.state.password==null||this.state.password==""){
-      alert("password must not be empty");
-    }
-    else if(this.state.email==null||this.state.email==""){
-      alert("email must not be empty");
-    }
-    else{
-      alert("Successfull!!");
-    }
-    
-    
+  state = {
+    password: null,
+    email: null,
   };
 
-  handleInputChange(event) {
-    const { name, value } = event.target;
-    switch (name) {
-      
-      case "password":
-        this.state.password = value;
-        if(value.length<8&&value.length>0){
-          document.getElementById("spanmessagepassword").innerHTML = 'minimum 8 characaters required'
-          this.state.errorpassword = "minimum 8 characaters required for password"
-            this.state.errortruepassword = true
-        }
-        else if(value.length==0){
-          document.getElementById("spanmessagepassword").innerHTML = 'password must not be empty'
-          this.state.errorpassword= "password must not be empty"
-          this.state.errortruepassword = true
-        }
+  onSubmit = (e) => {
+    e.preventDefault();
+    auth
+      .createUserWithEmailAndPassword(this.state.email, this.state.password)
+      .then((res) => {
+        alert('Successfully created your account kidnly login now');
+        console.log(res);
+      })
+      .catch(function (err) {
+        alert(err.message);
+      });
+  };
 
-        else{
-          document.getElementById("spanmessagepassword").innerHTML = ''
-          this.state.errorpassword = ""
-            this.state.errortruepassword = false
-        }
-        break;
-        case "email":
-        this.state.email = value;
-        break;
-      default:
-        break;
-    }
-  }
+  handleInputChange = (event) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+  };
 
   render() {
     return (
       <div
-        class="container "
+        class='container '
         style={{
-          marginTop: "50px",
-          border: "2px solid",
-          padding: "30px",
-          borderRadius: "30px",
-          width:"420px"
-        }}
-        
-      >
+          marginTop: '50px',
+          border: '2px solid',
+          padding: '30px',
+          borderRadius: '30px',
+          width: '420px',
+        }}>
         <style>
           {
-            ".button1{ margin-top:20px; width:150px; height: 30px;  color:#f5f8fa; background-color:#4fbae6; border: 1px solid #4fbae6; border-radius: 30px; } .button1:hover { background-color:#5b9be5; color:#f5f8fa; border: 1px solid } .input1{width:300px; height:30px;border-radius: 15px; border: 1px solid; border-color:#000000; padding:7px} .input1:focus{outline:none}"
+            '.button1{ margin-top:20px; width:150px; height: 30px;  color:#f5f8fa; background-color:#4fbae6; border: 1px solid #4fbae6; border-radius: 30px; } .button1:hover { background-color:#5b9be5; color:#f5f8fa; border: 1px solid } .input1{width:300px; height:30px;border-radius: 15px; border: 1px solid; border-color:#000000; padding:7px} .input1:focus{outline:none}'
           }
         </style>
-        <h1 style={{ fontSize: "30px", marginTop: "5px", padding: "40px" }}>
+        <h1 style={{ fontSize: '30px', marginTop: '5px', padding: '40px' }}>
           Create an Account
         </h1>
-        <form onSubmit={this.mySubmitHandler}>
-          
+        <form>
           <label>
             Email
             <br />
             <input
-              class="input1"
-              name="email"
-              type="text"
+              class='input1'
+              name='email'
+              type='email'
               value={this.state.email}
               onChange={this.handleInputChange}
             />
@@ -109,31 +64,25 @@ class Formlogin extends Component {
             Password
             <br />
             <input
-              class="input1"
-              name="password"
-              type="password"
+              class='input1'
+              name='password'
+              type='password'
               value={this.state.password}
               onChange={this.handleInputChange}
             />
           </label>
-       
-          <span className="errorMessage" id="spanmessagepassword"></span>
-          
+
+          <span className='errorMessage' id='spanmessagepassword'></span>
+
           <br />
           <br />
           <br />
-         
-          <button>
-            CREATE ACCOUNT
-          </button>
-          
+
+          <button onClick={this.onSubmit}>CREATE ACCOUNT</button>
         </form>
       </div>
     );
   }
-  
 }
-
-
 
 export default Formlogin;
