@@ -3,9 +3,10 @@ import "firebase/auth";
 import "firebase/firestore";
 
 /** firebase
- **/ 
+ **/
+
 export const firebaseConfig = {
-  apiKey: "", 
+  apiKey: "",
   authDomain: "",
   databaseURL: "",
   projectId: "",
