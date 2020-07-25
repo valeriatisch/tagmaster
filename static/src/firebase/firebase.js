@@ -2,10 +2,10 @@ import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 
-/**I have removed my firebase creds from here you can go to firebase and get your creds from there */
-
+/** firebase
+ **/ 
 export const firebaseConfig = {
-  apiKey: "",
+  apiKey: "", 
   authDomain: "",
   databaseURL: "",
   projectId: "",
