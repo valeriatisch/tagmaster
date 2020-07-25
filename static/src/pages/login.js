@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, FormGroup, FormControl } from "react-bootstrap";
 import "./login.css";
 import FacebookLogin from "react-facebook-login";
+import { auth } from "../firebase/firebase";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -10,14 +11,21 @@ export default function Login() {
   function validateForm() {
     return email.length > 0 && password.length > 0;
   }
+  function handleSubmit(e) {
+    e.preventDefault();
 
-  function handleSubmit(event) {
-    event.preventDefault();
+    /*  auth
+      .signInWithEmailAndPassword(email, password)
+      .then((res) => {
+        alert("LOGIN SUCCESFULL");
+        console.log(res);
+      })
+      .catch((err) => alert(err.message));*/
   }
-
+  console.log("USER : ", window.user);
   return (
     <div className="Login" style={{ color: "white" }}>
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <h3>Sign In</h3>
 
         <FormGroup controlId="email" bsSize="large">
@@ -82,9 +90,27 @@ export default function Login() {
           scope="public_profile,user_friends,user_actions.books"
           size="small"
         />
-        <p className="forgot-password text-right">
-          Forgot <a href="#">password?</a>
-        </p>
+
+        <a
+          href="#"
+          onClick={() => {
+            email
+              ? auth
+                  .sendPasswordResetEmail(email)
+                  .then((res) => {
+                    alert("Verification Link Sent To Your Email");
+                    console.log(res);
+                  })
+                  .catch((err) => {
+                    alert(err.message);
+                    console.log(err);
+                  })
+              : alert("Kindly Enter Your Email Then Click Forgot password");
+          }}
+          className="text-dark"
+        >
+          Forgot password?
+        </a>
       </form>
     </div>
   );
