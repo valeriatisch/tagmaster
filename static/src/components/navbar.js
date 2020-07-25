@@ -90,9 +90,7 @@ class ownNavbar extends Component {
             <Nav className="navbar-right ">
               {this.state.loggedIn == true ? (
                 <>
-                  <div className="text-light mt-2">
-                    {auth.currentUser.email}
-                  </div>
+                  <div className="text-light mt-2">{auth.currentUser.in}</div>
                   <Link
                     to={"/logout"}
                     className="nav-link"
