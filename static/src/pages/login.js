@@ -14,13 +14,13 @@ export default function Login() {
   function handleSubmit(e) {
     e.preventDefault();
 
-    /*  auth
+    auth
       .signInWithEmailAndPassword(email, password)
       .then((res) => {
         alert("LOGIN SUCCESFULL");
         console.log(res);
       })
-      .catch((err) => alert(err.message));*/
+      .catch((err) => alert(err.message));
   }
   console.log("USER : ", window.user);
   return (
@@ -98,14 +98,14 @@ export default function Login() {
               ? auth
                   .sendPasswordResetEmail(email)
                   .then((res) => {
-                    alert("Verification Link Sent To Your Email");
+                    alert("Verification Link has been Sent To Your Email");
                     console.log(res);
                   })
                   .catch((err) => {
                     alert(err.message);
                     console.log(err);
                   })
-              : alert("Kindly Enter Your Email Then Click Forgot password");
+              : alert("Please Enter Your Email Then Click Forgot password");
           }}
           className="text-dark"
         >
