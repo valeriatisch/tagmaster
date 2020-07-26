@@ -1,30 +1,52 @@
-# **Produktname: TAGMASTER**
+# TAGMASTER
 ![10000201000002F200000286882984D26AD5F309](https://user-images.githubusercontent.com/57265123/83730511-78ef6600-a649-11ea-82de-3ac233918202.png)
 
-## 1. **Rollen:**
+Tagmaster is a web app for labeling pictures most commonly used for training Image Recognition AIs.  
+It's completely **open source**. You can see the code to learn how it works, and contribute to help it improve.
 
-**Product Owner:** Valeria, Felix
+## 📌 Project Management
 
-**Backend:** Felix, Atilla, Valeria, Rick
+We are using the scrum framework for our project with the following role distribution:
 
-**Frontend:** Rumky, Theo, Berkan, Nili, Rick
+**Product Owners:** [Valeria](https://github.com/valeriatisch), [Felix](https://github.com/felixmoebius)
 
-**DevOps:** Felix
+**Backend team:** [Felix](https://github.com/felixmoebius), [Atilla](https://github.com/Foggernaut), [Valeria](https://github.com/valeriatisch), [Rick](https://github.com/rikkce)
 
-**QA:** Rick
+**Frontend team:** [Rumky](https://github.com/prez567), [Theo](https://github.com/TheoHtu), [Berkan](https://github.com/Berkan-C), [Nili](https://github.com/Nilinzm), [Rick](https://github.com/rikkce)
 
-## 2. **Development**
+**DevOps:** [Felix](https://github.com/felixmoebius)
 
-**Backend und Database:** Gin, Firebase, Auth0
+**QA:** [Rick](https://github.com/rikkce)
 
-**Frontend:** React
+## 💬 Collaboration Tools
 
-## 3. **Projektmanagement**
+These are our communication tools:
 
-GitHub: https://github.com/valeriatisch/tagmaster
+* Telegram
+* Zoom
+* GitHub
 
-## 4. **Kommunikation**
+## 🗂 Tech Stack
 
-Telegram
+Below is a list of technologies we use at Tagmaster.
 
-Zoom
+* 🎨 **Frontend:** [React](https://reactjs.org/)
+* 🏗 **Backend:** [Gin Framework](https://github.com/gin-gonic/gin)
+* 🎛 **Database:** [PostgreSQL](https://www.postgresql.org/)
+* ☁️ **Cloud:** [Google Cloud Platform](https://cloud.google.com/gcp/?hl=de&utm_source=google&utm_medium=cpc&utm_campaign=emea-de-all-de-dr-bkws-all-all-trial-e-gcp-1009139&utm_content=text-ad-none-any-DEV_c-CRE_431049261082-ADGP_Hybrid+%7C+AW+SEM+%7C+BKWS+~+EXA_1:1_DE_DE_General_Cloud_google+cloud+platform-KWID_43700053287067687-aud-606988878374:kwd-26415313501-userloc_9043013&utm_term=KW_google%20cloud%20platform-NET_g-PLAC_&ds_rl=1242853&ds_rl=1245734&ds_rl=1242853&ds_rl=1245734&utm_source=google&utm_medium=cpc&utm_campaign=emea-de-all-de-dr-bkws-all-all-trial-e-gcp-1003963&utm_content=text-ad-cretactr-any-DEV_c-CRE_431049261082-ADGP_Hybrid+%7C+AW+SEM+%7C+BKWS+~+EXA_1:1_DE_DE_General_Cloud_google+cloud+platform-KWID_43700053287067687-aud-606988878374:kwd-26415313501-userloc_9043013&utm_term=KW_google%20cloud%20platform-ST_google+cloud+platform&gclid=CjwKCAjw0_T4BRBlEiwAwoEiARPaqdA7Jt6F1AEH8C9c48uY_6Mn9LgKMoXFrdnMgCit40C_vOROsxoCtbYQAvD_BwE)
+* 🎩 **Deployment:** [Google App Engine](https://cloud.google.com/appengine?hl=de)
+* 📨 **Email Service:** [SendGrid](https://sendgrid.com/)
+
+## 📰 API Documentation
+[Here](https://github.com/valeriatisch/tagmaster/tree/master/documentation) you can find the documentation of our backend API.
+
+## 🙌 Want to Contribute?
+
+We are open to all kind of contributions. If you want to:
+* 🤔 share an idea
+* 🐛 report an [issue](https://github.com/valeriatisch/tagmaster/issues)
+* 📖 improve [documentation](https://github.com/valeriatisch/tagmaster/tree/master/documentation)
+* 👩🏽‍💻contribute to the code
+
+You are more than welcome.  
+💬 You can reach us via our GitHub profiles or via contact@tagmaster.ml
