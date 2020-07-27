@@ -12,3 +12,6 @@ static/build
 
 #local bucket
 images/*
+
+#JetBrains
+.idea

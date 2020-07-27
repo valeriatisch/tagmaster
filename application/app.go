@@ -18,10 +18,10 @@ type App struct {
 func (app *App) deletionCallback(scope *gorm.Scope) {
 	img, ok := scope.Value.(*models.Image)
 	if !ok {
-		return	
+		return
 	}
 
-	go app.bucket.RemoveFile(img.UUID)	
+	go app.bucket.RemoveFile(img.UUID)
 }
 
 func NewApp() *App {
@@ -58,31 +58,34 @@ func (app *App) Run() {
 	api := router.Group("/api")
 
 	// User
-	api.POST(  "/register",            app.userCreate)
-	api.POST(  "/login",               app.userLogin)
-	api.GET(   "/logout",              app.userLogout)
-	api.POST(  "/reset",               app.sendPassword)          
-	api.GET(   "/account",             app.userRead)
-	api.PATCH( "/account",             app.userUpdate)
-	api.DELETE("/account",             app.userDelete)
+	api.POST(  "/register",               app.userCreate)
+	api.POST(  "/login",                  app.userLogin)
+	api.GET(   "/logout",                 app.userLogout)
+	api.POST(  "/reset",                  app.sendPassword)
+	api.GET(   "/account",                app.userRead)
+	api.PATCH( "/account",                app.userUpdate)
+	api.DELETE("/account",                app.userDelete)
 
 	// Project
-	api.POST(  "/projects",            app.projectCreate)
-	api.GET(   "/projects",            app.projectList)
-	api.GET(   "/projects/:id",        app.projectRead)
-	api.DELETE("/projects/:id",        app.projectDelete)
+	api.POST(  "/projects",               app.projectCreate)
+	api.GET(   "/projects",               app.projectList)
+	api.GET(   "/projects/:id",           app.projectRead)
+	api.DELETE("/projects/:id",           app.projectDelete)
+	api.POST(  "/projects/:id/activate",  app.projectActivate)
+	api.GET(   "/projects/:id/export",    app.projectExport)
 
 	// Image
-	api.POST(  "/projects/:id/images", app.imageCreate)
-	api.GET(   "/projects/:id/images", app.imageList)
-	api.GET(   "/images/:id",          app.imageRead)
-	api.GET(   "/images/:id/file",     app.imageFile)
+	api.POST(  "/projects/:id/images",    app.imageCreate)
+	api.GET(   "/projects/:id/images",    app.imageList)
+	api.GET(   "/images/:id",             app.imageRead)
+	api.GET(   "/images/:id/file",        app.imageFile)
 
 	// Label
-	// TODO
+	api.POST(  "/images/:id/label",       app.labelCreate)
+	api.GET(   "/images/:id/label",       app.labelList)
 
 	// Next
-	api.GET(   "/next",                app.nextImage)
+	api.GET(   "/next",                   app.nextImage)
 
 	router.NoRoute(func(c *gin.Context) {
 		abortRequest(c, errorNotFound)

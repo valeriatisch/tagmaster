@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Col, Image, ListGroup, Table, Button, Modal } from 'react-bootstrap';
+import { Container, Row, Col, Image, ListGroup, Table, Button, Modal, Badge} from 'react-bootstrap';
 import { Trash, TabletLandscape } from 'react-bootstrap-icons';
 import {BrowserView, MobileView, isBrowser, isMobile, TabletView} from 'react-device-detect';
 
@@ -23,6 +23,18 @@ class LabelImage extends Component {
     };
   }
 
+  printTags() {
+    let ausgabe = [];
+    let tags = this.props.imageLabels;
+    let colors = ["#0247FE","green","#FE2712","#FB9902","#20B2AA","#FF69B4","darkviolet"];
+    
+    for (let i=0; i < tags.length; i++){
+    let badge = <Badge variant="primary" style={{backgroundColor:colors[i%colors.length],marginRight:"5px"}}>{tags[i]}</Badge>;
+        ausgabe.push(badge);
+    }
+    return ausgabe;
+  }
+
   componentDidMount() {
     const canvas = this.refs.canvas;
     const img = this.refs.img;
@@ -30,7 +42,7 @@ class LabelImage extends Component {
     img.onload = function() {
       canvas.width = img.width;
       canvas.height = img.height;
-      that.setState({ogwidth: canvas.width,ogheight: canvas.height});
+      that.setState({ogwidth: img.naturalWidth,ogheight: img.naturalHeight});
       const ctx = canvas.getContext("2d");
     }
     
@@ -53,39 +65,49 @@ class LabelImage extends Component {
   render() {
     
     return (
-    <>
+    <div style={{backgroundColor:"#191919"}}>
+      <style>{"body { background-color: #191919}"}</style>
       <BrowserView>
-        <Container style={{"margin-top": "40px"}}>
+        <Container style={{marginTop: "40px"}}>
           <Row>
-            <Col xs={6} md={8}>
+            <Col>
               <div>
-                <Image ref="img" style={{"position": "absolute", "top": "0px", "left": "0px", "width": "100%"}} src={this.props.imgsrc} fluid rounded/>
+                <Image ref="img" style={{"position": "absolute", "top": "0px", "left": "0px", "width": "100%", "marginBottom":"15px"}} src={this.props.imgsrc} fluid rounded/>
                 <canvas onMouseDown={(e) => this.onMouseDown(e)} onMouseUp={(e) => this.onMouseUp(e)} onMouseMove={(e) => this.onMouseMove(e)} 
                         onTouchStart={(e) => this.onTouchStart(e)} onTouchEnd={(e) => this.onTouchEnd(e)} onTouchMove={(e) => this.onTouchMove(e)}
                         style={{"position": "absolute", "top": "0px", "left": "0px"}} ref="canvas" height={425} />
               </div>
             </Col>
-            <Col xs={6} md={4}>
-              <Table striped bordered hover variant="dark">
-                <thead>
-                  <tr>
-                    <th>Tag
-                      <Button onClick={() => window.location.reload(false)} style={{width: "80px", border: "1px solid #efeb53", color: "#efeb53", "background-color": "transparent"}} size="sm" className="float-right">Done</Button>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {this.state.tags.map((e, i) => {
-                    return (
-                      <tr onMouseEnter={() => this.startHoverOrTouching(i)} onMouseLeave={() => this.stopHover()} onTouchStart={() => this.startHoverOrTouching(i)}>  
-                        <td>
-                          {e.label}
-                          <Button onClick={() => this.removeTag(i)} variant="outline-danger" size="sm" style={{"width": "50px"}} className="float-right"><Trash /></Button></td>
+            <Col>
+              <Row>
+                <Col style={{fontSize:"20px",marginBottom:"10px"}}>
+                  Tags: {this.printTags()}
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Table striped bordered hover variant="dark">
+                    <thead>
+                      <tr>
+                        <th>Tag
+                          <Button onClick={() => window.location.reload(false)} style={{width: "80px", border: "1px solid #efeb53", color: "#efeb53", "background-color": "transparent"}} size="sm" className="float-right">Done</Button>
+                        </th>
                       </tr>
-                    )}
-                  )}
-                </tbody>
-              </Table>
+                    </thead>
+                    <tbody>
+                      {this.state.tags.map((e, i) => {
+                        return (
+                          <tr onMouseEnter={() => this.startHoverOrTouching(i)} onMouseLeave={() => this.stopHover()} onTouchStart={() => this.startHoverOrTouching(i)}>  
+                            <td>
+                              {e.label}
+                              <Button onClick={() => this.removeTag(i)} variant="outline-danger" size="sm" style={{"width": "50px"}} className="float-right"><Trash /></Button></td>
+                          </tr>
+                        )}
+                      )}
+                    </tbody>
+                  </Table>
+                </Col>
+              </Row>
             </Col>
           </Row>
           <style>{".modal-content{border:2px solid yellow} .modal-dialog {position: relative;top: 15%} button1:hover{background-color:#3F3F3F}"}</style>
@@ -126,7 +148,7 @@ class LabelImage extends Component {
                 <Image ref="img" style={{"top": "0px", "left": "0px", "width": "100%"}} src={this.props.imgsrc} fluid rounded/>
                 <canvas onMouseDown={(e) => this.onMouseDown(e)} onMouseUp={(e) => this.onMouseUp(e)} onMouseMove={(e) => this.onMouseMove(e)} 
                     onTouchStart={(e) => this.onTouchStart(e)} onTouchEnd={(e) => this.onTouchEnd(e)} onTouchMove={(e) => this.onTouchMove(e)}
-                    style={{"position": "absolute", "top": "0px", "left": "0px", "marginLeft":"15px"}} ref="canvas" height={425}/>
+                    style={{"position": "absolute", "top": "0px", "left": "0px", "marginLeft":"15px", "touch-action":"none"}} ref="canvas" height={425}/>
             </Col>
           </Row>
           <Row>
@@ -184,7 +206,7 @@ class LabelImage extends Component {
           </Modal>
         </Container>
       </MobileView>
-    </>
+    </div>
     );
   }
 
@@ -291,7 +313,6 @@ class LabelImage extends Component {
 
   onTouchStart(e){
     this.clearCanvas();
-    
     var touch = e.touches[0];
     const {x, y} = this.getPos(touch);
 

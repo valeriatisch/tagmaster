@@ -7,7 +7,7 @@ import LabelImage from "../components/labelImage";
 class Label extends Component {
     render(){
     return(
-      <LabelImage imgsrc="https://source.unsplash.com/random" imageLabels={["cat", "dog", "bird"]}/>
+      <LabelImage imgsrc="https://source.unsplash.com/random" imageLabels={["dog","cat","bird","snake","lion","seal","bug","spider","fish"]}/>
     );
   }    
 }
