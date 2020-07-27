@@ -14,7 +14,7 @@ class Projects extends Component{
         return(
             <div>
                 <style>
-                    {"body { background-color: #191919; color: #CBCBCB} h1{color:#efeb53}"}
+                    {"body { background-color: #191919; color: #CBCBCB; min-height: 100%} h1{color:#efeb53}"}
                 </style>
                 <h1 class="text-center">All Projects</h1>
                 <Projectpreview title="Road traffic" creator="kevin" tag1="car" tag2="bus" tag3="pedestrian" id="1"
