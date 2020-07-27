@@ -18,6 +18,24 @@ export const loginSession = async (params) => {
     });
 };
 
+export const registerSession = async (params) => {
+  return fetch("/api/register/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(params),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      /* console.log("Success:", data); */
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
 export const getUserData = async () => {
   return fetch("/api/account/", {
     method: "GET",

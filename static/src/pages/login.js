@@ -3,6 +3,7 @@ import { Button, FormGroup, FormControl } from "react-bootstrap";
 import "./login.css";
 import { UserContext } from "../components/UserContext";
 import { loginSession, getUserData } from "../components/authentication";
+import { Link } from "react-router-dom";
 import AuthApi from "../components/AuthApi";
 import checkAuth from "../components/checkAuth";
 
@@ -74,9 +75,9 @@ export default function Login() {
         <Button block bsize="large" disabled={!validateForm()} type="submit">
           Login
         </Button>
-        <p className="forgot-password text-right">
-          Forgot <a href="#">password?</a>
-        </p>
+        <Link to={"/signup"}>
+          <p className="forgot-password text-right">No account?</p>
+        </Link>
       </form>
     </div>
   );

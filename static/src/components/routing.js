@@ -21,6 +21,7 @@ export default function Routing() {
     <Switch>
       <RouteRegistration path="/login" component={Login} />
       {/*  {!authApi.auth && <RouteRegistration path="/signup" component={Signup} />} */}
+      <RouteRegistration path="/signup" component={Signup} />
       <Route exact path="/" component={Home} />
       <Route path="/impressum" component={Impressum} />
       <Route path="/contact" component={Contact} />
