@@ -5,6 +5,7 @@ import Contact from "../pages/contact";
 import Logout from "../pages/logout";
 import Signup from "../pages/signup";
 import newProject from "../pages/newProject";
+import Projectpage from "../pages/projectpage";
 import logo from "../ressources/navbar-logo.png";
 import Projects from "../pages/projects.js";
 import Profile from "../pages/profile.js";
@@ -26,8 +27,9 @@ export default function Routing() {
       <Route path="/impressum" component={Impressum} />
       <Route path="/contact" component={Contact} />
       <Route path="/logout" component={Logout} />
-      <Route path="/user/newProject" component={newProject} />
+      <Route path="/newProject" component={newProject} />
       <RouteProtected path="/projects" component={Projects} />
+      <RouteProtected path="/project/:id" component={Projectpage} />
       <Route path="/accountpage" component={Accountpage} />
       <Route path="/label" component={Label} />
       <Route path="/profile" component={Profile} />
