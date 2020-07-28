@@ -59,6 +59,31 @@ var (
 		http.StatusInternalServerError, 
 		"Internal server error",
 	)
+
+	errorEmailNotUnique = newError(
+		http.StatusBadRequest, 
+		"Email address already in use",
+	)
+
+	errorNoImageAvailable = newError(
+		http.StatusInternalServerError, 
+		"No image available",
+	)
+
+	errorAlreadyLabeled = newError(
+		http.StatusBadRequest, 
+		"Image already labeled",
+	)
+
+	errorActivateEmpty = newError(
+		http.StatusBadRequest, 
+		"Project is empty",
+	)
+
+	errorIsActive = newError(
+		http.StatusBadRequest, 
+		"Project is already active",
+	)
 )
 
 // Abort request with json payload {"error":"description"}

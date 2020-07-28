@@ -7,16 +7,15 @@ h1{
     color:#efeb53
 } 
 
-div.main{
-    background-color: #191919;
-    margin:10px
-} 
 div.input-group{
     margin-bottom:10px
 }
 textarea.description{
     min-height: 76px;
     resize:vertical;
+}
+div.createP{
+    background-color: #191919;
 }
 .createP input{
     background-color: #646464;
@@ -47,6 +46,7 @@ textarea.description{
     color: #efeb53;
     background-color: #282828;
     border: 1px solid #efeb53;
+    width: 33%;
 }
 .createP button:hover{
     color: #ece990;

@@ -1,15 +1,15 @@
 // Contact.js
 
-import React, { Component } from "react";
+import React, { useContext } from "react";
+import { UserContext } from "../components/UserContext";
 
-class Contact extends Component {
-    render() {
-        return (
-            <div>
-                <h2 style={{color:"white"}}>Contact</h2>
-            </div>
-        );
-    }
+export default function Contact() {
+  const { user } = useContext(UserContext);
+
+  return (
+    <div>
+      <h2>Contact</h2>
+      <h3>{user}</h3>
+    </div>
+  );
 }
-
-export default Contact;

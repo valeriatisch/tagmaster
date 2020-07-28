@@ -3,6 +3,7 @@ tagmaster
 
 #dependencies
 static/node_modules
+node_modules
 
 #build
 static/build
@@ -12,3 +13,6 @@ static/build
 
 #local bucket
 images/*
+
+#JetBrains
+.idea

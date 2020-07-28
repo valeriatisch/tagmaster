@@ -13,12 +13,13 @@ type Database struct {
 func NewDatabase(uri string) *Database {
 	db, err := gorm.Open("postgres", uri)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Fatal: can't connect to db ", err)
 	}
 
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Project{})
 	db.AutoMigrate(&Image{})
+	db.AutoMigrate(&Label{})
 
 	// db.Model(&Project{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
 	// db.Model(&Image{}).AddForeignKey("project_id", "projects(id)", "CASCADE", "CASCADE")
