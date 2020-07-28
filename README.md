@@ -1,5 +1,8 @@
 # TAGMASTER
-![10000201000002F200000286882984D26AD5F309](https://user-images.githubusercontent.com/57265123/83730511-78ef6600-a649-11ea-82de-3ac233918202.png)
+
+<p align="center">
+  <img width="400" src="https://user-images.githubusercontent.com/57265123/83730511-78ef6600-a649-11ea-82de-3ac233918202.png">
+</p>
 
 Tagmaster is a web app for labeling pictures most commonly used for training Image Recognition AIs.  
 It's completely **open source**. You can see the code to learn how it works, and contribute to help it improve.
