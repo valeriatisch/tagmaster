@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Navbar from "./components/navbar";
+import Footer from "./components/footer";
 import Routing from "./components/routing";
 import AuthApi from "./components/AuthApi";
 import Authentication, { getUserData } from "./components/authentication";
@@ -35,6 +36,7 @@ export default function App() {
     <AuthApi.Provider value={{ auth, setAuth }}>
       <Router>
         <div>
+
           <Navbar auth={handleAuth} authToken={auth} />
           <Routing />
         </div>

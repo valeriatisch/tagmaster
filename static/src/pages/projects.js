@@ -24,7 +24,6 @@ export default function Projects() {
     const string = params.split(",");
     return string;
   }
-
   /*   console.log("project 1 fetch", useFetch("/api/projects/1")); */
 
   console.log(data);
