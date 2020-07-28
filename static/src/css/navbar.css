@@ -1,0 +1,23 @@
+.dropdown-menu {
+	background-color: #191919 !important;
+	border-color: #efeb53 !important;
+}
+
+.dropdown-item {
+	color: #efeb53 !important;
+	background-color: #191919 !important;
+}
+
+.dropdown-item:hover {
+	color: #efeb53 !important;
+	background-color: #191919 !important;
+}
+
+.dropdown-divider {
+	border-top: 1px solid #efeb53 !important;
+}
+
+.nav-btn {
+	border: 1px solid #efeb53 !important;
+	margin-right: 10px;
+}

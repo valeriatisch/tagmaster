@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Link, Switch, Route } from "react-router-dom";
 import logo from "../ressources/navbar-logo.png";
-import { Nav, Navbar } from "react-bootstrap";
+import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import Routing from "./routing";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
 import checkAuth from "./checkAuth.js";
 import Authentication, { logout } from "./authentication";
+import "../css/navbar.css";
 
 class ownNavbar extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class ownNavbar extends Component {
       <>
         <style>
           {
-            ".login-button{margin-right:100%;width:150px;border:1px solid #efeb53;text-align:center;background-color:#282828;color:#efeb53} .login-button:hover{background-color:#3F3F3F;color:#efeb53}"
+            ".login-button{margin-right:100%;width:150px;border:1px solid #efeb53;text-align:center;background-color:#282828;color:#efeb53} .login-button:hover{background-color:#3F3F3F;color:#efeb53} .nav-link{color: #efeb53 !important;}"
           }
         </style>
         <Navbar
@@ -70,32 +71,26 @@ class ownNavbar extends Component {
                 About
               </Nav.Link>
             </Nav>
-            <Nav className="navbar-right">
+
+            
               {this.props.authToken == true ? (
-                <Link to={"/"}>
-                  <button
-                    onClick={handleLogout}
-                    type="button"
-                    className="btn btn-lg login-button"
-                    role="button"
-                    aria-pressed="true"
-                  >
-                    Logout
-                  </button>
-                </Link>
+                <Nav className="navbar-right">
+                <NavDropdown title="user@email.com" id="collasible-nav-dropdown">
+                  <NavDropdown.Item href="">Profile</NavDropdown.Item>
+                  <NavDropdown.Item href="">Settings</NavDropdown.Item>
+                  <NavDropdown.Divider />                 
+                  <Link to={"/"}>
+                    <NavDropdown.Item onClick={handleLogout} href="">Logout</NavDropdown.Item>
+                  </Link>
+                </NavDropdown>
+                </Nav>
               ) : (
-                <Link to={"/login"}>
-                  <button
-                    type="button"
-                    className="btn btn-lg login-button"
-                    role="button"
-                    aria-pressed="true"
-                  >
-                    Log in
-                  </button>
-                </Link>
+              <Nav className="navbar-right">
+                <Nav.Link className="btn nav-btn" href="/login">Login</Nav.Link>
+                <Nav.Link className="btn nav-btn" href="/signup">Register</Nav.Link>
+              </Nav>
               )}
-            </Nav>
+            
           </Navbar.Collapse>
         </Navbar>
       </>
