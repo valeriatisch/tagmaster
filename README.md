@@ -66,11 +66,11 @@ Let's setup Tagmaster locally. You need to setup the services required to run Ta
 
 ### → STEP #1
 
-* Clone the [tagmaster](https://github.com/valeriatisch/tagmaster) repo.
+* Clone the **[tagmaster](https://github.com/valeriatisch/tagmaster) repo**.
 
 ### → STEP #2
 
-* You'll need a local PostgreSQL database. [Here](https://www.postgresql.org/docs/9.3/installation.html) you can find how to install and set it up.
+* You'll need a local **PostgreSQL** database. [Here](https://www.postgresql.org/docs/9.3/installation.html) you can find how to install and set it up.
 * Create an account and a database.
 * Create an environment variable called ```DATABASE_URI``` and set it to ```"host=localhost user=yourusername dbname=yourdatabase password=yourpassword"```.  
 You may have to set additional variables.
