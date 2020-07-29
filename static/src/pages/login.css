@@ -1,13 +1,31 @@
-@media all and (min-width: 480px) {
-  .Login {
-    padding: 20px 0;
-  }
+.login-btn {
+  background-color: #efeb53 !important;
+  border-color: #efeb53 !important;
+  color: #191919 !important;
+}
 
-  .Login form {
-    margin: 0 auto;
-    max-width: 320px;
-  }
-  .Login h3 {
-    text-align: center;
-  }
+.login-text {
+  color: #efeb53 !important;
+}
+
+a:hover {
+  color: #efeb53 !important;
+}
+
+.login-input {
+  color: #efeb53 !important;
+  margin-top: 10px;
+  background-color: #191919 !important;
+  border-color: #efeb53 !important;
+}
+
+.login-input:focus {
+  color: #efeb53 !important;
+  margin-top: 10px;
+  background-color: #191919 !important;
+  border-color: #efeb53 !important;
+}
+
+.login-container {
+  margin-top: 100px !important;
 }
