@@ -88,21 +88,17 @@ class LabelImage extends Component {
     const imgDetails = await getImageDetails(`/api/images/${nextImgId}`)
     console.log("imgDetails", imgDetails);
     let imgTags = imgDetails.tags;
-    console.log("imgTags: ", imgTags);
     /* imgTags = JSON.stringify(imgTags); */
 
-    imgTags = imgTags.replace(/"/g, '');
-    let array = imgTags.split(',');
-    console.log("imgTags output: ", array);
-    this.setState({ idTags: array });
+    if (imgTags) {
+      imgTags = imgTags.replace(/"/g, '');
+      let array = imgTags.split(',');
+      console.log("imgTags output: ", array);
+      this.setState({ idTags: array });
 
-    const picture = await getImage(`/api/images/${nextImgId}/file`);
-    this.setState({ picture })
-
-
-    /*   console.log("picture: ", picture);
-      console.log("nextImgId: ", nextImg.id);
-      console.log("nextImgTags: ", nextImg.tags); */
+      const picture = await getImage(`/api/images/${nextImgId}/file`);
+      this.setState({ picture })
+    }
 
     const canvas = this.refs.canvas;
     const img = this.refs.img;
