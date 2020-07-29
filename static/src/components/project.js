@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Container, Row, Col, Badge } from "react-bootstrap";
+import fetchProjectApi, { getProjectDetails, activateProject } from "./fetchProjectApi";
+
 
 class Register extends Component {
   constructor(props) {
@@ -7,13 +9,28 @@ class Register extends Component {
     this.state = {
       pictures: [],
       uploadCompleted: false,
-      activeProject: false
+      activeProject: false,
+      projectCompleted: false,
+      projectTags: {}
     };
+  }
+
+  async componentDidMount() {
+    const ID = this.props.id;
+    const projectInfo = await getProjectDetails(`/api/projects/${ID}`);
+    console.log("projectInfo: ", projectInfo);
+    this.setState({ projectTags: projectInfo.tags });
+    if (projectInfo.active) {
+      this.setState({ activeProject: true });
+    }
+    if (projectInfo.done) {
+      this.setState({ projectCompleted: true });
+    }
   }
 
   printTags() {
     let ausgabe = [];
-    let tags = this.props.tags;
+    let tags = this.state.projectTags;
     let colors = [
       "#0247FE",
       "green",
@@ -24,7 +41,13 @@ class Register extends Component {
       "darkviolet",
     ];
 
-    for (let i = 0; i < tags.length; i++) {
+    tags = JSON.stringify(tags);
+    tags = tags.replace(/ /g, '');
+    tags = tags.replace(/"/g, '');
+    console.log("tags output: ", tags);
+    let array = tags.split(',');
+
+    for (let i = 0; i < array.length; i++) {
       let badge = (
         <Badge
           variant="primary"
@@ -33,7 +56,7 @@ class Register extends Component {
             marginRight: "5px",
           }}
         >
-          {tags[i]}
+          {array[i]}
         </Badge>
       );
       ausgabe.push(badge);
@@ -46,6 +69,9 @@ class Register extends Component {
   };
 
   render() {
+
+    console.log("tags: ", this.state.projectTags);
+
     const handleUpload = async (e) => {
       e.preventDefault();
       const pictures = this.state.pictures;
@@ -64,17 +90,32 @@ class Register extends Component {
       });
     };
 
-    const handleActivation = (e) => {
-      e.preventDefault();
+    const handleActivation = async () => {
+      /* e.preventDefault(); */
+
+      console.log("handleActivation");
+      const ID = this.props.id;
+      console.log("id: ", ID);
+      const actObj = await activateProject(`/api/projects/${ID}/activate`);
+      /* if (login.message === "ok") {
+        setWrongCredentials(false);
+        authApi.setAuth(true);
+      } else {
+        setWrongCredentials(true);
+      } */
+      console.log("actObj: ", actObj);
+
       this.setState({
         activeProject: true
       });
-      console.log("handleActivation");
+
+
     }
 
     return (
       <div style={{ backgroundColor: "#191919" }}>
         <Container>
+          {(this.state.activeProject && this.state.projectCompleted) ? (<h1>Your Project is completed and ready to download!</h1>) : null}
           <Row>
             <Col>
               <h1

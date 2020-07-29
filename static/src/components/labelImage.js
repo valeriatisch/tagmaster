@@ -19,6 +19,7 @@ import {
   TabletView,
 } from "react-device-detect";
 import { sendLabel } from "./fetchLabelApi";
+import { getNextImage } from "./fetchImageApi";
 
 /*TODO:
   Style des Modals an die Seite anpassen
@@ -69,7 +70,16 @@ class LabelImage extends Component {
     return ausgabe;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+
+    const nextImg = await getNextImage();
+    console.log(nextImg);
+    const nextImgId = nextImg.id;
+    const nextImgTags = nextImg.tags;
+
+    console.log("nextImgId: ", nextImg.id);
+    console.log("nextImgTags: ", nextImg.tags);
+
     const canvas = this.refs.canvas;
     const img = this.refs.img;
     const that = this;
