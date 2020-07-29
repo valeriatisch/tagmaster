@@ -21,6 +21,7 @@ import {
 import { sendLabel } from "./fetchLabelApi";
 import { getNextImage, getImage, getImageDetails } from "./fetchImageApi";
 import { trunc } from 'mathjs';
+import ooi from "../ressources/out-of-images.png";
 
 
 /*TODO:
@@ -192,7 +193,7 @@ class LabelImage extends Component {
                       width: "100%",
                       marginBottom: "15px",
                     }}
-                    src={this.state.picture}
+                    src={this.state.picture ? this.state.picture : ooi}
                     fluid
                     rounded
                   />
