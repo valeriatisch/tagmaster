@@ -21,3 +21,17 @@
 	border: 1px solid #efeb53 !important;
 	margin-right: 10px;
 }
+
+.btn-login {
+	background-color: #efeb53 !important;
+	color: #191919 !important;
+}
+
+.btn-register {
+	background-color: #191919 !important;
+	color: #efeb53 !important;
+}
+
+.dropdown-toggle {
+	color: #efeb53 !important;
+}

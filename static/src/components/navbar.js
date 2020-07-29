@@ -35,7 +35,7 @@ class ownNavbar extends Component {
       <>
         <style>
           {
-            ".login-button{margin-right:100%;width:150px;border:1px solid #efeb53;text-align:center;background-color:#282828;color:#efeb53} .login-button:hover{background-color:#3F3F3F;color:#efeb53} .nav-link{color: #efeb53 !important;}"
+            ".login-button{margin-right:100%;width:150px;border:1px solid #efeb53;text-align:center;background-color:#282828;color:#efeb53} .login-button:hover{background-color:#3F3F3F;color:#efeb53}"
           }
         </style>
         <Navbar
@@ -86,8 +86,8 @@ class ownNavbar extends Component {
                 </Nav>
               ) : (
               <Nav className="navbar-right">
-                <Nav.Link className="btn nav-btn" href="/login">Login</Nav.Link>
-                <Nav.Link className="btn nav-btn" href="/signup">Register</Nav.Link>
+                <Nav.Link className="btn nav-btn btn-register" href="/signup">Sign Up</Nav.Link>
+                <Nav.Link className="btn nav-btn btn-login" href="/login">Login</Nav.Link>
               </Nav>
               )}
             
