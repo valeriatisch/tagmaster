@@ -20,6 +20,8 @@ import {
 } from "react-device-detect";
 import { sendLabel } from "./fetchLabelApi";
 import { getNextImage, getImage, getImageDetails } from "./fetchImageApi";
+import { trunc } from 'mathjs';
+
 
 /*TODO:
   Style des Modals an die Seite anpassen
@@ -33,6 +35,7 @@ class LabelImage extends Component {
       tags: [],
       idTags: [],
       show: false,
+      pictureId: null,
       drawing: false,
       x1: 0,
       y1: 0,
@@ -76,8 +79,10 @@ class LabelImage extends Component {
 
     const nextImg = await getNextImage();
     console.log(nextImg);
+
     const nextImgId = nextImg.id;
     const nextImgTags = nextImg.tags;
+    this.setState({ pictureId: nextImgId });
 
     const imgDetails = await getImageDetails(`/api/images/${nextImgId}`)
     let imgTags = imgDetails.tags;
@@ -124,29 +129,37 @@ class LabelImage extends Component {
   }
 
   render() {
-    async function handleLabelSubmit() {
+    const handleLabelSubmit = async () => {
       console.log("submitting tags...");
+      console.log("state: ", this.state);
 
       console.log("map through obj");
-      this.state.idTags.map(async (x) => {
-        const temp = { x };
-        console.log("my obj element: ", temp.x.label);
-        const objToPost = {
-          labelname: temp.x.label,
-          topright: temp.x.x1,
-          topleft: temp.x.x2,
-          bottomright: temp.x.y1,
-          bottomleft: temp.x.y2,
+      let body = [];
+      this.state.tags.map(async (x) => {
+        console.log("my obj element: ", x);
+        let x1C = parseInt(x.x1);
+        let y1C = parseInt(x.y1);
+        let x2C = parseInt(x.x2);
+        let y2C = parseInt(x.y2);
+        const obj = {
+          name: x.label,
+          x1: x1C,
+          y1: y1C,
+          x2: x2C,
+          y2: y2C,
         };
-        const sendLabelData = await sendLabel(objToPost);
-        if (sendLabelData.message === "ok") {
-          console.log("label data sent");
-        } else {
-          console.log("error : label data not sent");
-        }
+        body.push(obj);
       });
+      console.log("body in stringify: ", JSON.stringify(body));
+      console.log("normal body in stringify: ", body);
+      const sendLabelData = await sendLabel(body, `/api/images/${this.state.pictureId}/label`);
+      if (sendLabelData.message === "ok") {
+        console.log("label data sent");
+      } else {
+        console.log("error : label data not sent");
+      }
 
-      window.location.reload(false);
+      /* window.location.reload(false); */
     }
 
     return (
