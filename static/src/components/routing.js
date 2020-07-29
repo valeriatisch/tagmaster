@@ -10,7 +10,6 @@ import logo from "../ressources/navbar-logo.png";
 import Projects from "../pages/projects.js";
 import Profile from "../pages/profile.js";
 import Accountpage from "../pages/accountpage";
-import Dashboard from "../pages/dashboard";
 import Label from "../pages/label";
 import { Link, Switch, Route, Redirect } from "react-router-dom";
 import { UserContext } from "./UserContext.js";
@@ -31,7 +30,6 @@ export default function Routing() {
       <Route path="/newProject" component={newProject} />
       <RouteProtected path="/projects" component={Projects} />
       <RouteProtected path="/project/:id" component={Projectpage} />
-      <RouteProtected path="/dashboard" component={Dashboard} />
       <Route path="/accountpage" component={Accountpage} />
       <Route path="/label" component={Label} />
       <Route path="/profile" component={Profile} />
