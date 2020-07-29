@@ -7,6 +7,7 @@ import fetchProjectApi, {
   useFetch,
   getProjectDetails
 } from "./fetchProjectApi";
+import "../css/projectpreview.css";
 
 export default function Projectpreview(props) {
   const [state, setState] = useState({ picture: null, loadingPicture: true });

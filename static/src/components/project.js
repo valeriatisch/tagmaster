@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 import fetchProjectApi, { getProjectDetails, activateProject } from "./fetchProjectApi";
 import { downloadFile } from "./download";
+import "../css/project.css";
 
 
 class Register extends Component {
@@ -116,7 +117,7 @@ class Register extends Component {
 
     return (
       <div style={{ backgroundColor: "#191919" }}>
-        <Container>
+        <Container className="card-container">
           {(this.state.activeProject && this.state.projectCompleted) ? (<h1>Your Project is completed and ready to download!</h1>) : null}
           <Row>
             <Col>

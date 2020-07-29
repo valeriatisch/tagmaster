@@ -1,0 +1,24 @@
+.newproject-button {
+    background-color: #191919;
+    border-radius: 10px;
+    border-color: #EFEB53;
+    color: #EFEB53;
+    /* position: relative;
+     top: 50%;
+    left: 33%; 
+    left: 25%;
+    width: 160px;
+    height: 70px; */
+    display: grid;
+    padding-top: 10px;
+    padding-bottom: 10px;   
+    width: 30%;
+    margin: 0 auto;
+}
+
+.project-view{
+    padding-bottom: 10px;
+   
+}
+
+
