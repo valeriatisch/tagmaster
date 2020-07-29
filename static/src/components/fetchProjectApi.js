@@ -71,6 +71,36 @@ export const usePicture = (url) => {
   return state;
 };
 
+export const createProject = async (params) => {
+  return fetch("/api/projects/", {
+    method: "POST",
+    body: JSON.stringify(params),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
+export const getProjectDetails = async (url) => {
+  return fetch(url, {
+    method: "GET",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      /* console.log("Success:", data); */
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
+
 // export const createProject = async (params) => {
 //   return fetch("/api/projects/", {
 //     method: "POST",

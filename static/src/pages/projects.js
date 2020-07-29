@@ -8,6 +8,7 @@ import picture5 from "../ressources/dolphin1.png";
 import picture6 from "../ressources/dolphin2.png";
 import picture7 from "../ressources/giraffe.jpg";
 import picture8 from "../ressources/lion.jpg";
+import uploadPicture from "../ressources/upload-picture.png";
 import fetchProjectApi, {
   useFetch,
   usePicture,
@@ -18,6 +19,8 @@ import { Link } from "react-router-dom";
 export default function Projects() {
   const { data, loading } = useFetch("/api/projects/");
 
+  console.log("data is: ", data);
+
   const { picture, loadPic } = usePicture("/api/images/1/file");
 
   function convertTag(params) {
@@ -26,7 +29,7 @@ export default function Projects() {
   }
   /*   console.log("project 1 fetch", useFetch("/api/projects/1")); */
 
-  console.log(data);
+  /*  console.log(data); */
   return (
     <div>
       <div>
@@ -43,10 +46,11 @@ export default function Projects() {
                 <Projectpreview
                   title={p.name}
                   key={p.id}
+                  pid={p.id}
                   // PROBLEM tags are given out "tag1, tag2, tag3" but instead need to be like this "tag1", "tag2", "tag3" // Solution convert to array with str.split(')
                   tags={convertTag(p.tags)}
-                  numberofpictures={p.images}
-                  img1={loadPic ? null : { picture }}
+                  numberofpictures={p.images.length}
+                  img1={loadPic ? { uploadPicture } : { picture }}
                   img2={picture2}
                 />
               </Link>

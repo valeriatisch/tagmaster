@@ -33,14 +33,15 @@ export default function App() {
   return loading ? (
     <div></div>
   ) : (
-    <AuthApi.Provider value={{ auth, setAuth }}>
-      <Router>
-        <div>
+      <AuthApi.Provider value={{ auth, setAuth }}>
+        <Router>
+          <div>
 
-          <Navbar auth={handleAuth} authToken={auth} />
-          <Routing />
-        </div>
-      </Router>
-    </AuthApi.Provider>
-  );
+            <Navbar auth={handleAuth} authToken={auth} />
+            <Routing />
+            <Footer />
+          </div>
+        </Router>
+      </AuthApi.Provider>
+    );
 }
