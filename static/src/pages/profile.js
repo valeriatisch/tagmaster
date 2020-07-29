@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
+import { useFetch } from "../components/fetchProfileApi";
 
 import "./profile.css";
 
 const Profile = (props) => {
+
+  const { data, loading } = useFetch(`/api/account`);
+  console.log("data: ", data);
+
   return (
     <div className="total">
       <div className="info">
-        <h1> Profile name: NAME HERE </h1>
-        <h2>Email: EMAIL HERE</h2>
+        {/* <img source={avatar} /> */}
+        {!loading ? (
+          <h1> {data.email} </h1>
+        ) : null}
       </div>
     </div>
   );
