@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Container, Row, Col, Badge } from "react-bootstrap";
 import fetchProjectApi, { getProjectDetails, activateProject } from "./fetchProjectApi";
+import { downloadFile } from "./download";
 
 
 class Register extends Component {
@@ -44,7 +45,6 @@ class Register extends Component {
     tags = JSON.stringify(tags);
     tags = tags.replace(/ /g, '');
     tags = tags.replace(/"/g, '');
-    console.log("tags output: ", tags);
     let array = tags.split(',');
 
     for (let i = 0; i < array.length; i++) {
@@ -70,7 +70,9 @@ class Register extends Component {
 
   render() {
 
-    console.log("tags: ", this.state.projectTags);
+    const handleDownload = async (url) => {
+      downloadFile(`/api/projects/${this.props.id}/export`)
+    }
 
     const handleUpload = async (e) => {
       e.preventDefault();
@@ -142,29 +144,45 @@ class Register extends Component {
                     ".button1{width:150px; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .button1:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }"
                   }
                 </style>
-                <form
-                  onSubmit={this.onFormSubmit}
-                  style={{ margin: "0 auto", width: "300px" }}
-                >
-                  <div className="form-group files" style={{ width: "300px" }}>
-                    <input
-                      className="form-control"
-                      type="file"
-                      accept="image/png, image/jpeg"
-                      multiple
-                      onChange={this.onChange}
-                      style={{ height: "200px", backgroundColor: "grey" }}
-                    />
-                  </div>
+                {!this.state.activeProject ? (
+                  <form
+                    onSubmit={this.onFormSubmit}
+                    style={{ margin: "0 auto", width: "300px" }}
+                  >
+                    <div className="form-group files" style={{ width: "300px" }}>
+                      <input
+                        className="form-control"
+                        type="file"
+                        accept="image/png, image/jpeg"
+                        multiple
+                        onChange={this.onChange}
+                        style={{ height: "200px", backgroundColor: "grey" }}
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      onClick={handleUpload}
+                      className="btn button1"
+                      style={{ width: "100px" }}
+                    >
+                      Upload
+                  </button>
+
+                  </form>
+                ) : null}
+                {(!this.state.activateProject && (!this.state.projectCompleted)) ? (
+                  <h2>Project is in Progress</h2>
+                ) : null}
+                {(this.state.projectCompleted && this.state.activeProject) ? (
                   <button
                     type="submit"
-                    onClick={handleUpload}
                     className="btn button1"
-                    style={{ width: "100px" }}
+                    style={{ width: "110px" }}
+                    onClick={handleDownload}
                   >
-                    Upload
+                    Download
                   </button>
-                </form>
+                ) : null}
                 {this.state.activeProject ? null : (
                   <div> <button
                     type="submit"

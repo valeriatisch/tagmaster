@@ -150,8 +150,6 @@ class LabelImage extends Component {
         };
         body.push(obj);
       });
-      console.log("body in stringify: ", JSON.stringify(body));
-      console.log("normal body in stringify: ", body);
       const sendLabelData = await sendLabel(body, `/api/images/${this.state.pictureId}/label`);
       if (sendLabelData.message === "ok") {
         console.log("label data sent");
@@ -159,7 +157,7 @@ class LabelImage extends Component {
         console.log("error : label data not sent");
       }
 
-      /* window.location.reload(false); */
+      window.location.reload(false);
     }
 
     return (

@@ -43,9 +43,6 @@ export default function Projectpreview(props) {
     }
   }, [loading]);
 
-  if (!state.loadingPicture) {
-    console.log("picute URL", state.picture);
-  }
 
   // useEffect(async () => {
   //   const projectInfo = await getProjectDetails(`/api/projects/${props.pid}`);
