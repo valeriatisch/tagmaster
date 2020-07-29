@@ -31,6 +31,7 @@ class LabelImage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      logError: false,
       height: 0,
       ogwidth: 0,
       ogheight: 0,
@@ -137,6 +138,12 @@ class LabelImage extends Component {
     canvas.height = img.height;
   }
 
+  componentDidCatch(error, info) {
+    // Display fallback UI
+    this.setState({ logError: true });
+    // You can also log the error to an error reporting service
+  }
+
   updateDimensions() {
     const img = this.refs.img;
     this.setState({
@@ -177,293 +184,299 @@ class LabelImage extends Component {
     }
 
     return (
-      <div style={{ backgroundColor: "#191919" }}>
-        <style>{"body { background-color: #191919}"}</style>
-        <BrowserView>
-          <Container style={{ marginTop: "40px", height: this.state.height }}>
-            <Row>
-              <Col>
-                <div>
-                  <Image
-                    ref="img"
-                    style={{
-                      position: "absolute",
-                      top: "0px",
-                      left: "0px",
-                      width: "100%",
-                      marginBottom: "15px",
-                    }}
-                    src={this.state.picture ? this.state.picture : ooi}
-                    fluid
-                    rounded
-                  />
-                  <canvas
-                    onMouseDown={(e) => this.onMouseDown(e)}
-                    onMouseUp={(e) => this.onMouseUp(e)}
-                    onMouseMove={(e) => this.onMouseMove(e)}
-                    onTouchStart={(e) => this.onTouchStart(e)}
-                    onTouchEnd={(e) => this.onTouchEnd(e)}
-                    onTouchMove={(e) => this.onTouchMove(e)}
-                    style={{ position: "absolute", top: "0px", left: "0px" }}
-                    ref="canvas"
-                    height={425}
-                  />
-                </div>
-              </Col>
-              <Col>
-                <Row>
-                  <Col style={{ fontSize: "20px", marginBottom: "10px" }}>
-                    Tags: {this.printTags()}
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Table striped bordered hover variant="dark">
-                      <thead>
-                        <tr>
-                          <th>
-                            Tag
-                            <Button
-                              onClick={handleLabelSubmit}
-                              style={{
-                                width: "80px",
-                                border: "1px solid #efeb53",
-                                color: "#efeb53",
-                                "background-color": "transparent",
-                              }}
-                              size="sm"
-                              className="float-right"
-                            >
-                              Done
-                            </Button>
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {this.state.tags.map((e, i) => {
-                          return (
-                            <tr
-                              onMouseEnter={() => this.startHoverOrTouching(i)}
-                              onMouseLeave={() => this.stopHover()}
-                              onTouchStart={() => this.startHoverOrTouching(i)}
-                            >
-                              <td>
-                                {e.label}
-                                <Button
-                                  onClick={() => this.removeTag(i)}
-                                  variant="outline-danger"
-                                  size="sm"
-                                  style={{ width: "50px" }}
-                                  className="float-right"
-                                >
-                                  <Trash />
-                                </Button>
-                              </td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </Table>
-                  </Col>
-                </Row>
-              </Col>
-            </Row>
-            <style>
-              {
-                ".modal-content{border:2px solid yellow} .modal-dialog {position: relative;top: 15%} button1:hover{background-color:#3F3F3F}"
-              }
-            </style>
-            <Modal
-              show={this.state.show}
-              onHide={() => this.handleClose()}
-              backdrop="static"
-              keyboard={false}
-            >
-              <Modal.Header
-                style={{
-                  backgroundColor: "#191919",
-                  borderBottom: "1px solid #efeb53",
-                }}
-              >
-                <Modal.Title style={{ color: "#efeb53" }}>
-                  Select Tag
-                </Modal.Title>
-              </Modal.Header>
-              <Modal.Body style={{ backgroundColor: "#191919" }}>
-                <ListGroup variant="flush">
-                  {this.state.idTags.map((label) => (
-                    <ListGroup.Item
-                      style={{ color: "white", backgroundColor: "#454D55" }}
-                      action
-                      onClick={() => this.addTag(label)}
-                    >
-                      {label}
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-              </Modal.Body>
-              <Modal.Footer
-                style={{
-                  backgroundColor: "#191919",
-                  borderTop: "1px solid #efeb53",
-                }}
-              >
-                <Button
-                  className="button1"
-                  style={{
-                    color: "#efeb53",
-                    backgroundColor: "#282828",
-                    border: "1px solid #efeb53",
-                  }}
-                  onClick={() => this.handleClose()}
-                >
-                  Cancel
-                </Button>
-              </Modal.Footer>
-            </Modal>
-          </Container>
-        </BrowserView>
-        <MobileView>
-          <Container style={{ "margin-top": "40px" }}>
-            <Row>
-              <Col>
-                <Image
-                  ref="img"
-                  style={{ top: "0px", left: "0px", width: "100%" }}
-                  src={this.state.picture}
-                  fluid
-                  rounded
-                />
-                <canvas
-                  onMouseDown={(e) => this.onMouseDown(e)}
-                  onMouseUp={(e) => this.onMouseUp(e)}
-                  onMouseMove={(e) => this.onMouseMove(e)}
-                  onTouchStart={(e) => this.onTouchStart(e)}
-                  onTouchEnd={(e) => this.onTouchEnd(e)}
-                  onTouchMove={(e) => this.onTouchMove(e)}
-                  style={{
-                    position: "absolute",
-                    top: "0px",
-                    left: "0px",
-                    marginLeft: "15px",
-                    "touch-action": "none",
-                  }}
-                  ref="canvas"
-                  height={425}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Table
-                  bordered
-                  hover
-                  variant="dark"
-                  ref="tabelle"
-                  style={{ marginTop: "10px" }}
-                >
-                  <thead>
-                    <tr>
-                      <th>
-                        Tag
-                        <Button
-                          onClick={handleLabelSubmit}
+      <div>
+        {
+          this.state.logError ? <h1>Something went wrong</h1> : (
+            <div style={{ backgroundColor: "#191919" }}>
+              <style>{"body { background-color: #191919}"}</style>
+              <BrowserView>
+                <Container style={{ marginTop: "40px", height: this.state.height }}>
+                  <Row>
+                    <Col>
+                      <div>
+                        <Image
+                          ref="img"
                           style={{
-                            width: "80px",
-                            border: "1px solid #efeb53",
-                            color: "#efeb53",
-                            "background-color": "transparent",
+                            position: "absolute",
+                            top: "0px",
+                            left: "0px",
+                            width: "100%",
+                            marginBottom: "15px",
                           }}
-                          size="sm"
-                          className="float-right"
-                        >
-                          Done
-                        </Button>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.idTags.map((e, i) => {
-                      return (
-                        <tr
-                          onMouseEnter={() => this.startHoverOrTouching(i)}
-                          onMouseLeave={() => this.stopHover()}
-                          onTouchStart={() => this.startHoverOrTouching(i)}
-                        >
-                          <td>
-                            {e.label}
+                          src={this.state.picture ? this.state.picture : ooi}
+                          fluid
+                          rounded
+                        />
+                        <canvas
+                          onMouseDown={(e) => this.onMouseDown(e)}
+                          onMouseUp={(e) => this.onMouseUp(e)}
+                          onMouseMove={(e) => this.onMouseMove(e)}
+                          onTouchStart={(e) => this.onTouchStart(e)}
+                          onTouchEnd={(e) => this.onTouchEnd(e)}
+                          onTouchMove={(e) => this.onTouchMove(e)}
+                          style={{ position: "absolute", top: "0px", left: "0px" }}
+                          ref="canvas"
+                          height={425}
+                        />
+                      </div>
+                    </Col>
+                    <Col>
+                      <Row>
+                        <Col style={{ fontSize: "20px", marginBottom: "10px" }}>
+                          Tags: {this.printTags()}
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col>
+                          <Table striped bordered hover variant="dark">
+                            <thead>
+                              <tr>
+                                <th>
+                                  Tag
                             <Button
-                              onClick={() => this.removeTag(i)}
-                              variant="outline-danger"
-                              size="sm"
-                              style={{ width: "50px" }}
-                              className="float-right"
-                            >
-                              <Trash />
+                                    onClick={handleLabelSubmit}
+                                    style={{
+                                      width: "80px",
+                                      border: "1px solid #efeb53",
+                                      color: "#efeb53",
+                                      "background-color": "transparent",
+                                    }}
+                                    size="sm"
+                                    className="float-right"
+                                  >
+                                    Done
                             </Button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </Table>
-              </Col>
-            </Row>
-            <style>
-              {
-                ".modal-content{border:2px solid yellow} .modal-dialog {position: relative;top: 15%} button1:hover{background-color:#3F3F3F}"
-              }
-            </style>
-            <Modal
-              show={this.state.show}
-              onHide={() => this.handleClose()}
-              backdrop="static"
-              keyboard={false}
-            >
-              <Modal.Header
-                style={{
-                  backgroundColor: "#191919",
-                  borderBottom: "1px solid #efeb53",
-                }}
-              >
-                <Modal.Title style={{ color: "#efeb53" }}>
-                  Select Tag
-                </Modal.Title>
-              </Modal.Header>
-              <Modal.Body style={{ backgroundColor: "#191919" }}>
-                <ListGroup variant="flush">
-                  {this.state.idTags.map((label) => (
-                    <ListGroup.Item
-                      style={{ color: "white", backgroundColor: "#454D55" }}
-                      action
-                      onClick={() => this.addTag(label)}
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {this.state.tags.map((e, i) => {
+                                return (
+                                  <tr
+                                    onMouseEnter={() => this.startHoverOrTouching(i)}
+                                    onMouseLeave={() => this.stopHover()}
+                                    onTouchStart={() => this.startHoverOrTouching(i)}
+                                  >
+                                    <td>
+                                      {e.label}
+                                      <Button
+                                        onClick={() => this.removeTag(i)}
+                                        variant="outline-danger"
+                                        size="sm"
+                                        style={{ width: "50px" }}
+                                        className="float-right"
+                                      >
+                                        <Trash />
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                );
+                              })}
+                            </tbody>
+                          </Table>
+                        </Col>
+                      </Row>
+                    </Col>
+                  </Row>
+                  <style>
+                    {
+                      ".modal-content{border:2px solid yellow} .modal-dialog {position: relative;top: 15%} button1:hover{background-color:#3F3F3F}"
+                    }
+                  </style>
+                  <Modal
+                    show={this.state.show}
+                    onHide={() => this.handleClose()}
+                    backdrop="static"
+                    keyboard={false}
+                  >
+                    <Modal.Header
+                      style={{
+                        backgroundColor: "#191919",
+                        borderBottom: "1px solid #efeb53",
+                      }}
                     >
-                      {label}
-                    </ListGroup.Item>
-                  ))}
-                </ListGroup>
-              </Modal.Body>
-              <Modal.Footer
-                style={{
-                  backgroundColor: "#191919",
-                  borderTop: "1px solid #efeb53",
-                }}
-              >
-                <Button
-                  className="button1"
-                  style={{
-                    color: "#efeb53",
-                    backgroundColor: "#282828",
-                    border: "1px solid #efeb53",
-                  }}
-                  onClick={() => this.handleClose()}
-                >
-                  Cancel
+                      <Modal.Title style={{ color: "#efeb53" }}>
+                        Select Tag
+                </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body style={{ backgroundColor: "#191919" }}>
+                      <ListGroup variant="flush">
+                        {this.state.idTags.map((label) => (
+                          <ListGroup.Item
+                            style={{ color: "white", backgroundColor: "#454D55" }}
+                            action
+                            onClick={() => this.addTag(label)}
+                          >
+                            {label}
+                          </ListGroup.Item>
+                        ))}
+                      </ListGroup>
+                    </Modal.Body>
+                    <Modal.Footer
+                      style={{
+                        backgroundColor: "#191919",
+                        borderTop: "1px solid #efeb53",
+                      }}
+                    >
+                      <Button
+                        className="button1"
+                        style={{
+                          color: "#efeb53",
+                          backgroundColor: "#282828",
+                          border: "1px solid #efeb53",
+                        }}
+                        onClick={() => this.handleClose()}
+                      >
+                        Cancel
                 </Button>
-              </Modal.Footer>
-            </Modal>
-          </Container>
-        </MobileView>
+                    </Modal.Footer>
+                  </Modal>
+                </Container>
+              </BrowserView>
+              <MobileView>
+                <Container style={{ "margin-top": "40px" }}>
+                  <Row>
+                    <Col>
+                      <Image
+                        ref="img"
+                        style={{ top: "0px", left: "0px", width: "100%" }}
+                        src={this.state.picture}
+                        fluid
+                        rounded
+                      />
+                      <canvas
+                        onMouseDown={(e) => this.onMouseDown(e)}
+                        onMouseUp={(e) => this.onMouseUp(e)}
+                        onMouseMove={(e) => this.onMouseMove(e)}
+                        onTouchStart={(e) => this.onTouchStart(e)}
+                        onTouchEnd={(e) => this.onTouchEnd(e)}
+                        onTouchMove={(e) => this.onTouchMove(e)}
+                        style={{
+                          position: "absolute",
+                          top: "0px",
+                          left: "0px",
+                          marginLeft: "15px",
+                          "touch-action": "none",
+                        }}
+                        ref="canvas"
+                        height={425}
+                      />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Table
+                        bordered
+                        hover
+                        variant="dark"
+                        ref="tabelle"
+                        style={{ marginTop: "10px" }}
+                      >
+                        <thead>
+                          <tr>
+                            <th>
+                              Tag
+                        <Button
+                                onClick={handleLabelSubmit}
+                                style={{
+                                  width: "80px",
+                                  border: "1px solid #efeb53",
+                                  color: "#efeb53",
+                                  "background-color": "transparent",
+                                }}
+                                size="sm"
+                                className="float-right"
+                              >
+                                Done
+                        </Button>
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {this.state.idTags.map((e, i) => {
+                            return (
+                              <tr
+                                onMouseEnter={() => this.startHoverOrTouching(i)}
+                                onMouseLeave={() => this.stopHover()}
+                                onTouchStart={() => this.startHoverOrTouching(i)}
+                              >
+                                <td>
+                                  {e.label}
+                                  <Button
+                                    onClick={() => this.removeTag(i)}
+                                    variant="outline-danger"
+                                    size="sm"
+                                    style={{ width: "50px" }}
+                                    className="float-right"
+                                  >
+                                    <Trash />
+                                  </Button>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </Table>
+                    </Col>
+                  </Row>
+                  <style>
+                    {
+                      ".modal-content{border:2px solid yellow} .modal-dialog {position: relative;top: 15%} button1:hover{background-color:#3F3F3F}"
+                    }
+                  </style>
+                  <Modal
+                    show={this.state.show}
+                    onHide={() => this.handleClose()}
+                    backdrop="static"
+                    keyboard={false}
+                  >
+                    <Modal.Header
+                      style={{
+                        backgroundColor: "#191919",
+                        borderBottom: "1px solid #efeb53",
+                      }}
+                    >
+                      <Modal.Title style={{ color: "#efeb53" }}>
+                        Select Tag
+                </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body style={{ backgroundColor: "#191919" }}>
+                      <ListGroup variant="flush">
+                        {this.state.idTags.map((label) => (
+                          <ListGroup.Item
+                            style={{ color: "white", backgroundColor: "#454D55" }}
+                            action
+                            onClick={() => this.addTag(label)}
+                          >
+                            {label}
+                          </ListGroup.Item>
+                        ))}
+                      </ListGroup>
+                    </Modal.Body>
+                    <Modal.Footer
+                      style={{
+                        backgroundColor: "#191919",
+                        borderTop: "1px solid #efeb53",
+                      }}
+                    >
+                      <Button
+                        className="button1"
+                        style={{
+                          color: "#efeb53",
+                          backgroundColor: "#282828",
+                          border: "1px solid #efeb53",
+                        }}
+                        onClick={() => this.handleClose()}
+                      >
+                        Cancel
+                </Button>
+                    </Modal.Footer>
+                  </Modal>
+                </Container>
+              </MobileView>
+            </div>
+          )
+        }
       </div>
     );
   }
