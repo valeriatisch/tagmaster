@@ -20,10 +20,6 @@ class Body extends Component{
                     <div class="col-sm">
                         <h1>Get started</h1>
                         The best thing about it? It's completely free. So why don't you try it out right now?
-                        <br/>
-                        <Link to="/accountpage">
-                            <button type="button" class="btn btn-lg button1" role="button" aria-pressed="true">Register</button>
-                        </Link>
                     </div>
                 </div>
             </div>
