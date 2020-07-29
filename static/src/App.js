@@ -39,7 +39,7 @@ export default function App() {
 
             <Navbar auth={handleAuth} authToken={auth} />
             <Routing />
-            {/*  <Footer /> */}
+            <Footer />
           </div>
         </Router>
       </AuthApi.Provider>
