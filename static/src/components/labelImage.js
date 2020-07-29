@@ -27,6 +27,7 @@ class LabelImage extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      height: 0,
       ogwidth: 0,
       ogheight: 0,
       tags: [],
@@ -73,11 +74,15 @@ class LabelImage extends Component {
     const canvas = this.refs.canvas;
     const img = this.refs.img;
     const that = this;
+    const container = this.refs.container;
     img.onload = function () {
       canvas.width = img.width;
       canvas.height = img.height;
       that.setState({ ogwidth: img.naturalWidth, ogheight: img.naturalHeight });
       const ctx = canvas.getContext("2d");
+      that.setState({
+        height: img.height
+      })
     };
 
     const table = this.refs.tabelle;
@@ -87,6 +92,12 @@ class LabelImage extends Component {
         canvas.height = img.height;
       }
     }, 10);
+
+    window.addEventListener('resize', () => this.updateDimensions());
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', () => this.updateDimensions());
   }
 
   componentDidUpdate() {
@@ -95,6 +106,13 @@ class LabelImage extends Component {
     canvas.width = img.width;
     canvas.height = img.height;
   }
+
+  updateDimensions() {
+    const img = this.refs.img;
+    this.setState({
+      height: img.height
+    })
+  };
 
   render() {
     async function handleLabelSubmit() {
@@ -126,7 +144,7 @@ class LabelImage extends Component {
       <div style={{ backgroundColor: "#191919" }}>
         <style>{"body { background-color: #191919}"}</style>
         <BrowserView>
-          <Container style={{ marginTop: "40px" }}>
+          <Container style={{ marginTop: "40px", height: this.state.height }}>
             <Row>
               <Col>
                 <div>

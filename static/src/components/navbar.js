@@ -57,6 +57,7 @@ class ownNavbar extends Component {
     return (
       <>
       <Navbar
+      className="t-navbar"
       expand="md"
       style={{
         backgroundColor: "#191919",
