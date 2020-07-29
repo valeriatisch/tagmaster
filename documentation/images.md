@@ -14,6 +14,10 @@ Success is indicated by the http status code `200`
 
 Failure is indicated by a http status code `4xx` or `5xx`
 
+Error descriptions:
+* ```Bad request``` indicates that the JSON format body is incorrect or there're keys missing.
+* ```Not found``` indicates that the link is incorrect.
+
 ## Image Upload
 
 #### Request
@@ -39,6 +43,11 @@ Failure is indicated by a http status code `4xx` or `5xx`
 }
 ```
 
+Possible error descriptions:
+* ```"Unauthorized"``` if the user is not logged in
+* ```"Internal server error"``` if there are problems with the database
+* ```Not found``` if the project id is incorrect
+* ```Project is already active```
 
 ## List Images
 
@@ -68,6 +77,10 @@ Failure is indicated by a http status code `4xx` or `5xx`
 }
 ```
 
+Possible error descriptions:
+* ```"Unauthorized"``` if the user is not logged in
+* ```"Internal server error"``` if there are problems with the database
+* ```Not found``` if the project id is incorrect
 
 ## Image Details
 
@@ -91,6 +104,11 @@ Shows id, done status and tags of an image.
 }
 ```
 
+Possible error descriptions:
+* ```"Unauthorized"``` if the user is not logged in
+* ```"Internal server error"``` if there are problems with the database
+* ```Not found``` if the image id is incorrect
+
 ## Image
 #### Request
 `GET /api/images/id/file`
@@ -104,6 +122,11 @@ Shows the image.
   "error": "description"
 }
 ```
+
+Possible error descriptions:
+* ```"Unauthorized"``` if the user is not logged in
+* ```"Internal server error"``` if there are problems with the database
+* ```Not found``` if the image id is incorrect
 
 ## Next Image
 #### Request
@@ -123,3 +146,8 @@ Shows the image.
   "error": "description"
 }
 ```
+
+Possible error descriptions:
+* ```"Unauthorized"``` if the user is not logged in
+* ```"Internal server error"``` if there are problems with the database
+* ```No image available``` if there are no images left

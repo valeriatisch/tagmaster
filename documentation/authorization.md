@@ -16,6 +16,10 @@ Success is indicated by the http status code `200`
 
 Failure is indicated by a http status code `4xx` or `5xx`
 
+Error descriptions:
+* ```Bad request``` indicates that the JSON format body is incorrect or there're keys missing.
+* ```Not found``` indicates that the link is incorrect.
+
 ## Register
 
 #### Request
@@ -30,6 +34,7 @@ Failure is indicated by a http status code `4xx` or `5xx`
 ```
 ```"first" and "last"``` have to be at least 2 and max 20 characters long.  
 ```"password"``` has to be at least 8 and max 20 characters long.
+
 #### Success 
 A new user has been created.
 ```
@@ -46,7 +51,7 @@ A new user has been created.
 ```
 Possible error descriptions:  
 * ```"No credentials found"``` if there are missing credentials
-* ```"Failed to create user"``` if the user already exists
+* ```"Failed to create user"``` if the user already exists or used to be one and deleted theirs account
 
 ## Login
 
@@ -147,11 +152,13 @@ Possible error descriptions:
   "error": "description"
 }
 ```
+Possible error descriptions:
+* ```"Unauthorized"``` if the user is not logged in
 
 ## Editing User Profile
 
 #### Request
-E.g. to modify email and firstname:
+E.g. to modify email and firstname (it's possible to modify ```"last"``` and ```"password"``` as well):
 `PATCH /api/account`
 ```
 {
@@ -173,6 +180,10 @@ User profile information has been updated.
   "error": "description"
 }
 ```
+Possible error descriptions:
+* ```"Unauthorized"``` if the user is not logged in
+* ```"Internal server error"``` if there are problems with the database
+* ```"Email address already in use"```
 
 ## Delete User Account
 
@@ -193,3 +204,7 @@ Deletes user account and related projects.
   "error": "description"
 }
 ```
+
+Possible error descriptions:
+* ```"Unauthorized"``` if the user is not logged in
+* ```"Internal server error"``` if there are problems with the database
