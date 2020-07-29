@@ -92,6 +92,8 @@ class Register extends Component {
         await fetch(`/api/projects/${this.props.id}/images`, options);
         this.setState({ uploadCompleted: true });
         console.log("state is: ", this.state.uploadCompleted);
+        console.log("projectDone is: ", this.state.projectCompleted);
+        this.setState({ projectCompleted: false });
       });
     };
 
