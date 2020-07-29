@@ -86,9 +86,10 @@ class LabelImage extends Component {
     this.setState({ pictureId: nextImgId });
 
     const imgDetails = await getImageDetails(`/api/images/${nextImgId}`)
+    console.log("imgDetails", imgDetails);
     let imgTags = imgDetails.tags;
     console.log("imgTags: ", imgTags);
-    imgTags = JSON.stringify(imgTags);
+    /* imgTags = JSON.stringify(imgTags); */
 
     imgTags = imgTags.replace(/"/g, '');
     let array = imgTags.split(',');
