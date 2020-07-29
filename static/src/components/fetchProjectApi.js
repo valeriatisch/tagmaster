@@ -15,6 +15,20 @@ export const useFetch = (url) => {
   return state;
 };
 
+export const activateProject = async (url) => {
+  return fetch(url, {
+    method: "POST"
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+      return data;
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+};
+
 /* export const usePicture = (url) => {
   const [state, setState] = useState({ picture: null, loading: true });
 
