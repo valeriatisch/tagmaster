@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Container, Row, Col, Badge } from "react-bootstrap";
+import { Container, Row, Col, Badge, Alert } from "react-bootstrap";
 import fetchProjectApi, { getProjectDetails, activateProject } from "./fetchProjectApi";
 import { downloadFile } from "./download";
 import "../css/project.css";
@@ -13,7 +13,8 @@ class Register extends Component {
       uploadCompleted: false,
       activeProject: false,
       projectCompleted: false,
-      projectTags: {}
+      projectTags: {},
+      loading: true,
     };
   }
 
@@ -28,6 +29,7 @@ class Register extends Component {
     if (projectInfo.done) {
       this.setState({ projectCompleted: true });
     }
+    this.setState({ loading: false })
   }
 
   printTags() {
@@ -116,92 +118,97 @@ class Register extends Component {
     }
 
     return (
-      <div style={{ backgroundColor: "#191919" }}>
-        <Container className="card-container">
-          {(this.state.activeProject && this.state.projectCompleted) ? (<h1>Your Project is completed and ready to download!</h1>) : null}
-          <Row>
-            <Col>
-              <h1
-                style={{
-                  marginTop: "10px",
-                  textAlign: "center",
-                  fontSize: "50px",
-                }}
-              >
-                {this.props.title}
-              </h1>
-            </Col>
-          </Row>
-          <Row>
-            <Col style={{ fontSize: "24px", textAlign: "center" }}>
-              {this.printTags()}
-            </Col>
-          </Row>
-          <Row>
-            <Col style={{ marginTop: "15px", textAlign: "center" }}>
-              <div style={{ backgroundColor: "#191919" }}>
-                <style>
-                  {
-                    ".button1{width:150px; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .button1:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }"
-                  }
-                </style>
-                {!this.state.activeProject ? (
-                  <form
-                    onSubmit={this.onFormSubmit}
-                    style={{ margin: "0 auto", width: "300px" }}
+      <div>
+        {this.state.loading ? null : (
+          <div style={{ backgroundColor: "#191919" }}>
+            <Container className="card-container">
+              {(this.state.activeProject && this.state.projectCompleted) ? (<div className="download-rdy-alert"><Alert variant={"success"}>Your Project is completed and ready to download!</Alert></div>) : null}
+              {(this.state.activeProject && !this.state.projectCompleted) ? (<div className="download-rdy-alert"><Alert variant={"success"}>Your project is in progress</Alert></div>) : null}
+              {(!this.state.activeProject && this.state.projectCompleted) ? (<div className="download-rdy-alert"><Alert variant={"warning"}>Once your project is activated you can't upload more pictures</Alert></div>) : null}
+              <Row>
+                <Col>
+                  <h1
+                    style={{
+                      textAlign: "center",
+                      margin: "auto",
+                      fontSize: "50px",
+                      border: "solid",
+                      paddingBottom: "10px",
+                      width: "40%",
+                    }}
                   >
-                    <div className="form-group files" style={{ width: "300px" }}>
-                      <input
-                        className="form-control"
-                        type="file"
-                        accept="image/png, image/jpeg"
-                        multiple
-                        onChange={this.onChange}
-                        style={{ height: "200px", backgroundColor: "grey" }}
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      onClick={handleUpload}
-                      className="btn button1"
-                      style={{ width: "100px" }}
-                    >
-                      Upload
-                  </button>
+                    {this.props.title}
+                  </h1>
+                </Col>
+              </Row>
+              <Row>
+                <Col style={{ paddingTop: "10px", fontSize: "24px", textAlign: "center" }}>
+                  {this.printTags()}
+                </Col>
+              </Row>
+              <Row>
+                <Col style={{ marginTop: "15px", textAlign: "center" }}>
+                  <div style={{ backgroundColor: "#191919" }}>
+                    <style>
+                      {
+                        ".button1{width:150px; color:#efeb53; background-color:#282828; border: 1px solid #efeb53 } .button1:hover { background-color:#3F3F3F; color:#efeb53; border: 1px solid }"
+                      }
+                    </style>
+                    {!this.state.activeProject ? (
+                      <form
+                        onSubmit={this.onFormSubmit}
+                        style={{ margin: "0 auto", width: "300px" }}
+                      >
+                        <div className="form-group files" style={{ width: "300px" }}>
+                          <input
+                            className="form-control"
+                            type="file"
+                            accept="image/png, image/jpeg"
+                            multiple
+                            onChange={this.onChange}
+                            style={{ height: "200px", backgroundColor: "grey" }}
+                          />
+                        </div>
+                        <button
+                          type="submit"
+                          onClick={handleUpload}
+                          className="btn button1"
+                          style={{ width: "100px" }}
+                        >
+                          Upload
+                    </button>
 
-                  </form>
-                ) : null}
-                {(!this.state.activateProject && (!this.state.projectCompleted)) ? (
-                  <h2>Project is in Progress</h2>
-                ) : null}
-                {(this.state.projectCompleted && this.state.activeProject) ? (
-                  <button
-                    type="submit"
-                    className="btn button1"
-                    style={{ width: "110px" }}
-                    onClick={handleDownload}
-                  >
-                    Download
-                  </button>
-                ) : null}
-                {this.state.activeProject ? null : (
-                  <div> <button
-                    type="submit"
-                    onClick={handleActivation}
-                    className="btn button1"
-                    style={{ width: "100px", marginTop: "10px" }}
-                  >
-                    Activate Project
-                  </button>
-                    <h3 style={{ marginTop: "10px" }}>Once the project is activated, no more images can be uploaded</h3>
+                      </form>
+                    ) : null}
+                    {(this.state.projectCompleted && this.state.activeProject) ? (
+                      <button
+                        type="submit"
+                        className="btn button1"
+                        style={{ width: "110px" }}
+                        onClick={handleDownload}
+                      >
+                        Download
+                      </button>
+                    ) : null}
+                    {this.state.activeProject ? null : (
+                      <div> <button
+                        type="submit"
+                        onClick={handleActivation}
+                        className="btn button1"
+                        style={{ width: "100px", marginTop: "10px" }}
+                      >
+                        Activate Project
+                    </button>
+                      </div>
+                    )}
+
+                    {this.state.uploadCompleted ? (<div className="upload-alert"><Alert variant={"success"}>Upload Successfull</Alert></div>) : null}
                   </div>
-                )}
-
-                {this.state.uploadCompleted ? <h1>uploadCompleted!</h1> : null}
-              </div>
-            </Col>
-          </Row>
-        </Container>
+                </Col>
+              </Row>
+            </Container>
+          </div >
+        )}
       </div>
     );
   }
