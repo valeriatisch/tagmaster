@@ -33,7 +33,7 @@ class ownNavbar extends Component {
         if (user) {
           console.log("user", user);
           this.setState({
-            email: user.first + " " + user.last
+            email: user.email
           })
         } else {
           console.log("Cannot get user info");
