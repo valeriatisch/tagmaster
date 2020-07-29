@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Button, FormGroup, FormControl } from "react-bootstrap";
+import { Button, FormGroup, FormControl, Container, Row, Col } from "react-bootstrap";
 import "./login.css";
 import { UserContext } from "../components/UserContext";
 import { loginSession, getUserData } from "../components/authentication";
@@ -18,67 +18,62 @@ export default function Login() {
     return email.length > 0 && password.length > 0;
   }
   return (
-    <div className="Login" style={{ color: "white" }}>
-      {wrongCredentials ? (
-        <h1>Error! Email address or password is incorrect</h1>
-      ) : (
-        <h1></h1>
-      )}
-      <form
-        onSubmit={async (event) => {
-          event.preventDefault();
-          const obj = {
-            Email: email,
-            Password: password,
-          };
+    <Container className="login-container">
+      <Row>
+        <Col></Col>
+        <Col xs={12} sm={8} md={6} lg={4}>
+          {wrongCredentials ? (
+            <h1 className="login-text">Error! Email address or password is incorrect</h1>
+          ) : (
+            <h1></h1>
+          )}
 
-          const login = await loginSession(obj);
-          if (login.message === "ok") {
-            setWrongCredentials(false);
-            authApi.setAuth(true);
-          } else {
-            setWrongCredentials(true);
-          }
-        }}
-      >
-        <h3>Sign In</h3>
+          <form
+            onSubmit={async (event) => {
+              event.preventDefault();
+              const obj = {
+                Email: email,
+                Password: password,
+              };
 
-        <FormGroup controlId="email" bsize="large">
-          Email
-          <FormControl
-            autoFocus
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </FormGroup>
-        <FormGroup controlId="password" bsize="large">
-          Password
-          <FormControl
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            type="password"
-          />
-        </FormGroup>
-        <div className="form-group">
-          <div className="custom-control custom-checkbox">
-            <input
-              type="checkbox"
-              className="custom-control-input"
-              id="customCheck1"
-            />
-            <label className="custom-control-label" htmlFor="customCheck1">
-              Remember me
-            </label>
-          </div>
-        </div>
-        <Button block bsize="large" disabled={!validateForm()} type="submit">
-          Login
-        </Button>
-        <Link to={"/signup"}>
-          <p className="forgot-password text-right">No account?</p>
-        </Link>
-      </form>
-    </div>
+              const login = await loginSession(obj);
+              if (login.message === "ok") {
+                setWrongCredentials(false);
+                authApi.setAuth(true);
+              } else {
+                setWrongCredentials(true);
+              }
+            }}
+          >
+            <h3 className="login-text">Sign In</h3>
+            <FormGroup controlId="email" bsize="large">
+              <div className="login-text">Email</div>
+              <FormControl className="login-input"
+                autoFocus
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </FormGroup>
+            <FormGroup controlId="password" bsize="large">
+              <div className="login-text">Password</div>
+              <FormControl className="login-input"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                type="password"
+              />
+            </FormGroup>
+            <Button className="login-btn" block bsize="large" disabled={!validateForm()} type="submit">
+              Login
+            </Button>
+            <Link to={"/signup"}>
+              <p className="forgot-password text-right login-text">No account?</p>
+            </Link>
+          </form>
+         </Col>
+         <Col></Col>
+      </Row>
+    </Container>
+
   );
 }

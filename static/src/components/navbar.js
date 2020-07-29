@@ -85,7 +85,7 @@ class ownNavbar extends Component {
               <NavDropdown.Item href="/label">Label</NavDropdown.Item>
               <NavDropdown.Item href="/projects">Projects</NavDropdown.Item>
               <NavDropdown.Divider />                 
-              <NavDropdown.Item onClick={handleLogout} href="">Logout</NavDropdown.Item>
+              <NavDropdown.Item onClick={handleLogout} href="/login">Logout</NavDropdown.Item>
             </NavDropdown>            
           </Nav>
           <Nav className="navbar-right ml-auto d-md-none">
