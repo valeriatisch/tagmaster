@@ -92,6 +92,12 @@ class LabelImage extends Component {
         canvas.height = img.height;
       }
     }, 10);
+
+    window.addEventListener('resize', () => this.updateDimensions());
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', () => this.updateDimensions());
   }
 
   componentDidUpdate() {
@@ -100,6 +106,13 @@ class LabelImage extends Component {
     canvas.width = img.width;
     canvas.height = img.height;
   }
+
+  updateDimensions() {
+    const img = this.refs.img;
+    this.setState({
+      height: img.height
+    })
+  };
 
   render() {
     async function handleLabelSubmit() {
