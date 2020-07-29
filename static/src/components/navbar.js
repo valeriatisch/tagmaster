@@ -5,7 +5,7 @@ import { Nav, Navbar, NavDropdown } from "react-bootstrap";
 import Routing from "./routing";
 import { BrowserRouter as Router, Redirect } from "react-router-dom";
 import checkAuth from "./checkAuth.js";
-import Authentication, { logout } from "./authentication";
+import Authentication, { logout, getUserData } from "./authentication";
 import "../css/navbar.css";
 
 class ownNavbar extends Component {
@@ -13,8 +13,33 @@ class ownNavbar extends Component {
     super(props);
     this.toggle = this.toggle.bind(this);
     this.state = {
+      email: "",
       isOpen: false,
     };
+
+    this.loadUserInfo();
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.authToken == false && this.props.authToken == true) {
+      this.loadUserInfo();
+    }
+  }
+
+  loadUserInfo() {
+    if (this.props.authToken == true) {
+      (async () => {
+        const user = await getUserData(); 
+        if (user) {
+          console.log("user", user);
+          this.setState({
+            email: user.first + " " + user.last
+          })
+        } else {
+          console.log("Cannot get user info");
+        }
+      })();
+    }
   }
 
   toggle() {
@@ -54,7 +79,7 @@ class ownNavbar extends Component {
       {this.props.authToken == true ? (
         <React.Fragment>
           <Nav className="navbar-right ml-auto d-none d-md-block">       
-            <NavDropdown title="user@email.com" id="collasible-nav-dropdown">
+            <NavDropdown title={this.state.email} id="collasible-nav-dropdown">
               <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
               <NavDropdown.Item href="/label">Label</NavDropdown.Item>
               <NavDropdown.Item href="/projects">Projects</NavDropdown.Item>
