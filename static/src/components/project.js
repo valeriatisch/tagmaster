@@ -7,6 +7,7 @@ class Register extends Component {
     this.state = {
       pictures: [],
       uploadCompleted: false,
+      activeProject: false
     };
   }
 
@@ -63,6 +64,14 @@ class Register extends Component {
       });
     };
 
+    const handleActivation = (e) => {
+      e.preventDefault();
+      this.setState({
+        activeProject: true
+      });
+      console.log("handleActivation");
+    }
+
     return (
       <div style={{ backgroundColor: "#191919" }}>
         <Container>
@@ -115,6 +124,19 @@ class Register extends Component {
                     Upload
                   </button>
                 </form>
+                {this.state.activeProject ? null : (
+                  <div> <button
+                    type="submit"
+                    onClick={handleActivation}
+                    className="btn button1"
+                    style={{ width: "100px", marginTop: "10px" }}
+                  >
+                    Activate Project
+                  </button>
+                    <h3 style={{ marginTop: "10px" }}>Once the project is activated, no more images can be uploaded</h3>
+                  </div>
+                )}
+
                 {this.state.uploadCompleted ? <h1>uploadCompleted!</h1> : null}
               </div>
             </Col>
