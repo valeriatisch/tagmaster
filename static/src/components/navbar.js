@@ -61,6 +61,9 @@ class ownNavbar extends Component {
               <Nav.Link href="/" style={{ color: "#efeb53" }}>
                 Home
               </Nav.Link>
+              <Nav.Link href="/label" style={{ color: "#efeb53" }}>
+                Label Image
+              </Nav.Link>
               <Nav.Link href="/projects" style={{ color: "#efeb53" }}>
                 Projects
               </Nav.Link>

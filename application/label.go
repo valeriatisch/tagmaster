@@ -9,7 +9,7 @@ import (
 )
 
 type LabelJSON struct {
-	Name string `json:"name"`
+	Name string `json:"label"`
 	X1   uint   `json:"x1"`
 	Y1   uint   `json:"y1"`
 	X2   uint   `json:"x2"`
