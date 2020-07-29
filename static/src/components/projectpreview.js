@@ -11,6 +11,8 @@ import fetchProjectApi, {
 export default function Projectpreview(props) {
   const [state, setState] = useState({ picture: null, loadingPicture: true });
 
+  /*   console.log("props tags are:", props.tags) */
+
   const { data, loading } = useFetch(`/api/projects/${props.pid}`);
   /* console.log("loadingProject: ", loading) */
   /* console.log(loading ? null : data); */
@@ -41,9 +43,6 @@ export default function Projectpreview(props) {
     }
   }, [loading]);
 
-  if (!state.loadingPicture) {
-    console.log("picute URL", state.picture);
-  }
 
   // useEffect(async () => {
   //   const projectInfo = await getProjectDetails(`/api/projects/${props.pid}`);

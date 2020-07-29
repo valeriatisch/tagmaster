@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-export const sendLabel = async (params) => {
-  return fetch("/api/images/id/label", {
+export const sendLabel = async (params, url) => {
+  return fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

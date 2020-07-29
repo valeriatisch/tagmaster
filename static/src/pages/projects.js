@@ -19,8 +19,6 @@ import { Link } from "react-router-dom";
 export default function Projects() {
   const { data, loading } = useFetch("/api/projects/");
 
-  console.log("data is: ", data);
-
   const { picture, loadPic } = usePicture("/api/images/1/file");
 
   function convertTag(params) {

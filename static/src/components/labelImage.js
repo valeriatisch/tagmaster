@@ -19,6 +19,9 @@ import {
   TabletView,
 } from "react-device-detect";
 import { sendLabel } from "./fetchLabelApi";
+import { getNextImage, getImage, getImageDetails } from "./fetchImageApi";
+import { trunc } from 'mathjs';
+
 
 /*TODO:
   Style des Modals an die Seite anpassen
@@ -31,18 +34,21 @@ class LabelImage extends Component {
       ogwidth: 0,
       ogheight: 0,
       tags: [],
+      idTags: [],
       show: false,
+      pictureId: null,
       drawing: false,
       x1: 0,
       y1: 0,
       x2: 0,
       y2: 0,
+      picture: null,
     };
   }
 
   printTags() {
     let ausgabe = [];
-    let tags = this.props.imageLabels;
+    let tags = this.state.idTags;
     let colors = [
       "#0247FE",
       "green",
@@ -70,7 +76,33 @@ class LabelImage extends Component {
     return ausgabe;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+
+    const nextImg = await getNextImage();
+    console.log(nextImg);
+
+    const nextImgId = nextImg.id;
+    const nextImgTags = nextImg.tags;
+    this.setState({ pictureId: nextImgId });
+
+    const imgDetails = await getImageDetails(`/api/images/${nextImgId}`)
+    let imgTags = imgDetails.tags;
+    console.log("imgTags: ", imgTags);
+    imgTags = JSON.stringify(imgTags);
+
+    imgTags = imgTags.replace(/"/g, '');
+    let array = imgTags.split(',');
+    console.log("imgTags output: ", array);
+    this.setState({ idTags: array });
+
+    const picture = await getImage(`/api/images/${nextImgId}/file`);
+    this.setState({ picture })
+
+
+    /*   console.log("picture: ", picture);
+      console.log("nextImgId: ", nextImg.id);
+      console.log("nextImgTags: ", nextImg.tags); */
+
     const canvas = this.refs.canvas;
     const img = this.refs.img;
     const that = this;
@@ -115,27 +147,33 @@ class LabelImage extends Component {
   };
 
   render() {
-    async function handleLabelSubmit() {
+    const handleLabelSubmit = async () => {
       console.log("submitting tags...");
+      console.log("state: ", this.state);
 
       console.log("map through obj");
+      let body = [];
       this.state.tags.map(async (x) => {
-        const temp = { x };
-        console.log("my obj element: ", temp.x.label);
-        const objToPost = {
-          labelname: temp.x.label,
-          topright: temp.x.x1,
-          topleft: temp.x.x2,
-          bottomright: temp.x.y1,
-          bottomleft: temp.x.y2,
+        console.log("my obj element: ", x);
+        let x1C = parseInt(x.x1);
+        let y1C = parseInt(x.y1);
+        let x2C = parseInt(x.x2);
+        let y2C = parseInt(x.y2);
+        const obj = {
+          name: x.label,
+          x1: x1C,
+          y1: y1C,
+          x2: x2C,
+          y2: y2C,
         };
-        const sendLabelData = await sendLabel(objToPost);
-        if (sendLabelData.message === "ok") {
-          console.log("label data sent");
-        } else {
-          console.log("error : label data not sent");
-        }
+        body.push(obj);
       });
+      const sendLabelData = await sendLabel(body, `/api/images/${this.state.pictureId}/label`);
+      if (sendLabelData.message === "ok") {
+        console.log("label data sent");
+      } else {
+        console.log("error : label data not sent");
+      }
 
       window.location.reload(false);
     }
@@ -157,7 +195,7 @@ class LabelImage extends Component {
                       width: "100%",
                       marginBottom: "15px",
                     }}
-                    src={this.props.imgsrc}
+                    src={this.state.picture}
                     fluid
                     rounded
                   />
@@ -255,7 +293,7 @@ class LabelImage extends Component {
               </Modal.Header>
               <Modal.Body style={{ backgroundColor: "#191919" }}>
                 <ListGroup variant="flush">
-                  {this.props.imageLabels.map((label) => (
+                  {this.state.idTags.map((label) => (
                     <ListGroup.Item
                       style={{ color: "white", backgroundColor: "#454D55" }}
                       action
@@ -294,7 +332,7 @@ class LabelImage extends Component {
                 <Image
                   ref="img"
                   style={{ top: "0px", left: "0px", width: "100%" }}
-                  src={this.props.imgsrc}
+                  src={this.state.picture}
                   fluid
                   rounded
                 />
@@ -347,7 +385,7 @@ class LabelImage extends Component {
                     </tr>
                   </thead>
                   <tbody>
-                    {this.state.tags.map((e, i) => {
+                    {this.state.idTags.map((e, i) => {
                       return (
                         <tr
                           onMouseEnter={() => this.startHoverOrTouching(i)}
@@ -396,7 +434,7 @@ class LabelImage extends Component {
               </Modal.Header>
               <Modal.Body style={{ backgroundColor: "#191919" }}>
                 <ListGroup variant="flush">
-                  {this.props.imageLabels.map((label) => (
+                  {this.state.idTags.map((label) => (
                     <ListGroup.Item
                       style={{ color: "white", backgroundColor: "#454D55" }}
                       action
