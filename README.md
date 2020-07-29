@@ -53,3 +53,33 @@ We are open to all kind of contributions. If you want to:
 
 You are more than welcome.  
 💬 You can reach us via our GitHub profiles or via contact@tagmaster.ml
+
+## 🚀 Running Tagmaster locally
+
+Let's setup Tagmaster locally. You need to setup the services required to run Tagmaster. Follow up the setups below to quickly get started.
+
+## ⚙️ Setting Up Tagmaster
+
+### → STEP #0
+
+* Make sure **GoLang** is installed on your machine. Take a look at the [official guide](https://golang.org/doc/install) for installation.
+
+### → STEP #1
+
+* Clone the [tagmaster](https://github.com/valeriatisch/tagmaster) repo.
+
+### → STEP #2
+
+* You'll need a local PostgreSQL database. [Here](https://www.postgresql.org/docs/9.3/installation.html) you can find how to install and set it up.
+* Create an account and a database.
+* Create an environment variable called ```DATABASE_URI``` and set it to ```"host=localhost user=yourusername dbname=yourdatabase password=yourpassword"```.  
+You may have to set additional variables.
+* With common SQL queries you will be able to access the database.
+
+### → STEP #3
+
+* Firstly, go to ```/tagmaster``` and run the command ```go build main.go```.
+* Secondly, go to ```/tagmaster/static``` and run the command ```npm start``` to start it in development mode.  
+You may have to install missing module dependencies. In this case just run ```npm install```.
+
+That's it! 🥂
