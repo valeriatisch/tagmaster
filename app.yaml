@@ -8,12 +8,18 @@ handlers:
 - url: /api/.*
   script: auto
   secure: always
+  http_headers:
+    Access-Control-Allow-Origin: https://storage.gooleapis.com
 
 - url: /static
   static_dir: static/build
   secure: always
+  http_headers:
+    Access-Control-Allow-Origin: https://storage.gooleapis.com
 
 - url: /.*
   static_files: static/build/index.html
   upload: static/build/index.html
   secure: always
+  http_headers:
+    Access-Control-Allow-Origin: https://storage.gooleapis.com
