@@ -14,6 +14,7 @@ type ImageJSON struct {
 	Id uint `json:"id"`
 	Name string `json:"filename"`
 	Done bool `json:"done"`
+	URL string `json:"url"`
 }
 
 func (app *App) imageCreate(c *gin.Context) {
@@ -126,10 +127,16 @@ func (app *App) imageRead(c *gin.Context) {
 		return
 	}
 
+	url := "/api/images/" + strconv.Itoa(int(img.Id())) + "/file"
+	if app.config.isProduction {
+		url = img.PublicURL()
+	}
+
 	json := gin.H{
 		"id": img.Id(),
 		"done": img.Done,
 		"tags": p.Tags,
+		"url": url,
 	}
 
 	c.JSON(http.StatusOK, json)
@@ -209,10 +216,16 @@ func (app *App) imageList(c *gin.Context) {
 	json := make([]ImageJSON, len(images))
 
 	for i, img := range images {
+		url := "/api/images/" + strconv.Itoa(int(img.Id())) + "/file"
+		if app.config.isProduction {
+			url = img.PublicURL()
+		}
+
 		json[i] = ImageJSON{
 			Id: img.Id(),
 			Name: img.Name,
 			Done: img.Done,
+			URL: url,
 		}
 	}
 

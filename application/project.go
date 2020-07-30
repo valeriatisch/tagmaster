@@ -14,6 +14,7 @@ type ProjectJSON struct {
 	Active bool `json:"active"`
 	Done bool   `json:"done"`
 	Images []uint `json:"images"`
+	URLS []string `json:"urls"`
 }
 
 func (app *App) projectCreate(c *gin.Context) {
@@ -53,6 +54,7 @@ func (app *App) projectCreate(c *gin.Context) {
 		Active: false,
 		Done: false,
 		Images: []uint{},
+		URLS: []string{},
 	}
 
 	c.JSON(http.StatusOK, res)
@@ -194,7 +196,7 @@ func (app *App) projectActivate(c *gin.Context) {
 		return
 	}
 
-	imageIds := getImageIds(app.database, p)
+	imageIds, _ := getImageIds(app.database, p, app.config.isProduction)
 
 	if len(imageIds) == 0 {
 		abortRequest(c, errorActivateEmpty)
@@ -245,7 +247,7 @@ func (app *App) projectRead(c *gin.Context) {
 		return
 	}
 
-	imageIds := getImageIds(app.database, p)
+	imageIds, imageUrls := getImageIds(app.database, p, app.config.isProduction)
 	done, err := projectIsDone(app.database, p)
 	if err != nil {
 		abortRequest(c, errorInternal)
@@ -259,26 +261,36 @@ func (app *App) projectRead(c *gin.Context) {
 		Images: imageIds,
 		Done: done,
 		Active: p.Active,
+		URLS: imageUrls,
 	}
 
 	c.JSON(http.StatusOK, res)
 }
 
-func getImageIds(db *models.Database, p models.Project) []uint {
+
+func getImageIds(db *models.Database, p models.Project, production bool) ([]uint, []string) {
 	var images []models.Image
 	imageIds := make([]uint, 0)
+	imageURLS := make([]string, 0)
+
 	err := db.Model(&p).Related(&images).Error
 	if err != nil {
 		// TODO: better error handling
-		return imageIds
+		return imageIds, imageURLS
 	}
 
 	
 	for _, img := range images {
+		url := "/api/images/" + strconv.Itoa(int(img.Id())) + "/file"
+		if production {
+			url = img.PublicURL()
+		}
+
 		imageIds = append(imageIds, img.Id())
+		imageURLS = append(imageURLS, url)
 	}
 
-	return imageIds
+	return imageIds, imageURLS
 }
 
 func (app *App) projectList(c *gin.Context) {
@@ -299,7 +311,7 @@ func (app *App) projectList(c *gin.Context) {
 	json := make([]ProjectJSON, len(projects))
 
 	for i, p := range projects {
-		imageIds := getImageIds(app.database, p)
+		imageIds, imageUrls := getImageIds(app.database, p, app.config.isProduction)
 		done, err := projectIsDone(app.database, p)
 		if err != nil {
 			abortRequest(c, errorInternal)
@@ -312,6 +324,7 @@ func (app *App) projectList(c *gin.Context) {
 			Images: imageIds,
 			Done: done,
 			Active: p.Active,
+			URLS: imageUrls,
 		}
 	}
 
