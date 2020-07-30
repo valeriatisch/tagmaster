@@ -91,6 +91,8 @@ class LabelImage extends Component {
     console.log("imgDetails", imgDetails);
     let imgTags = imgDetails.tags;
     /* imgTags = JSON.stringify(imgTags); */
+    const imgUrl = imgDetails.url;
+    console.log("url", imgUrl);
 
     if (imgTags) {
       imgTags = imgTags.replace(/"/g, '');
@@ -98,7 +100,7 @@ class LabelImage extends Component {
       console.log("imgTags output: ", array);
       this.setState({ idTags: array });
 
-      const picture = await getImage(`/api/images/${nextImgId}/file`);
+      const picture = await getImage(`${imgUrl}`);
       this.setState({ picture })
     }
 

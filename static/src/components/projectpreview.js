@@ -29,9 +29,11 @@ export default function Projectpreview(props) {
       /* console.log("data:", data); */
       const imageId = data.images[0];
       const ImageIdTwo = data.images[1];
-      if (imageId) {
+      const imageUrl = data.urls[0];
+      console.log("imageUrl", imageUrl);
+      if (imageUrl) {
         //fetch data
-        fetch(`/api/images/${imageId}/file`)
+        fetch(`${imageUrl}`)
           .then((res) => res.blob())
           .then((blob) => {
             setState({
