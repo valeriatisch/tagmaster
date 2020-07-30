@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-const urlPrefix = "https://storage.googleapis.com/sksy-tagmaster.appspot.com/"
+const urlPrefix = "https://sksy-tagmaster.appspot.com.storage.googleapis.com/"
 
 type Image struct {
 	gorm.Model
