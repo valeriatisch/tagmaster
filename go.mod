@@ -11,6 +11,6 @@ require (
 	github.com/jinzhu/gorm v1.9.12
 	github.com/sendgrid/rest v2.6.0+incompatible // indirect
 	github.com/sendgrid/sendgrid-go v3.6.0+incompatible
-	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
+	golang.org/x/crypto v0.1.0
 	google.golang.org/genproto v0.0.0-20200617032506-f1bdc9086088
 )
